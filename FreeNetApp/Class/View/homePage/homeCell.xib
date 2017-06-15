@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12100" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12072"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="homeCell" id="gTV-IL-0wX" customClass="homeCell">
+            <rect key="frame" x="0.0" y="0.0" width="140" height="127"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="140" height="127"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_1" translatesAutoresizingMaskIntoConstraints="NO" id="ABb-po-AWt">
+                        <rect key="frame" x="31.5" y="15" width="77" height="77"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="ABb-po-AWt" secondAttribute="height" id="JgD-Gx-LZc"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开饭了" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YR8-cQ-Dra">
+                        <rect key="frame" x="0.0" y="97" width="140" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="ndH-EP-CpB"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="YR8-cQ-Dra" secondAttribute="trailing" id="549-TD-leB"/>
+                <constraint firstItem="ABb-po-AWt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="AWB-8u-FrI"/>
+                <constraint firstItem="YR8-cQ-Dra" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="MTD-o4-vM0"/>
+                <constraint firstItem="YR8-cQ-Dra" firstAttribute="top" secondItem="ABb-po-AWt" secondAttribute="bottom" constant="5" id="TVF-90-OX6"/>
+                <constraint firstAttribute="bottom" secondItem="YR8-cQ-Dra" secondAttribute="bottom" constant="10" id="fcD-ga-XnV"/>
+                <constraint firstItem="ABb-po-AWt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="qPc-Kw-ROH"/>
+            </constraints>
+            <size key="customSize" width="140" height="127"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                    <real key="value" value="1"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                    <color key="value" red="0.81960784313725488" green="0.81960784313725488" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="markImage" destination="ABb-po-AWt" id="BOx-VW-bUU"/>
+                <outlet property="titleLabel" destination="YR8-cQ-Dra" id="4c0-KL-YSC"/>
+                <outlet property="topSpace" destination="qPc-Kw-ROH" id="fhe-qB-vl1"/>
+            </connections>
+            <point key="canvasLocation" x="79" y="116.5"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="home_1" width="30" height="30"/>
+    </resources>
+</document>

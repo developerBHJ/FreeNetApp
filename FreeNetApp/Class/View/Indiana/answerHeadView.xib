@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="answerHeadView" id="iN0-l3-epB" customClass="answerHeadView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_head" translatesAutoresizingMaskIntoConstraints="NO" id="XzG-St-vtH">
+                    <rect key="frame" x="10" y="10" width="130" height="130"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="XzG-St-vtH" secondAttribute="height" id="FB3-jc-xmq"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="春哥" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqg-6t-Duy">
+                    <rect key="frame" x="143.5" y="14.5" width="31" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="topFun_sun" translatesAutoresizingMaskIntoConstraints="NO" id="PK5-Az-G0d">
+                    <rect key="frame" x="184.5" y="16" width="15" height="15"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="PK5-Az-G0d" secondAttribute="height" id="Dta-MW-3jk"/>
+                        <constraint firstAttribute="height" constant="15" id="vfW-f7-xyH"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WPB-S3-CFK">
+                    <rect key="frame" x="314.5" y="10.5" width="57.5" height="57.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="WPB-S3-CFK" secondAttribute="height" id="d3k-H5-JIC"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20欢乐豆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YrE-ph-J3z">
+                    <rect key="frame" x="143.5" y="117" width="64" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.95102399587631226" green="0.63131523132324219" blue="0.20012196898460388" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qOY-ch-JbD">
+                    <rect key="frame" x="0.0" y="149" width="375" height="1"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="8aP-UZ-s15"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="PK5-Az-G0d" firstAttribute="centerY" secondItem="aqg-6t-Duy" secondAttribute="centerY" id="5cJ-lX-LJh"/>
+                <constraint firstItem="aqg-6t-Duy" firstAttribute="leading" secondItem="XzG-St-vtH" secondAttribute="trailing" constant="3.5" id="8Zg-39-nfo"/>
+                <constraint firstAttribute="trailing" secondItem="WPB-S3-CFK" secondAttribute="trailing" constant="3" id="AiC-8d-1cG"/>
+                <constraint firstAttribute="bottom" secondItem="qOY-ch-JbD" secondAttribute="bottom" id="KzT-8w-XXh"/>
+                <constraint firstItem="WPB-S3-CFK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10.5" id="OaP-JR-CpT"/>
+                <constraint firstItem="PK5-Az-G0d" firstAttribute="leading" secondItem="aqg-6t-Duy" secondAttribute="trailing" constant="10" id="SwA-ky-Leq"/>
+                <constraint firstItem="XzG-St-vtH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="ap7-k0-png"/>
+                <constraint firstAttribute="bottom" secondItem="XzG-St-vtH" secondAttribute="bottom" constant="10" id="gzG-8U-kac"/>
+                <constraint firstItem="WPB-S3-CFK" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="1:6.5" id="hsZ-Qh-5Gc"/>
+                <constraint firstItem="qOY-ch-JbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jwj-9F-9Rh"/>
+                <constraint firstItem="YrE-ph-J3z" firstAttribute="bottom" secondItem="XzG-St-vtH" secondAttribute="bottom" constant="-5" id="ndr-Za-2t3"/>
+                <constraint firstItem="aqg-6t-Duy" firstAttribute="top" secondItem="XzG-St-vtH" secondAttribute="top" constant="4.5" id="ped-yL-qpv"/>
+                <constraint firstAttribute="trailing" secondItem="qOY-ch-JbD" secondAttribute="trailing" id="u4A-Q4-kmh"/>
+                <constraint firstItem="YrE-ph-J3z" firstAttribute="leading" secondItem="aqg-6t-Duy" secondAttribute="leading" id="umx-t3-pVb"/>
+                <constraint firstItem="XzG-St-vtH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="wCj-i1-hnB"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="subTitle" destination="YrE-ph-J3z" id="3kV-3H-8SU"/>
+                <outlet property="timerView" destination="WPB-S3-CFK" id="z9e-7E-wr6"/>
+                <outlet property="user_headView" destination="XzG-St-vtH" id="sxg-Cs-K33"/>
+                <outlet property="user_level" destination="PK5-Az-G0d" id="6Ty-O9-Kk8"/>
+                <outlet property="user_name" destination="aqg-6t-Duy" id="T0S-xe-2Bv"/>
+            </connections>
+            <point key="canvasLocation" x="33.5" y="96"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="topFun_sun" width="15" height="15"/>
+        <image name="user_head" width="50" height="50"/>
+    </resources>
+</document>

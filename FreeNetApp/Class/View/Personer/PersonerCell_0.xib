@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="PersonerCell_0" selectionStyle="default" indentationWidth="10" rowHeight="129" id="KGk-i7-Jjw" customClass="PersonerCell_0">
+            <rect key="frame" x="0.0" y="0.0" width="331" height="129"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="331" height="128.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FqI-1F-fSC">
+                        <rect key="frame" x="219" y="15" width="112" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="FqI-1F-fSC" secondAttribute="height" multiplier="4.69" id="j4s-jw-8lh"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <state key="normal" title="lev2 小白   &gt;" image="Crown">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="levBtnAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="SP4-ht-z7y"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击头像登陆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGQ-Ly-24a">
+                        <rect key="frame" x="125.5" y="100" width="80" height="23.5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="23.5" id="vcm-mx-BTy"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBj-Jq-QqA">
+                        <rect key="frame" x="189.5" y="15" width="22" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="oBj-Jq-QqA" secondAttribute="height" id="g2C-Jq-Gov"/>
+                        </constraints>
+                        <state key="normal" image="pencil"/>
+                        <connections>
+                            <action selector="editAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="MCe-bG-dga"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6oa-5i-lg4">
+                        <rect key="frame" x="130.5" y="15" width="70" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="6oa-5i-lg4" secondAttribute="height" id="YmD-wQ-exr"/>
+                            <constraint firstAttribute="height" constant="70" id="pdz-Hy-S4U"/>
+                        </constraints>
+                        <state key="normal" backgroundImage="signOut"/>
+                        <connections>
+                            <action selector="headImageAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="oHe-Gm-sHl"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" red="0.67177271297122254" green="0.86154667057249723" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="oBj-Jq-QqA" firstAttribute="top" secondItem="6oa-5i-lg4" secondAttribute="top" id="Baw-RR-Uyb"/>
+                    <constraint firstItem="6oa-5i-lg4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="EYg-zo-DO6"/>
+                    <constraint firstItem="FGQ-Ly-24a" firstAttribute="centerX" secondItem="6oa-5i-lg4" secondAttribute="centerX" id="FHg-IR-lGE"/>
+                    <constraint firstItem="oBj-Jq-QqA" firstAttribute="centerX" secondItem="6oa-5i-lg4" secondAttribute="centerX" constant="35" id="MSV-0y-y2F"/>
+                    <constraint firstAttribute="trailing" secondItem="FqI-1F-fSC" secondAttribute="trailing" id="NfD-FT-ztY"/>
+                    <constraint firstItem="FqI-1F-fSC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="UVa-pW-swu"/>
+                    <constraint firstAttribute="bottom" secondItem="FGQ-Ly-24a" secondAttribute="bottom" constant="5" id="mOQ-1J-Qit"/>
+                    <constraint firstItem="FqI-1F-fSC" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2.96" id="nAf-G9-oje"/>
+                </constraints>
+            </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="6oa-5i-lg4" firstAttribute="centerX" secondItem="KGk-i7-Jjw" secondAttribute="centerX" id="Ex1-kj-eR5"/>
+            </constraints>
+            <connections>
+                <outlet property="edtiBtn" destination="oBj-Jq-QqA" id="zH6-jc-oSo"/>
+                <outlet property="lev_butn" destination="FqI-1F-fSC" id="FXm-lu-Usq"/>
+                <outlet property="user_headImage" destination="6oa-5i-lg4" id="F1t-9T-eM5"/>
+                <outlet property="user_name" destination="FGQ-Ly-24a" id="nHd-iY-Fd1"/>
+            </connections>
+            <point key="canvasLocation" x="50" y="45"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Crown" width="10" height="11"/>
+        <image name="pencil" width="8" height="8"/>
+        <image name="signOut" width="50" height="50"/>
+    </resources>
+</document>

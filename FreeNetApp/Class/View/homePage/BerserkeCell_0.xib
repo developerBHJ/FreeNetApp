@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BerserkeCell_0" rowHeight="71" id="KGk-i7-Jjw" customClass="BerserkeCell_0">
+            <rect key="frame" x="0.0" y="0.0" width="412" height="71"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="412" height="70.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="希捷科技有限公司" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u14-oc-A4H">
+                        <rect key="frame" x="10" y="5" width="257.5" height="60.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6TW-Nr-6bW">
+                        <rect key="frame" x="299" y="7" width="103" height="56.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <state key="normal" title="官方旗舰店">
+                            <color key="titleColor" red="0.90231543780000001" green="0.45262169839999999" blue="0.43634533879999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.90231543780000001" green="0.45262169839999999" blue="0.43634533879999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="nextView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="bGO-Wj-mHV"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="u14-oc-A4H" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="1rN-AQ-F6J"/>
+                    <constraint firstItem="u14-oc-A4H" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:1.6" id="6W7-ng-rDr"/>
+                    <constraint firstAttribute="bottom" secondItem="6TW-Nr-6bW" secondAttribute="bottom" constant="7" id="Dg7-A6-DdP"/>
+                    <constraint firstAttribute="trailing" secondItem="6TW-Nr-6bW" secondAttribute="trailing" constant="10" id="Efu-Th-j1k"/>
+                    <constraint firstItem="6TW-Nr-6bW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="GJU-AC-f6x"/>
+                    <constraint firstItem="u14-oc-A4H" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="Mn5-d6-7Gm"/>
+                    <constraint firstItem="6TW-Nr-6bW" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.25" id="Tra-3a-VHE"/>
+                    <constraint firstAttribute="bottom" secondItem="u14-oc-A4H" secondAttribute="bottom" constant="5" id="UdG-3o-4HS"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="nextBtn" destination="6TW-Nr-6bW" id="rEr-1f-tph"/>
+                <outlet property="titleLabel" destination="u14-oc-A4H" id="uTx-gL-psd"/>
+            </connections>
+            <point key="canvasLocation" x="80" y="88.5"/>
+        </tableViewCell>
+    </objects>
+</document>

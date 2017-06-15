@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="flagShipHeadView_1" id="U6b-Vx-4bR" customClass="flagShipHeadView_1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="查看全部评论（25）" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MeQ-jL-mh5">
+                    <rect key="frame" x="10" y="16" width="140" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bKu-gB-ncU">
+                    <rect key="frame" x="295.5" y="19" width="9.5" height="12"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="12" id="Q15-lu-D9R"/>
+                        <constraint firstAttribute="width" secondItem="bKu-gB-ncU" secondAttribute="height" multiplier="0.8" id="Ste-Mg-Avd"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="right_arrow"/>
+                    <connections>
+                        <action selector="moreAction:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="0as-dI-FFN"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="MeQ-jL-mh5" firstAttribute="centerY" secondItem="U6b-Vx-4bR" secondAttribute="centerY" id="1A7-Mf-HPh"/>
+                <constraint firstItem="bKu-gB-ncU" firstAttribute="centerY" secondItem="MeQ-jL-mh5" secondAttribute="centerY" id="Qa0-II-Eoe"/>
+                <constraint firstAttribute="trailing" secondItem="bKu-gB-ncU" secondAttribute="trailing" constant="15" id="Smx-fw-DcN"/>
+                <constraint firstItem="MeQ-jL-mh5" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="10" id="fja-Zw-QNr"/>
+            </constraints>
+            <connections>
+                <outlet property="rightBtn" destination="bKu-gB-ncU" id="yb9-Mq-TH2"/>
+                <outlet property="themeLabel" destination="MeQ-jL-mh5" id="XF0-Un-21F"/>
+            </connections>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="right_arrow" width="7" height="12"/>
+    </resources>
+</document>

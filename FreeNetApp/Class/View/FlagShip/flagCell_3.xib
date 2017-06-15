@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="flagCell_3" id="gTV-IL-0wX" customClass="flagCell_3">
+            <rect key="frame" x="0.0" y="0.0" width="152" height="184"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="152" height="184"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="特价" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mr1-Vh-02x">
+                        <rect key="frame" x="0.0" y="137" width="152" height="37"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discount" translatesAutoresizingMaskIntoConstraints="NO" id="tPQ-22-tVR">
+                        <rect key="frame" x="15" y="5" width="122" height="122"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="tPQ-22-tVR" secondAttribute="height" id="6BF-TV-EPR"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Mr1-Vh-02x" firstAttribute="top" secondItem="tPQ-22-tVR" secondAttribute="bottom" constant="10" id="089-gT-6Ik"/>
+                <constraint firstItem="tPQ-22-tVR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="7bu-eo-zl8"/>
+                <constraint firstAttribute="trailing" secondItem="Mr1-Vh-02x" secondAttribute="trailing" id="BDA-gm-ydo"/>
+                <constraint firstAttribute="bottom" secondItem="Mr1-Vh-02x" secondAttribute="bottom" constant="10" id="Lu1-iA-NdG"/>
+                <constraint firstItem="tPQ-22-tVR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="dqY-Wu-ALx"/>
+                <constraint firstAttribute="trailing" secondItem="tPQ-22-tVR" secondAttribute="trailing" constant="15" id="e6p-Z4-Eha"/>
+                <constraint firstItem="Mr1-Vh-02x" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="v8z-yM-H3b"/>
+            </constraints>
+            <size key="customSize" width="152" height="184"/>
+            <connections>
+                <outlet property="image" destination="tPQ-22-tVR" id="OcW-pI-kDQ"/>
+                <outlet property="themeLabel" destination="Mr1-Vh-02x" id="foJ-Wk-ybh"/>
+            </connections>
+            <point key="canvasLocation" x="-8" y="128"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="discount" width="40" height="40"/>
+    </resources>
+</document>

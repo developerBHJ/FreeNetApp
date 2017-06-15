@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModifyPwdViewController">
+            <connections>
+                <outlet property="confirmPwd" destination="MT7-cO-ATj" id="pK0-kq-Kl9"/>
+                <outlet property="currentPwd" destination="odI-CI-fig" id="Dfg-o9-mC3"/>
+                <outlet property="pwdTF" destination="xa7-5A-rze" id="dcZ-vE-dYO"/>
+                <outlet property="sureBtn" destination="xLF-pH-w32" id="Itr-Gr-muR"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="当前密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="odI-CI-fig">
+                    <rect key="frame" x="10" y="79" width="355" height="56"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="确认新密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MT7-cO-ATj">
+                    <rect key="frame" x="10" y="231" width="355" height="56"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xLF-pH-w32">
+                    <rect key="frame" x="10" y="307" width="355" height="56"/>
+                    <color key="backgroundColor" red="0.89411764709999997" green="0.31372549020000001" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                    <state key="normal" title="确认提交">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="confirmAction:" destination="-1" eventType="touchUpInside" id="dgF-4O-0Qe"/>
+                    </connections>
+                </button>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="新密码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xa7-5A-rze">
+                    <rect key="frame" x="10" y="155" width="355" height="56"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="xLF-pH-w32" firstAttribute="trailing" secondItem="MT7-cO-ATj" secondAttribute="trailing" id="4jc-N3-Xhh"/>
+                <constraint firstItem="xa7-5A-rze" firstAttribute="leading" secondItem="odI-CI-fig" secondAttribute="leading" id="8Fh-AD-acF"/>
+                <constraint firstItem="xLF-pH-w32" firstAttribute="top" secondItem="MT7-cO-ATj" secondAttribute="bottom" constant="20" id="FdZ-cg-FL2"/>
+                <constraint firstAttribute="trailing" secondItem="odI-CI-fig" secondAttribute="trailing" constant="10" id="GnD-Qq-eNw"/>
+                <constraint firstItem="xa7-5A-rze" firstAttribute="height" secondItem="odI-CI-fig" secondAttribute="height" id="KAi-B0-VdE"/>
+                <constraint firstItem="MT7-cO-ATj" firstAttribute="trailing" secondItem="xa7-5A-rze" secondAttribute="trailing" id="WEW-8s-mgh"/>
+                <constraint firstItem="MT7-cO-ATj" firstAttribute="height" secondItem="xa7-5A-rze" secondAttribute="height" id="Wcl-xv-Utq"/>
+                <constraint firstItem="MT7-cO-ATj" firstAttribute="leading" secondItem="xa7-5A-rze" secondAttribute="leading" id="X45-bt-QRp"/>
+                <constraint firstItem="odI-CI-fig" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="79" id="XUV-oX-q13"/>
+                <constraint firstItem="xa7-5A-rze" firstAttribute="top" secondItem="odI-CI-fig" secondAttribute="bottom" constant="20" id="mqD-g6-lmF"/>
+                <constraint firstItem="odI-CI-fig" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="1:11.9" id="oj9-AD-E69"/>
+                <constraint firstItem="odI-CI-fig" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="rOk-bs-j6e"/>
+                <constraint firstItem="xLF-pH-w32" firstAttribute="height" secondItem="MT7-cO-ATj" secondAttribute="height" id="wwP-Ka-7GF"/>
+                <constraint firstItem="MT7-cO-ATj" firstAttribute="top" secondItem="xa7-5A-rze" secondAttribute="bottom" constant="20" id="xLH-m4-uIu"/>
+                <constraint firstItem="xLF-pH-w32" firstAttribute="leading" secondItem="MT7-cO-ATj" secondAttribute="leading" id="y7d-pg-z9Q"/>
+                <constraint firstItem="xa7-5A-rze" firstAttribute="trailing" secondItem="odI-CI-fig" secondAttribute="trailing" id="zJe-La-RWD"/>
+            </constraints>
+            <point key="canvasLocation" x="33.5" y="100.5"/>
+        </view>
+    </objects>
+</document>

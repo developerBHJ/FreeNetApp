@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="answerHeadView_1" id="iN0-l3-epB" customClass="answerHeadView_1">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_head" translatesAutoresizingMaskIntoConstraints="NO" id="aLZ-Kq-A3n">
+                    <rect key="frame" x="15" y="44" width="62.5" height="62.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="aLZ-Kq-A3n" secondAttribute="height" id="DHl-IX-ugR"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sorry" translatesAutoresizingMaskIntoConstraints="NO" id="Sdj-oR-D0F">
+                    <rect key="frame" x="203" y="18" width="137" height="114"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Sdj-oR-D0F" secondAttribute="height" multiplier="1.2" id="SvQ-xT-wiA"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="topFun_sun" translatesAutoresizingMaskIntoConstraints="NO" id="Uuw-Zm-9X2">
+                    <rect key="frame" x="112.5" y="54" width="15" height="15"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="春哥" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="506-EO-U2A">
+                    <rect key="frame" x="82.5" y="54" width="25" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200欢乐豆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6h-IG-RFs">
+                    <rect key="frame" x="82" y="74" width="60" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.95102399589999997" green="0.6313152313" blue="0.20012196900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Sdj-oR-D0F" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="18" id="07t-CE-Yvz"/>
+                <constraint firstItem="Uuw-Zm-9X2" firstAttribute="centerY" secondItem="506-EO-U2A" secondAttribute="centerY" id="0I1-jK-D6g"/>
+                <constraint firstItem="506-EO-U2A" firstAttribute="leading" secondItem="aLZ-Kq-A3n" secondAttribute="trailing" constant="5" id="47J-Gi-RM7"/>
+                <constraint firstAttribute="bottom" secondItem="Sdj-oR-D0F" secondAttribute="bottom" constant="18" id="5Cx-PL-GSt"/>
+                <constraint firstAttribute="trailing" secondItem="Sdj-oR-D0F" secondAttribute="trailing" constant="35" id="9b3-DP-TD3"/>
+                <constraint firstItem="506-EO-U2A" firstAttribute="top" secondItem="aLZ-Kq-A3n" secondAttribute="top" constant="10" id="DPJ-cO-Iqx"/>
+                <constraint firstItem="aLZ-Kq-A3n" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="1:6" id="FJ1-Kr-8Oc"/>
+                <constraint firstItem="p6h-IG-RFs" firstAttribute="top" secondItem="Uuw-Zm-9X2" secondAttribute="bottom" constant="5" id="Fod-BW-geu"/>
+                <constraint firstItem="p6h-IG-RFs" firstAttribute="leading" secondItem="506-EO-U2A" secondAttribute="leading" id="Mhb-NJ-5I7"/>
+                <constraint firstItem="Uuw-Zm-9X2" firstAttribute="leading" secondItem="506-EO-U2A" secondAttribute="trailing" constant="5" id="aZe-dk-Imq"/>
+                <constraint firstItem="aLZ-Kq-A3n" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="bF7-dm-IWf"/>
+                <constraint firstItem="aLZ-Kq-A3n" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="bNc-sT-hpb"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="markView" destination="Sdj-oR-D0F" id="KcW-Tv-2rB"/>
+                <outlet property="moneyLabel" destination="p6h-IG-RFs" id="Xd2-4f-67H"/>
+                <outlet property="user_head" destination="aLZ-Kq-A3n" id="OwF-Mo-g5M"/>
+                <outlet property="user_level" destination="Uuw-Zm-9X2" id="jWQ-GR-3kA"/>
+                <outlet property="user_name" destination="506-EO-U2A" id="IaG-KF-yd6"/>
+            </connections>
+            <point key="canvasLocation" x="33.5" y="95"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="sorry" width="100" height="77"/>
+        <image name="topFun_sun" width="15" height="15"/>
+        <image name="user_head" width="50" height="50"/>
+    </resources>
+</document>

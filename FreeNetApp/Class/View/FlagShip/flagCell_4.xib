@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="flagCell_4" id="gTV-IL-0wX" customClass="flagCell_4">
+            <rect key="frame" x="0.0" y="0.0" width="326" height="66"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="326" height="66"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100元代金券现价90" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g8B-xn-T60">
+                        <rect key="frame" x="66" y="24.5" width="136" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mark_back" translatesAutoresizingMaskIntoConstraints="NO" id="Ysf-N6-A1t">
+                        <rect key="frame" x="10" y="10" width="46" height="46"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="Ysf-N6-A1t" secondAttribute="height" id="CEp-38-0gX"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="券" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5mG-Z3-fAn">
+                        <rect key="frame" x="25.5" y="24.5" width="15.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="90元" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GYL-4E-bt6">
+                        <rect key="frame" x="277" y="24.5" width="34" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="5mG-Z3-fAn" firstAttribute="centerX" secondItem="Ysf-N6-A1t" secondAttribute="centerX" id="6zk-nR-lye"/>
+                <constraint firstItem="Ysf-N6-A1t" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Jee-ac-Nin"/>
+                <constraint firstItem="GYL-4E-bt6" firstAttribute="centerY" secondItem="g8B-xn-T60" secondAttribute="centerY" id="LBD-8b-95M"/>
+                <constraint firstItem="g8B-xn-T60" firstAttribute="centerY" secondItem="Ysf-N6-A1t" secondAttribute="centerY" id="MQu-kT-gvd"/>
+                <constraint firstAttribute="bottom" secondItem="Ysf-N6-A1t" secondAttribute="bottom" constant="10" id="Y0V-WJ-yrf"/>
+                <constraint firstItem="5mG-Z3-fAn" firstAttribute="centerY" secondItem="Ysf-N6-A1t" secondAttribute="centerY" id="g9M-PI-8Lg"/>
+                <constraint firstItem="g8B-xn-T60" firstAttribute="leading" secondItem="Ysf-N6-A1t" secondAttribute="trailing" constant="10" id="iLZ-nb-Ihk"/>
+                <constraint firstItem="Ysf-N6-A1t" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="pdj-MG-z9h"/>
+                <constraint firstAttribute="trailing" secondItem="GYL-4E-bt6" secondAttribute="trailing" constant="15" id="uBA-1b-7j7"/>
+            </constraints>
+            <size key="customSize" width="326" height="66"/>
+            <connections>
+                <outlet property="markLabel" destination="5mG-Z3-fAn" id="Gd1-sM-MxF"/>
+                <outlet property="markView" destination="Ysf-N6-A1t" id="C9w-Q2-2wB"/>
+                <outlet property="priceLabel" destination="GYL-4E-bt6" id="T4P-61-HTi"/>
+                <outlet property="title" destination="g8B-xn-T60" id="W4l-us-r07"/>
+            </connections>
+            <point key="canvasLocation" x="35" y="69"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="mark_back" width="22" height="24"/>
+    </resources>
+</document>

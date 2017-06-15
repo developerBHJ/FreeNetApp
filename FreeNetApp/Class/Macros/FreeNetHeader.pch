@@ -1,0 +1,109 @@
+//
+//  FreeNetHeader.pch
+//  FreeNetApp
+//
+//  Created by 白华君 on 2016/11/10.
+//  Copyright © 2016年 BHJ. All rights reserved.
+//
+
+#ifndef FreeNetHeader_pch
+#define FreeNetHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#pragma mark - 宏
+
+#define HWColor(r, g, b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
+#define kScreenWidth self.view.frame.size.width
+#define kScreenHeight self.view.frame.size.height
+#define MainScreen_width  [UIScreen mainScreen].bounds.size.width//宽
+#define MainScreen_height [UIScreen mainScreen].bounds.size.height//高
+
+#define mapKey @"c08169bad5e4d862f5574c659eeb01ef"
+
+#define GETLOCATIONNOTIFICATION @"GetLocationNotification"
+#define GETCLASSLIST @"GetClassList"
+// 百度地图
+#define BDMapKey @"CYEc5h2tYM6GDZc2bhOw2cAHcZI5d3LQ"
+// 轮播图
+#define BannerUrl @"http://192.168.0.254:1000/banner/index"
+// 搜索
+#define SearchUrl @"http://192.168.0.254:1000/free/searchs"
+
+#pragma mark - 第三方
+
+#import <SDWebImage/SDImageCache.h>
+#import <UIImageView+WebCache.h>
+#import <SDWebImage/SDImageCache.h>
+#import <UIImageView+AFNetworking.h>
+#import <SDImageCache.h>
+#import <SDWebImageCompat.h>
+#import <SDWebImage/UIButton+WebCache.h>
+
+
+#import <SDCycleScrollView/SDCycleScrollView.h>   // 轮播图
+#import <AFNetworking.h>
+#import <Masonry/Masonry.h>
+#import <PYPhotoBrowser.h>
+#import <MBProgressHUD/MBProgressHUD.h>
+#import <UMSocialCore/UMSocialCore.h>
+#import <UShareUI/UShareUI.h>
+
+#import <MJExtension/MJExtension.h>
+
+
+///////////////////////// 高德地图 /////////////////////
+#import <AMapFoundationKit/AMapFoundationKit.h>
+#import <AMapLocationKit/AMapLocationKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
+#import <MAMapKit/MAMapKit.h>
+
+#pragma mark - 自定义
+#import "BHJNavigationViewController.h"
+#import "BaseTableViewCell.h"
+#import "BHJSegementHeadView.h"
+#import "UIView+LBExtension.h"
+#import "BHJVerifyCodeButton.h"
+#import "BHJViewController.h"
+#import "UITableView+UITabelView_EmptyData.h"
+#import "BaseCollectionViewCell.h"
+#import "BaseModel.h"
+#import "UICustomLineLabel.h"
+#import "BHJTools.h"
+#import "BHJReusableView.h"
+#import "UIColor+UIColor_expand.h"
+#import "TopfunViewController.h"
+#import "RechargeRecordViewController.h"
+#import "OpenRiceViewController.h"
+#import "UIButton+BHJButtonCategory.h"
+#import "PersonalTagViewController.h"
+#import "CalendarViewController.h"
+#import "RestaurantViewController.h"
+#import "BerserkViewController.h"
+#import "MoreClassViewController.h"
+#import "BHJCustomView.h"
+#import "arrowView.h"
+#import "MHActionSheet.h"
+#import "BHJStoreModel.h"
+#import "BHJSearchViewController.h"
+#import "UIImage+Extension.h"
+#import "UIImageView+ImgaeFill.h"
+#import "NSString+Additions.h"
+//封装提示框
+#import "ShowMessage.h"
+
+#import "GoodsModel.h"
+
+
+//本地个人信息
+#define Token [[NSUserDefaults standardUserDefaults]objectForKey:@"token"]
+#define user_id @"12"
+
+
+
+
+
+
+
+
+#endif /* FreeNetHeader_pch */
