@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *rightImage;
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftSpace;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftMargin;
 
 
 

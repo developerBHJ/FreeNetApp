@@ -8,7 +8,7 @@
 
 #import "RechargeRecordViewController.h"
 #import "RechargeCell.h"
-
+#import "RechargeViewController.h"
 @interface RechargeRecordViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *rechargeLabel;
@@ -36,6 +36,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"充值记录" style:UIBarButtonItemStylePlain target:self action:@selector(rechargeRecord:)];
+    [self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} forState:UIControlStateNormal];
+
     [self.rechargeTableView registerNib:[UINib nibWithNibName:@"RechargeCell" bundle:nil] forCellReuseIdentifier:@"RechargeCell"];
     self.navigationItem.title = @"账户充值";
     [self setView];
@@ -59,6 +62,10 @@
     NSLog(@"确认支付");
 }
 
+-(void)rechargeRecord:(UIBarButtonItem *)sender{
+
+    [self.navigationController pushViewController:[RechargeViewController new] animated:YES];
+}
 
 -(void)setView{
 

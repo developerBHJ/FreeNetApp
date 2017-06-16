@@ -44,14 +44,15 @@
     [super viewDidLoad];
     
     [self setView];
+    
+    NSLog(@"-------------%ld",self.status);
 }
 
 #pragma mark >>> 自定义
 
 -(void)setView{
     
-    self.navigationItem.title = @"我的免费";
-
+    self.navigationItem.title = self.navgationTitle;
     for (int i = 0; i < 10; i ++) {
         BaseModel *model = [[BaseModel alloc]init];
         [self.myFreeData addObject:model];

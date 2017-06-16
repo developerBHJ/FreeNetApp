@@ -22,9 +22,6 @@
 #import "PersonerExchangeViewController.h"
 
 #import "MyOrderViewController.h"
-#import "MyExchangeViewController.h"
-#import "RechargeViewController.h"
-#import "ExchangeRecordViewController.h"
 #import "InvitationRecordViewController.h"
 #import "AddressViewController.h"
 
@@ -80,19 +77,27 @@
         _segementArray = [NSMutableArray new];
         
         PersonerFreeViewController *freeVC = [[PersonerFreeViewController alloc]init];
-        
+        freeVC.status = BHJViewStyleWithFree;
+        PersonerFreeViewController *freeVC1 = [[PersonerFreeViewController alloc]init];
+        freeVC1.status = BHJViewStyleWithIndiana;
+        PersonerFreeViewController *freeVC2 = [[PersonerFreeViewController alloc]init];
+        freeVC2.status = BHJViewStyleWithSpecial;
+        PersonerFreeViewController *freeVC3 = [[PersonerFreeViewController alloc]init];
+        freeVC3.status = BHJViewStyleWithCoupon;
+        PersonerFreeViewController *freeVC4 = [[PersonerFreeViewController alloc]init];
+        freeVC4.status = BHJViewStyleWithOpen;
         PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"免费" image:@"myFree" subTitle:nil toViewController:freeVC];
-        PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"夺宝" image:@"myIndiana" subTitle:nil toViewController:freeVC];
-        PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"特价" image:@"mySpecial" subTitle:nil toViewController:freeVC];
-        PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"现金券" image:@"myExchange" subTitle:nil toViewController:freeVC];
-        PersonerGroup *model_4 = [[PersonerGroup alloc]initWithTitle:@"开饭啦" image:@"myOpen" subTitle:nil toViewController:freeVC];
-
+        PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"夺宝" image:@"myIndiana" subTitle:nil toViewController:freeVC1];
+        PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"特价" image:@"mySpecial" subTitle:nil toViewController:freeVC2];
+        PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"现金券" image:@"myExchange" subTitle:nil toViewController:freeVC3];
+        PersonerGroup *model_4 = [[PersonerGroup alloc]initWithTitle:@"开饭啦" image:@"myOpen" subTitle:nil toViewController:freeVC4];
+        
         [_segementArray addObject:model_0];
         [_segementArray addObject:model_1];
         [_segementArray addObject:model_2];
         [_segementArray addObject:model_3];
         [_segementArray addObject:model_4];
-
+        
     }
     return _segementArray;
 }
@@ -122,7 +127,7 @@
     NSString *loginstyle = [userDefault valueForKey:@"login"];
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"set"] style:UIBarButtonItemStylePlain target:self action:@selector(personerSetting:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStylePlain target:self action:@selector(scanAction:)];
-
+    
     //把右侧的两个按钮添加到rightBarButtonItem
     if ([loginstyle isEqualToString:@"succeed"]) {
         self.loginStyle = LoginSucceed;
@@ -140,8 +145,8 @@
     MessageCenterViewController *messageVC = [[MessageCenterViewController alloc]init];
     PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"消息中心" image:@"myMessage" subTitle:nil toViewController:messageVC];
     
-   // DailyRecommendationViewController *recommendationVC = [[DailyRecommendationViewController alloc]init];
-   // PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"每日推荐" image:@"recommend" subTitle:nil toViewController:recommendationVC];
+    // DailyRecommendationViewController *recommendationVC = [[DailyRecommendationViewController alloc]init];
+    // PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"每日推荐" image:@"recommend" subTitle:nil toViewController:recommendationVC];
     
     TopfunViewController *topFunVC = [[TopfunViewController alloc]init];
     PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"乐翻天" image:@"topFun" subTitle:@"玩游戏，好礼天天送" toViewController:topFunVC];
@@ -150,27 +155,27 @@
     PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"客服中心" image:@"customer" subTitle:nil toViewController:customerVC];
     [self.groupData removeAllObjects];
     [self.groupData addObject:model_0];
-  //  [self.groupData addObject:model_1];
+    //  [self.groupData addObject:model_1];
     [self.groupData addObject:model_2];
     [self.groupData addObject:model_3];
     
     MyOrderViewController *orderVC = [[MyOrderViewController alloc]init];
-  //  MyExchangeViewController *myExchangeVC = [[MyExchangeViewController alloc]init];
-    RechargeViewController *rechargeRecordVC = [[RechargeViewController alloc]init];
-    ExchangeRecordViewController *exchangeRecordVC = [[ExchangeRecordViewController alloc]init];
+    //  MyExchangeViewController *myExchangeVC = [[MyExchangeViewController alloc]init];
+    RechargeRecordViewController *rechargeRecordVC = [[RechargeRecordViewController alloc]init];
+    PersonerExchangeViewController *exchangeRecordVC = [[PersonerExchangeViewController alloc]init];
     InvitationRecordViewController *invitationVC = [[InvitationRecordViewController alloc]init];
     AddressViewController *addressVC = [[AddressViewController alloc]init];
     
-    PersonerGroup *group_0 = [[PersonerGroup alloc]initWithTitle:@"我的订单" image:@"myOrder" subTitle:nil toViewController:orderVC];
-   // PersonerGroup *group_1 = [[PersonerGroup alloc]initWithTitle:@"我的换货" image:@"exChange" subTitle:nil toViewController:myExchangeVC];
-    PersonerGroup *group_2 = [[PersonerGroup alloc]initWithTitle:@"充值记录" image:@"reCharge" subTitle:@"385 元" toViewController:rechargeRecordVC];
-    PersonerGroup *group_3 = [[PersonerGroup alloc]initWithTitle:@"兑换记录" image:@"exchangeRecord" subTitle:nil toViewController:exchangeRecordVC];
+    PersonerGroup *group_0 = [[PersonerGroup alloc]initWithTitle:@"我的关注" image:@"myCollection" subTitle:nil toViewController:orderVC];
+    // PersonerGroup *group_1 = [[PersonerGroup alloc]initWithTitle:@"我的换货" image:@"exChange" subTitle:nil toViewController:myExchangeVC];
+    PersonerGroup *group_2 = [[PersonerGroup alloc]initWithTitle:@"充值" image:@"reCharge" subTitle:@"385 元" toViewController:rechargeRecordVC];
+    PersonerGroup *group_3 = [[PersonerGroup alloc]initWithTitle:@"兑换" image:@"exchangeRecord" subTitle:nil toViewController:exchangeRecordVC];
     PersonerGroup *group_4 = [[PersonerGroup alloc]initWithTitle:@"邀请记录" image:@"Invitation record" subTitle:@"300 欢乐豆" toViewController:invitationVC];
     PersonerGroup *group_5 = [[PersonerGroup alloc]initWithTitle:@"收货地址" image:@"address" subTitle:nil toViewController:addressVC];
     
     [self.personerData removeAllObjects];
     [self.personerData addObject:group_0];
-   // [self.personerData addObject:group_1];
+    // [self.personerData addObject:group_1];
     [self.personerData addObject:group_2];
     [self.personerData addObject:group_3];
     [self.personerData addObject:group_4];
@@ -209,22 +214,18 @@
     
     for (int i = 0; i < self.segementArray.count; i ++) {
         JXButton *btn = [JXButton buttonWithType:UIButtonTypeCustom];
-        CGFloat btnWidth = (kScreenWidth - 3) / 4;
-        [btn setFrame:CGRectMake((btnWidth + 1)* i, 5, btnWidth, CGRectGetHeight(cell.frame) - 10)];
+        CGFloat btnWidth = kScreenWidth / 5;
+        [btn setFrame:CGRectMake(btnWidth* i, 7, btnWidth, CGRectGetHeight(cell.frame) - 10)];
         PersonerGroup *model = self.segementArray[i];
         [btn setImage:[[UIImage imageNamed:model.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
         [btn setTitle:model.title forState:UIControlStateNormal];
         btn.tag = 2000 + i;
         [btn.titleLabel setFont:[UIFont systemFontOfSize:12]];
         [btn setTitleColor:[UIColor colorWithHexString:@"#696969"] forState:UIControlStateNormal];
+        [btn.imageView imageFillImageView];
         
         [btn addTarget:self action:@selector(segementAction:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:btn];
-        if (i != 0) {
-            UIView *segmentView = [[UIView alloc]initWithFrame:CGRectMake(btnWidth* i + (i - 1) * 1, 0, 1, CGRectGetHeight(cell.frame))];
-            segmentView.backgroundColor = HWColor(169, 169, 169, 0.5);
-            [cell addSubview:segmentView];
-        }
     }
 }
 
@@ -233,38 +234,13 @@
 -(void)segementAction:(UIButton *)sender{
     
     if (self.loginStyle != LoginSucceed) {
-
+        
         [ShowMessage showMessage:@"请先登录" duration:3];
     }else{
-    
-    switch (sender.tag) {
-        case 2000:
-        {
-            PersonerFreeViewController *freeVC = [[PersonerFreeViewController alloc]init];
-            [self.navigationController pushViewController:freeVC animated:YES];
-        }
-            break;
-        case 2001:
-        {
-            PersonerIndianaViewController *indianaVC = [[PersonerIndianaViewController alloc]init];
-            [self.navigationController pushViewController:indianaVC animated:YES];
-        }
-            break;
-        case 2002:
-        {
-            RechargeRecordViewController *rechargeVC = [[RechargeRecordViewController alloc]init];
-            [self.navigationController pushViewController:rechargeVC animated:YES];
-        }
-            break;
-        case 2003:
-        {
-            PersonerExchangeViewController *exchangeVC = [[PersonerExchangeViewController alloc]init];
-            [self.navigationController pushViewController:exchangeVC animated:YES];
-        }
-            break;
-        default:
-            break;
-        }
+        PersonerGroup *group = self.segementArray[sender.tag - 2000];
+        BHJViewController *toVC = (BHJViewController *)group.viewController;
+        toVC.navgationTitle = group.title;
+        [self.navigationController pushViewController:toVC animated:YES];
     }
 }
 
@@ -297,7 +273,7 @@
     //线条上下移动图片
     style.animationImage = [UIImage imageNamed:@"CodeScan.bundle/qrcode_scan_light_green"];
     //添加一些扫码或相册结果处理
-   BHJScanQRViewController *scanVC = [BHJScanQRViewController new];
+    BHJScanQRViewController *scanVC = [BHJScanQRViewController new];
     scanVC.style = style;
     
     scanVC.isQQSimulator = YES;
@@ -399,6 +375,10 @@
     }else{
         PersonerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PersonerCell" forIndexPath:indexPath];
         if (indexPath.section == 2) {
+            if (indexPath.row == 0) {
+                cell.leftMargin.constant = 12.5;
+                cell.leftSpace.constant = 12.5;
+            }
             PersonerGroup *model = self.personerData[indexPath.row];
             [cell setCellWithModel:model];
         }else if (indexPath.section == 3){
@@ -410,7 +390,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
@@ -447,7 +427,7 @@
 
 #pragma mark - 调用系统相册
 -(void)setUserHeadImage{
-
+    
     UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc]init];
     imagePickerVC.delegate = self;
     imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -459,7 +439,7 @@
     
     PersonerCell_0 *cell = [self.personTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     UIImage *selectImage = [info[UIImagePickerControllerEditedImage] clipImageWithRadius:cell.user_headImage.width / 2];
-
+    
     [cell.user_headImage setImage:selectImage forState:(UIControlStateNormal)];
     [self.personTableView reloadData];
     
@@ -481,7 +461,7 @@
 
 #pragma mark - 修改头像
 -(void)changeHeadImageWithURL:(NSString *)url Data:(NSData *)data{
-
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
     [parameter setValue:data forKey:@"avatar"];

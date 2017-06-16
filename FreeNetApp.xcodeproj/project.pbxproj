@@ -52,6 +52,8 @@
 		0C1DB09E1DD476480011410F /* PersonerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1DB09D1DD476480011410F /* PersonerViewController.m */; };
 		0C1DB0A31DD482710011410F /* PersonerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1DB0A11DD482710011410F /* PersonerCell.m */; };
 		0C1DB0A41DD482710011410F /* PersonerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C1DB0A21DD482710011410F /* PersonerCell.xib */; };
+		0C1F21211EF3DA3600398F5B /* MyCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F211F1EF3DA3600398F5B /* MyCollectionCell.m */; };
+		0C1F21221EF3DA3600398F5B /* MyCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C1F21201EF3DA3600398F5B /* MyCollectionCell.xib */; };
 		0C2171911E03F4F50061FC1F /* answerHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2171901E03F4F50061FC1F /* answerHeadView.m */; };
 		0C2171931E03F5000061FC1F /* answerHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C2171921E03F5000061FC1F /* answerHeadView.xib */; };
 		0C2689361DF93F2800780192 /* BerserkCell_2.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2689341DF93F2800780192 /* BerserkCell_2.m */; };
@@ -491,6 +493,9 @@
 		0C1DB0A01DD482710011410F /* PersonerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonerCell.h; sourceTree = "<group>"; };
 		0C1DB0A11DD482710011410F /* PersonerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonerCell.m; sourceTree = "<group>"; };
 		0C1DB0A21DD482710011410F /* PersonerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonerCell.xib; sourceTree = "<group>"; };
+		0C1F211E1EF3DA3600398F5B /* MyCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionCell.h; sourceTree = "<group>"; };
+		0C1F211F1EF3DA3600398F5B /* MyCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionCell.m; sourceTree = "<group>"; };
+		0C1F21201EF3DA3600398F5B /* MyCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyCollectionCell.xib; sourceTree = "<group>"; };
 		0C21718F1E03F4F50061FC1F /* answerHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = answerHeadView.h; sourceTree = "<group>"; };
 		0C2171901E03F4F50061FC1F /* answerHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = answerHeadView.m; sourceTree = "<group>"; };
 		0C2171921E03F5000061FC1F /* answerHeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = answerHeadView.xib; sourceTree = "<group>"; };
@@ -1571,6 +1576,9 @@
 				0C10C9251DE28C0800095201 /* RechargeRecordCell.h */,
 				0C10C9261DE28C0800095201 /* RechargeRecordCell.m */,
 				0C10C9271DE28C0800095201 /* RechargeRecordCell.xib */,
+				0C1F211E1EF3DA3600398F5B /* MyCollectionCell.h */,
+				0C1F211F1EF3DA3600398F5B /* MyCollectionCell.m */,
+				0C1F21201EF3DA3600398F5B /* MyCollectionCell.xib */,
 			);
 			path = Group1;
 			sourceTree = "<group>";
@@ -2373,6 +2381,7 @@
 				0C08C50C1E35D93200ABDF2B /* ModifyPwdViewController.xib in Resources */,
 				244183E31EC9B96900ED7B31 /* area.plist in Resources */,
 				0C087A641E334F3E00D6D2A9 /* CodeScan.bundle in Resources */,
+				0C1F21221EF3DA3600398F5B /* MyCollectionCell.xib in Resources */,
 				0CD24A851ECADF49000C6EDF /* area.plist in Resources */,
 				0C73C4321DE6E80000857BA8 /* homeCell_2.xib in Resources */,
 				0CF9CB631E5C1CEC00FEB388 /* searchCell.xib in Resources */,
@@ -2747,6 +2756,7 @@
 				0CB5D7A51DF9538C0014AA55 /* BerserkCell_4.m in Sources */,
 				0C45D6F81E0CCFE4000BAC44 /* MoreCouponViewController.m in Sources */,
 				24F4B73F1EC95AB500FDE000 /* SearchModel.m in Sources */,
+				0C1F21211EF3DA3600398F5B /* MyCollectionCell.m in Sources */,
 				0C3CC5531DD6C0A00064C2BC /* PersonerFreeViewController.m in Sources */,
 				0C3CC5641DD6C2250064C2BC /* InvitationRecordViewController.m in Sources */,
 				0CDED5451DE0033200FD7A63 /* VerificationViewController.m in Sources */,

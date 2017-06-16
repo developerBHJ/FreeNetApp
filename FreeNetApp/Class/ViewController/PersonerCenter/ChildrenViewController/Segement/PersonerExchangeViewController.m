@@ -7,7 +7,7 @@
 //
 
 #import "PersonerExchangeViewController.h"
-
+#import "ExchangeRecordViewController.h"
 @interface PersonerExchangeViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *exchangeStyle;
@@ -29,6 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"充值记录" style:UIBarButtonItemStylePlain target:self action:@selector(exchangeRecord:)];
+    [self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} forState:UIControlStateNormal];
     self.navigationItem.title = @"兑换";
     [self setView];
     
@@ -51,6 +53,11 @@
     self.balanceLabel.textColor = [UIColor whiteColor];
     self.balanceLabel.backgroundColor = [UIColor redColor];
     NSLog(@"兑换");
+}
+
+-(void)exchangeRecord:(UIBarButtonItem *)sender{
+
+    [self.navigationController pushViewController:[ExchangeRecordViewController new] animated:YES];
 }
 
 

@@ -21,4 +21,5 @@ typedef NS_ENUM(NSInteger,BHJViewStyle) {
 
 @property (nonatomic,assign)BHJViewStyle status;
 
+
 @end
