@@ -10,12 +10,10 @@
 
 @interface MessageModel : NSObject
 
-@property (nonatomic,strong)NSNumber *messageId;
+@property (nonatomic,strong)NSNumber *messageId;    //ID
 
-@property (nonatomic,strong)NSString *message;
+@property (nonatomic,strong)NSString *msg;      //消息
 
-@property (nonatomic,strong)NSString *sendtime;
-
-@property (nonatomic,strong)NSString *images;
+@property (nonatomic,strong)NSString *created_at;   //时间
 
 @end

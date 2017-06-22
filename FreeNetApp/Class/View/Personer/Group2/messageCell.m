@@ -20,6 +20,7 @@
     
 }
 
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
@@ -27,10 +28,12 @@
 }
 
 
+
 -(void)setModel:(MessageModel *)model{
 
-    self.timeLabel.text = model.sendtime;
-    self.contentLabel.text = model.message;
+    self.contentLabel.text = model.msg;
+    
+    self.timeLabel.text = model.created_at;
 }
 
 

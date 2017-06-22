@@ -8,18 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger,BHJViewStyle) {
-    
-    BHJViewStyleWithFree,
-    BHJViewStyleWithIndiana,
-    BHJViewStyleWithSpecial,
-    BHJViewStyleWithCoupon,
-    BHJViewStyleWithOpen,
-};
-
 @interface PersonerFreeViewController : BHJViewController
-
-@property (nonatomic,assign)BHJViewStyle status;
 
 
 @end

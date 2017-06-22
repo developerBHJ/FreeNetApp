@@ -7,20 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RechargeModel.h"
+#import "ExchangeRecordModel.h"
 
 @interface RechargeRecordCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *payment;  //支付方式
-@property (weak, nonatomic) IBOutlet UILabel *cardNum;  //银行卡号
+
 @property (weak, nonatomic) IBOutlet UILabel *numberLabel;  //充值钱数
 
 @property (weak, nonatomic) IBOutlet UIImageView *timeImage;
+
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;//时间
 
-
-@property (nonatomic,strong)RechargeModel *model;
+@property (nonatomic,strong)ExchangeRecordModel *model;
 @end
 
 

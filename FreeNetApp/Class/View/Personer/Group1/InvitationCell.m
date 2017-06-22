@@ -20,15 +20,28 @@
     self.invitationMark.layer.cornerRadius = 3;
     self.invitationMark.layer.masksToBounds = YES;
     
-    NSString *content = @"100欢乐豆";
-    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc]initWithString:content];
-    [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#e4504b"] range:NSMakeRange(0, 3)];
-    [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#696969"] range:NSMakeRange(3, 3)];
-
-    self.prizeLabel.attributedText = attributedStr;
     
-    // Initialization code
 }
+
+
+
+-(void)setModel:(InvitationModel *)model{
+
+    [self.head_image sd_setImageWithURL:[NSURL URLWithString:model.avatar_url]];
+
+    self.user_name.text = model.nickname;
+    
+    self.user_address.text = [NSString stringWithFormat:@"来自:%@",model.region[@"title"]];
+    
+    self.prizeLabel.text = [NSString stringWithFormat:@"%@",model.coin];
+    
+    self.timeLabel.text = [model.created_at substringToIndex:10];
+}
+
+
+
+
+
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

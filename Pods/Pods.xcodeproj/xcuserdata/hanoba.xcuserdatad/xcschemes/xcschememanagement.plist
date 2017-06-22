@@ -34,6 +34,11 @@
 			<key>orderHint</key>
 			<integer>7</integer>
 		</dict>
+		<key>MJExtension.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>15</integer>
+		</dict>
 		<key>Masonry.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -82,6 +87,16 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>2C9E5757CE02CDD7518CC748EA41967C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5494BCECEE8D2BC318A56B348A8C0F1D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>5700D8DB63D0F2A972BD7F787C684D8F</key>
 		<dict>
 			<key>primary</key>
@@ -98,6 +113,16 @@
 			<true/>
 		</dict>
 		<key>695CC512BB920DB2DF2D1ABDF434F3BD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>72CD41996B2533E3585040486B2527D9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7B76751B4E6FC061010010425CECCBA9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,6 +147,11 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>A316B54C67E947D23CECD230FA5BFAEF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>B423037F11F9BA5222A384725B86FFE3</key>
 		<dict>
 			<key>primary</key>
@@ -138,6 +168,11 @@
 			<true/>
 		</dict>
 		<key>DA1DDB71FACCC49CB7F3E488B5B33EDB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DAF866337962239B521C4AC465EBB44B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

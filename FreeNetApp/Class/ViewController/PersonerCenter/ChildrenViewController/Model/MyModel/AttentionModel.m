@@ -1,21 +1,22 @@
 //
-//  OrderModel.m
+//  AttentionModel.m
 //  FreeNetApp
 //
-//  Created by HanOBa on 2017/5/10.
+//  Created by HanOBa on 2017/6/20.
 //  Copyright © 2017年 BHJ. All rights reserved.
 //
 
-#import "OrderModel.h"
+#import "AttentionModel.h"
 
-@implementation OrderModel
-
+@implementation AttentionModel
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key{
 
     if ([key isEqualToString:@"id"]) {
-        self.orderId = value;
+        self.shopId = value;
     }
+    
 }
+
 
 @end

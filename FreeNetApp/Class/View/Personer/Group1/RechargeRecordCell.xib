@@ -27,19 +27,13 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="微信支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRe-62-kkb">
-                        <rect key="frame" x="245.5" y="10" width="63.5" height="22"/>
+                        <rect key="frame" x="245.5" y="19.5" width="63.5" height="22"/>
                         <color key="backgroundColor" red="0.89411764709999997" green="0.31372549020000001" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="WRe-62-kkb" secondAttribute="height" multiplier="23:8" id="ZOU-HL-SrX"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="银行卡6236 **** **** 3315" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="byl-nE-W56">
-                        <rect key="frame" x="176.5" y="55" width="132.5" height="12"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                        <color key="textColor" red="0.74509803921568629" green="0.74509803921568629" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥100.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zmd-at-1Jq">
@@ -65,7 +59,6 @@
                 <constraints>
                     <constraint firstItem="c34-jh-1Qw" firstAttribute="leading" secondItem="e4t-em-1Wh" secondAttribute="leading" id="3SG-vf-YMF"/>
                     <constraint firstAttribute="bottom" secondItem="c34-jh-1Qw" secondAttribute="bottom" constant="10" id="8J5-ZJ-XCd"/>
-                    <constraint firstItem="byl-nE-W56" firstAttribute="trailing" secondItem="WRe-62-kkb" secondAttribute="trailing" id="9zE-Js-dmo"/>
                     <constraint firstItem="e4t-em-1Wh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="AgQ-6S-Wv0"/>
                     <constraint firstItem="Zmd-at-1Jq" firstAttribute="leading" secondItem="e4t-em-1Wh" secondAttribute="trailing" id="Byd-q8-1bi"/>
                     <constraint firstItem="JPG-6B-t0O" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2.4" id="JXq-Dt-Snj"/>
@@ -73,15 +66,12 @@
                     <constraint firstItem="WRe-62-kkb" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:5" id="O85-V0-pwr"/>
                     <constraint firstItem="JPG-6B-t0O" firstAttribute="centerY" secondItem="c34-jh-1Qw" secondAttribute="centerY" id="PJc-3b-vMo"/>
                     <constraint firstItem="e4t-em-1Wh" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="POL-my-O1a"/>
-                    <constraint firstItem="byl-nE-W56" firstAttribute="centerY" secondItem="c34-jh-1Qw" secondAttribute="centerY" id="T9W-Zc-Z71"/>
                     <constraint firstItem="JPG-6B-t0O" firstAttribute="leading" secondItem="c34-jh-1Qw" secondAttribute="trailing" id="gHX-bX-9e2"/>
                     <constraint firstItem="Zmd-at-1Jq" firstAttribute="centerY" secondItem="e4t-em-1Wh" secondAttribute="centerY" id="i2J-5c-UJA"/>
-                    <constraint firstItem="WRe-62-kkb" firstAttribute="centerY" secondItem="e4t-em-1Wh" secondAttribute="centerY" id="lxn-x2-NdG"/>
-                    <constraint firstItem="byl-nE-W56" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:2.4" id="rcQ-D1-uGs"/>
+                    <constraint firstItem="WRe-62-kkb" firstAttribute="centerY" secondItem="e4t-em-1Wh" secondAttribute="centerY" constant="10" id="lxn-x2-NdG"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="cardNum" destination="byl-nE-W56" id="VKV-27-KjS"/>
                 <outlet property="numberLabel" destination="Zmd-at-1Jq" id="t0Z-dV-8Lc"/>
                 <outlet property="payment" destination="WRe-62-kkb" id="her-J0-4RR"/>
                 <outlet property="timeImage" destination="c34-jh-1Qw" id="Dtm-KM-SKW"/>

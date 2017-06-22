@@ -97,12 +97,13 @@
 
 //本地个人信息
 #define Token [[NSUserDefaults standardUserDefaults]objectForKey:@"token"]
-#define user_id @"12"
+#define user_id @"1"
 
 
 
-
-
+//接口地址
+#define API @"http://192.168.0.254:4004"
+#define API_URL(url) [API stringByAppendingString:(url)]
 
 
 

@@ -68,7 +68,6 @@
     dispatch_once(&onceToken, ^{
        // [self settleAreaData];
     });
-
     //    UIToolbar *statusBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
     //    statusBar.backgroundColor = [UIColor blackColor];
     //    [self.view addSubview:statusBar];

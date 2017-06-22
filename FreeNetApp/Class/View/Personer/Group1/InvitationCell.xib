@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -54,14 +54,14 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100欢乐豆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk3-Gt-NzZ">
-                        <rect key="frame" x="199.5" y="38" width="57.5" height="14.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xk3-Gt-NzZ">
+                        <rect key="frame" x="191.5" y="38" width="13.5" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京朝阳" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YTX-9G-d6q">
-                        <rect key="frame" x="121.5" y="41" width="49.5" height="14.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="欢乐豆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6cE-7x-tgD">
+                        <rect key="frame" x="205" y="38" width="37" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -76,13 +76,13 @@
                     <constraint firstItem="U9F-Yx-7vX" firstAttribute="trailing" secondItem="SNH-C9-aK0" secondAttribute="trailing" id="99M-SD-3ua"/>
                     <constraint firstItem="SNH-C9-aK0" firstAttribute="centerY" secondItem="2sB-He-ZL9" secondAttribute="centerY" id="BS2-m1-ksU"/>
                     <constraint firstItem="RZN-Ec-xFK" firstAttribute="leading" secondItem="BFw-uB-iIV" secondAttribute="trailing" constant="10" id="JKd-hz-KZq"/>
-                    <constraint firstItem="YTX-9G-d6q" firstAttribute="leading" secondItem="2sB-He-ZL9" secondAttribute="trailing" constant="10" id="SFb-gc-Ouw"/>
-                    <constraint firstItem="YTX-9G-d6q" firstAttribute="centerY" secondItem="2sB-He-ZL9" secondAttribute="centerY" id="SUj-o8-NFH"/>
                     <constraint firstItem="RZN-Ec-xFK" firstAttribute="top" secondItem="BFw-uB-iIV" secondAttribute="top" id="T4s-WY-z8g"/>
-                    <constraint firstItem="Xk3-Gt-NzZ" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" multiplier="1.25" id="X6i-jR-eu3"/>
+                    <constraint firstItem="6cE-7x-tgD" firstAttribute="leading" secondItem="Xk3-Gt-NzZ" secondAttribute="trailing" id="TGX-Jl-6yo"/>
+                    <constraint firstItem="Xk3-Gt-NzZ" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" multiplier="1.25" constant="-30" id="X6i-jR-eu3"/>
                     <constraint firstItem="2sB-He-ZL9" firstAttribute="top" secondItem="RZN-Ec-xFK" secondAttribute="bottom" constant="10" id="hL9-MF-Zkc"/>
                     <constraint firstItem="Xk3-Gt-NzZ" firstAttribute="centerY" secondItem="BFw-uB-iIV" secondAttribute="centerY" id="iBa-Eo-Y2z"/>
                     <constraint firstAttribute="trailing" secondItem="U9F-Yx-7vX" secondAttribute="trailing" constant="10" id="jbU-jQ-AnO"/>
+                    <constraint firstItem="6cE-7x-tgD" firstAttribute="centerY" secondItem="Xk3-Gt-NzZ" secondAttribute="centerY" id="s9J-A7-HUA"/>
                     <constraint firstItem="SNH-C9-aK0" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:6.4" id="ysN-Z0-Wmx"/>
                 </constraints>
             </tableViewCellContentView>

@@ -14,39 +14,44 @@
 @property (weak, nonatomic) IBOutlet UITextField *styleSelected;
 @property (weak, nonatomic) IBOutlet UILabel *totalprice;
 @property (weak, nonatomic) IBOutlet UILabel *price;
-@property (weak, nonatomic) IBOutlet UILabel *balanceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *balanceLabel; //余额
 @property (weak, nonatomic) IBOutlet UITextField *numberSelected;
 @property (weak, nonatomic) IBOutlet UILabel *exchangeNum;
 @property (weak, nonatomic) IBOutlet UIView *firstView;
 @property (weak, nonatomic) IBOutlet UIView *secondView;
 @property (weak, nonatomic) IBOutlet UIButton *sureBtn;
-
-
 @end
 
 @implementation PersonerExchangeViewController
-#pragma mark - 生命周期
+
+
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"充值记录" style:UIBarButtonItemStylePlain target:self action:@selector(exchangeRecord:)];
     [self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} forState:UIControlStateNormal];
     self.navigationItem.title = @"兑换";
-    [self setView];
+    
     
     [self setViewWithTextField:self.numberSelected imageName:nil anotherImage:nil];
-    [self setViewFiled:self.styleSelected image:@"drop"];
-}
-#pragma mark - 自定义
--(void)setView{
     
-    NSString *banlance = @"余额:  49元";
-    NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:banlance];
-    [str addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 3)];
-    self.balanceLabel.attributedText = str;
-    NSLog(@"%lu",(unsigned long)banlance.length);
+    [self setViewFiled:self.styleSelected image:@"drop"];
+    
+    
+    
+    //账户余额
+    [self accountBalanceWithURL:API_URL(@"/my/balance")];
+    
 }
 
+
+
+
+
+
+#pragma mark - 确认支付
 - (IBAction)sureAction:(UIButton *)sender {
     
     self.balanceLabel.text = @"余额不足:  9元";
@@ -61,6 +66,8 @@
 }
 
 
+
+#pragma mark - 构造UI
 -(void)setViewWithTextField:(UITextField *)textField imageName:(NSString *)imageName anotherImage:(NSString *)image{
     
     UIView *rightView = [[UIView alloc]init];
@@ -133,5 +140,63 @@
 
     NSLog(@"下拉");
 }
+
+
+
+#pragma mark - 数据请求
+    //兑换
+-(void)exchangeWithURL:(NSString *)url{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:user_id forKey:@"userId"];
+    [parameter setValue:@"" forKey:@"gold"];
+    [parameter setValue:@"" forKey:@"coin"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSLog(@"%@",result);
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+        
+    }];
+}
+
+
+    //账户余额
+-(void)accountBalanceWithURL:(NSString *)url{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:user_id forKey:@"userId"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        
+        
+        NSString *banlance = [NSString stringWithFormat:@"余额:  %@元",result[@"data"][@"gold"]];
+//        NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:banlance];
+//        [str addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(5, 3)];
+        self.balanceLabel.text = banlance;
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
+}
+
+
+
+
 
 @end

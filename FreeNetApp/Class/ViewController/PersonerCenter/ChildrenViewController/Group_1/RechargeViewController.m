@@ -8,7 +8,6 @@
 
 #import "RechargeViewController.h"
 #import "RechargeRecordCell.h"
-#import "RechargeModel.h"
 
 @interface RechargeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -104,9 +103,9 @@
         NSArray *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
 
         for (NSDictionary *data in result) {
-            RechargeModel *model = [RechargeModel new];
-            [model setValuesForKeysWithDictionary:data];
-            [self.dataArray addObject:model];
+//            RechargeModel *model = [RechargeModel new];
+//            [model setValuesForKeysWithDictionary:data];
+//            [self.dataArray addObject:model];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{

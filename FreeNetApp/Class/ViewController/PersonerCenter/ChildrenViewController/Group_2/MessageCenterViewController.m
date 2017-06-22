@@ -46,28 +46,22 @@
 
 
 
-#pragma mark >>> 生命周期
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.title = @"消息中心";
 
-//    if (self.messageData.count == 0) {
-//        [self setViewWithNothingWithImageName:@"myMessage" alerntTitle:@"您还没有消息哦～" buttonTitle:nil subContent:nil selector:nil imageFrame:CGRectMake(kScreenWidth / 2.8, kScreenHeight / 2.5, kScreenWidth / 4.5, kScreenWidth / 5.5)];
-//    }else{
-//        [self setView];
-//    }
-    
     //构造UI
     [self setView];
     
-    //默认请求数据
-  //  [self fetchMessageWithURL:@"http://192.168.0.254:1000/personer/messages" Type:1];
+    //数据请求
+    [self fetchMessageWithURL:API_URL(@"/my/messages") Type:0];
 }
 
 
-#pragma mark >>> 自定义
 
+#pragma mark - Creat UI
 -(void)setView{
     
     [self.messageView registerNib:[UINib nibWithNibName:@"messageCell" bundle:nil] forCellReuseIdentifier:@"messageCell"];
@@ -91,7 +85,7 @@
 #pragma mark - 选择器方法
 -(void)changeView:(UISegmentedControl *)sender{
     
-    [self fetchMessageWithURL:@"http://192.168.0.254:1000/personer/messages" Type:sender.selectedSegmentIndex+1];
+    [self fetchMessageWithURL:API_URL(@"/my/messages") Type:sender.selectedSegmentIndex];
 }
 
 
@@ -104,10 +98,10 @@
 }
 
 
-#pragma mark >>> UITableViewDelegate,UITableViewDataSource
+#pragma mark - Table
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 5;
+    return [self.dataArray count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -130,7 +124,8 @@
         cell.markLabel.backgroundColor = [UIColor lightGrayColor];
     }
     
-  //  cell.model = self.dataArray[indexPath.row];
+    
+    cell.model = self.dataArray[indexPath.row];
     
     return cell;
 }
@@ -143,23 +138,23 @@
     [self.dataArray removeAllObjects];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
     [parameter setValue:@(type) forKey:@"type"];
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
         
-        for (NSDictionary *data in result) {
+        for (NSDictionary *data in result[@"data"]) {
             MessageModel *model = [MessageModel new];
             [model setValuesForKeysWithDictionary:data];
             [self.dataArray addObject:model];
         }
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [self.messageView reloadData];
@@ -171,15 +166,6 @@
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
-
-
-
-
-
-
-
-
-
 
 
 

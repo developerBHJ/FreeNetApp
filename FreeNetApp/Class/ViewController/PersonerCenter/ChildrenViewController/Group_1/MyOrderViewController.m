@@ -8,23 +8,26 @@
 
 #import "MyOrderViewController.h"
 #import "MyCollectionCell.h"
-#import "OrderModel.h"
+#import "AttentionModel.h"
 @interface MyOrderViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong)UITableView *myOrderView;
-@property (nonatomic,strong)NSMutableArray *dataArray;
 
+@property (nonatomic,strong)NSMutableArray *dataArray;
 @end
 
 @implementation MyOrderViewController
+
+
 
 #pragma mark - Init
 -(UITableView *)myOrderView{
     
     if (!_myOrderView) {
-        _myOrderView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64) style:UITableViewStylePlain];
+        _myOrderView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
         _myOrderView.delegate = self;
         _myOrderView.dataSource = self;
+        _myOrderView.tableFooterView = [UIView new];
     }
     return _myOrderView;
 }
@@ -45,38 +48,15 @@
     
     self.navigationItem.title = @"我的关注";
     
-    //默认请求全部订单数据
-    [self myOrderWithURL:@"http://192.168.0.254:1000/personer/my_orders" Type:@"5"];
-    
-    //    if (self.dataArray.count == 0) {
-    //        [self setViewWithNothingWithImageName:@"order" alerntTitle:@"您还没有订单" buttonTitle:nil subContent:nil selector:nil imageFrame:CGRectMake(kScreenWidth / 2.5, kScreenHeight / 2.5, kScreenWidth / 5.5, kScreenWidth / 5)];
-    //    }else{
-    //        [self setView];
-    //    }
-    [self setView];
-}
-
-
-
-#pragma mark - UI
--(void)setView{
-    
+    //Table
     [self.myOrderView registerNib:[UINib nibWithNibName:@"MyCollectionCell" bundle:nil] forCellReuseIdentifier:@"MyCollectionCell"];
-    
     [self.view addSubview:self.myOrderView];
-}
-
-
-
-#pragma mark - 选择器实现
--(void)changeViewWithData:(UISegmentedControl *)sender{
     
-    if (sender.selectedSegmentIndex == 0) {
-        [self myOrderWithURL:@"http://192.168.0.254:1000/personer/my_orders" Type:@"5"];
-    }else{
-        NSString *type = [NSString stringWithFormat:@"%ld",(long)sender.selectedSegmentIndex];
-        [self myOrderWithURL:@"http://192.168.0.254:1000/personer/my_orders" Type:type];
-    }
+    
+    //默认请求全部订单数据
+    [self myAttentionWithURL:API_URL(@"/my/focuses")];
+    
+
 }
 
 
@@ -84,7 +64,7 @@
 #pragma mark - Table
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 5;
+    return [self.dataArray count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -97,13 +77,58 @@
     MyCollectionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyCollectionCell" forIndexPath:indexPath];
     cell.delegate = self;
     cell.index = indexPath;
-    // cell.model = self.dataArray[indexPath.row];
+    
+    cell.model = self.dataArray[indexPath.row];
+    
     return cell;
 }
+    //删除
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    return   UITableViewCellEditingStyleDelete;
+}
+
+    //先要设Cell可编辑
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return YES;
+}
+
+    //修改编辑按钮文字
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return @"删除";
+}
+    //设置进入编辑状态时，Cell不会缩进
+- (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return NO;
+}
+
+    //进入编辑模式，按下出现的编辑按钮后
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除？" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+
+            [_dataArray removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            AttentionModel *model = self.dataArray[indexPath.row];
+            //删除关注
+            [self myAttentionDeleteWithURL:API_URL(@"/my/focuseDel") Lid:model.shopId];
+        }]];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+
 
 #pragma mark >>> BaseTableViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)index{
-    
     
     NSLog(@"cellRow:----%ld",(long)index.row);
 }
@@ -111,13 +136,12 @@
 
 
 #pragma mark - 数据请求
--(void)myOrderWithURL:(NSString *)url Type:(NSString *)type{
-    
-    [self.dataArray removeAllObjects];
+//关注
+-(void)myAttentionWithURL:(NSString *)url{
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:type forKey:@"type"];
     [parameter setValue:user_id forKey:@"userId"];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -126,12 +150,11 @@
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
         
-        for (NSDictionary *data in result) {
-            OrderModel *model = [OrderModel new];
+        for (NSDictionary *data in result[@"data"]) {
+            AttentionModel *model = [AttentionModel new];
             [model setValuesForKeysWithDictionary:data];
             [self.dataArray addObject:model];
         }
-        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -139,14 +162,35 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         });
         
-        
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
+
+
+//关注删除
+-(void)myAttentionDeleteWithURL:(NSString *)url Lid:(NSNumber *)lib{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:lib forKey:@"lid"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSLog(@"%@",result);
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+        
+    }];
+}
+
 
 
 

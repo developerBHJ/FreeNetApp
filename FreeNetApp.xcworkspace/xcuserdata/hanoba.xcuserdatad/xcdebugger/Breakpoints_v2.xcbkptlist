@@ -121,7 +121,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "468"
             endingLineNumber = "468"
-            landmarkName = "-imagePickerController:didFinishPickingMediaWithInfo:"
+            landmarkName = "-changeHeadImageWithURL:Data:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -137,8 +137,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "495"
             endingLineNumber = "495"
-            landmarkName = "-changeHeadImageWithURL:Data:"
-            landmarkType = "7">
+            landmarkName = "@implementation PersonerViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -234,6 +234,99 @@
             startingLineNumber = "166"
             endingLineNumber = "166"
             landmarkName = "-loginProjectWithURL:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[LoginViewController loginProjectWithURL:]"
+                  moduleName = "FreeNetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hanoba/Desktop/LiMianWang/FreeNetApp/FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/LoginViewController.m"
+                  timestampString = "519717678.226716"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "776">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__43-[LoginViewController loginProjectWithURL:]_block_invoke"
+                  moduleName = "FreeNetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hanoba/Desktop/LiMianWang/FreeNetApp/FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/LoginViewController.m"
+                  timestampString = "519717678.229295"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "1086">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__copy_helper_block_"
+                  moduleName = "FreeNetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hanoba/Desktop/LiMianWang/FreeNetApp/FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/LoginViewController.m"
+                  timestampString = "519717678.231072"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "51">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_"
+                  moduleName = "FreeNetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hanoba/Desktop/LiMianWang/FreeNetApp/FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/LoginViewController.m"
+                  timestampString = "519717678.232758"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "29">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__43-[LoginViewController loginProjectWithURL:]_block_invoke.147"
+                  moduleName = "FreeNetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hanoba/Desktop/LiMianWang/FreeNetApp/FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/LoginViewController.m"
+                  timestampString = "519717678.235008"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FreeNetApp/Class/ViewController/PersonerCenter/ChildrenViewController/Segement/PersonerFreeViewController.m"
+            timestampString = "519622889.903158"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "-viewDidLoad"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

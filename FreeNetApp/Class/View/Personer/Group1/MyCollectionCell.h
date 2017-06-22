@@ -7,13 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "AttentionModel.h"
 @interface MyCollectionCell : BaseTableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *storeLogoImage;
-@property (weak, nonatomic) IBOutlet UILabel *addressLabel;
-@property (weak, nonatomic) IBOutlet UIButton *phoneBtn;
-@property (weak, nonatomic) IBOutlet UILabel *storeName;
+@property (nonatomic,strong)AttentionModel *model;
 
+@property (weak, nonatomic) IBOutlet UIImageView *storeLogoImage;   //图片
 
+@property (weak, nonatomic) IBOutlet UILabel *addressLabel; //地址
+
+@property (weak, nonatomic) IBOutlet UIButton *phoneBtn;    //电话
+
+@property (weak, nonatomic) IBOutlet UILabel *storeName;    //商店名
+
+@property (weak, nonatomic) IBOutlet UILabel *detailLabel;  //附属
+
+@property (nonatomic,strong)NSString *iphoneNum;    //电话号码
 @end

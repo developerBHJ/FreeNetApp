@@ -77,15 +77,15 @@
         _segementArray = [NSMutableArray new];
         
         PersonerFreeViewController *freeVC = [[PersonerFreeViewController alloc]init];
-        freeVC.status = BHJViewStyleWithFree;
+        freeVC.viewControllerStatu = BHJViewControllerStatuFree;
         PersonerFreeViewController *freeVC1 = [[PersonerFreeViewController alloc]init];
-        freeVC1.status = BHJViewStyleWithIndiana;
+        freeVC1.viewControllerStatu = BHJViewControllerStatuIndiana;
         PersonerFreeViewController *freeVC2 = [[PersonerFreeViewController alloc]init];
-        freeVC2.status = BHJViewStyleWithSpecial;
+        freeVC2.viewControllerStatu = BHJViewControllerStatuSpecial;
         PersonerFreeViewController *freeVC3 = [[PersonerFreeViewController alloc]init];
-        freeVC3.status = BHJViewStyleWithCoupon;
+        freeVC3.viewControllerStatu = BHJViewControllerStatuCoupon;
         PersonerFreeViewController *freeVC4 = [[PersonerFreeViewController alloc]init];
-        freeVC4.status = BHJViewStyleWithOpen;
+        freeVC4.viewControllerStatu = BHJViewControllerStatuOpen;
         PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"免费" image:@"myFree" subTitle:nil toViewController:freeVC];
         PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"夺宝" image:@"myIndiana" subTitle:nil toViewController:freeVC1];
         PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"特价" image:@"mySpecial" subTitle:nil toViewController:freeVC2];
@@ -117,8 +117,6 @@
     self.tabBarController.tabBar.hidden = NO;
     [self setView];
 }
-
-
 
 #pragma mark - 自定义
 -(void)setView{
@@ -297,7 +295,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
-    if (section == 3) {
+    if (section == 3 || section == 0) {
         return 1;
     }else{
         return 10;

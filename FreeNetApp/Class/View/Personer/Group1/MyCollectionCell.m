@@ -30,6 +30,18 @@
     }
 }
 
+-(void)setModel:(AttentionModel *)model{
+    
+    [self.storeLogoImage sd_setImageWithURL:[NSURL URLWithString:model.shop[@"logo_url"]]];
+    
+    self.storeName.text = model.shop[@"title"];
+    
+    self.detailLabel.text = [NSString stringWithFormat:@"(%@)",model.shop[@"introduction"]];
+    
+    self.addressLabel.text = model.shop[@"address"];
+
+    self.iphoneNum = model.shop[@"tel"];
+}
 
 
 

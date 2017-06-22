@@ -8,17 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
+#import "InvitationModel.h"
+
 @interface InvitationCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *head_image;
-@property (weak, nonatomic) IBOutlet UILabel *user_name;
-@property (weak, nonatomic) IBOutlet UILabel *user_address;
-@property (weak, nonatomic) IBOutlet UILabel *prizeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *invitationMark;
+@property (nonatomic,strong)InvitationModel *model;
 
+@property (weak, nonatomic) IBOutlet UIImageView *head_image;   //头像
 
+@property (weak, nonatomic) IBOutlet UILabel *user_name;    //昵称
 
+@property (weak, nonatomic) IBOutlet UILabel *user_address; //地址
+
+@property (weak, nonatomic) IBOutlet UILabel *prizeLabel;   //豆
+
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;    //时间
+
+@property (weak, nonatomic) IBOutlet UILabel *invitationMark;   //邀请标记
 @end
 
 

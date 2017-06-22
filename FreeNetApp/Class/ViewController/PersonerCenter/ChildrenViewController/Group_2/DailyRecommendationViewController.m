@@ -52,6 +52,8 @@
 -(void)setView{
 
     self.navigationItem.title = @"每日推荐";
+    
+    
     for (int i = 0; i < 10; i ++) {
         BaseModel *model = [[BaseModel alloc]init];
         [self.recommentdationData addObject:model];

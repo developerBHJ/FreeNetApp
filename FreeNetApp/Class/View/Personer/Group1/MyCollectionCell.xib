@@ -102,6 +102,7 @@
             </constraints>
             <connections>
                 <outlet property="addressLabel" destination="gcd-Xg-EoX" id="CNf-F2-qsn"/>
+                <outlet property="detailLabel" destination="8JD-Od-LBf" id="KSf-mQ-fJK"/>
                 <outlet property="phoneBtn" destination="gMj-3Y-ysq" id="SFy-rw-dDJ"/>
                 <outlet property="storeLogoImage" destination="YmN-k2-rfU" id="Ftw-Wh-tSA"/>
                 <outlet property="storeName" destination="1cR-Dh-JoR" id="p1H-LJ-MXJ"/>

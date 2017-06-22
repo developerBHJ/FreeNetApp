@@ -1,23 +1,24 @@
 //
-//  RechargeModel.m
+//  ExchangeRecordModel.m
 //  FreeNetApp
 //
-//  Created by HanOBa on 2017/5/9.
+//  Created by HanOBa on 2017/6/21.
 //  Copyright © 2017年 BHJ. All rights reserved.
 //
 
-#import "RechargeModel.h"
+#import "ExchangeRecordModel.h"
 
-@implementation RechargeModel
+@implementation ExchangeRecordModel
+
 
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key{
 
     if ([key isEqualToString:@"id"]) {
-        self.rechargeId = value;
+        self.exchangeId = value;
     }
-
 }
+
 
 
 

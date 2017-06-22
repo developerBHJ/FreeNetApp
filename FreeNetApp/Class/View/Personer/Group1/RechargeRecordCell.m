@@ -27,29 +27,12 @@
 
 
 
--(void)setModel:(RechargeModel *)model{
+-(void)setModel:(ExchangeRecordModel *)model{
 
-    //self.cardNum.text = model.            //银行卡号
-    self.numberLabel.text = [NSString stringWithFormat:@"%@",model.money];    //充值金额
-
-    self.timeLabel.text = model.pay_time;   //充值时间
-    
-    switch ([model.pay_type intValue]) {    //支付方式
-        case 1:
-            self.payment.text = @"支付宝支付";
-            self.payment.backgroundColor = [UIColor blueColor];
-            break;
-        case 2:
-            self.payment.text = @"微信支付";
-            self.payment.backgroundColor = [UIColor greenColor];
-            break;
-        case 3:
-            self.payment.text = @"银联支付";
-            self.payment.backgroundColor = [UIColor redColor];
-            break;
-        default:
-            break;
-    }
+    self.titleLabel.text = @"兑换欢乐豆";
+    self.numberLabel.text = [NSString stringWithFormat:@"%@",model.coin];
+    self.payment.text = [NSString stringWithFormat:@"￥%@",model.gold];
+    self.timeLabel.text = model.created_at;
 }
 
 @end

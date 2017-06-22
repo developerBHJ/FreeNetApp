@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger,BHJViewControllerStatu) {
     BHJViewControllerStatuFree,
     BHJViewControllerStatuSpecial,
     BHJViewControllerStatuIndiana,
-    BHJViewControllerStatuCoupon
+    BHJViewControllerStatuCoupon,
+    BHJViewControllerStatuOpen
 };
 
 

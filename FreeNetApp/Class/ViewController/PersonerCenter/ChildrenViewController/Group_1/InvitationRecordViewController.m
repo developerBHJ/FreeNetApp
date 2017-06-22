@@ -8,16 +8,20 @@
 
 #import "InvitationRecordViewController.h"
 #import "InvitationCell.h"
+#import "InvitationModel.h"
 
 @interface InvitationRecordViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *invitationTableView;
-@property (nonatomic,strong)NSMutableArray *invitationRecord;
 
+@property (nonatomic,strong)NSMutableArray *dataArray;
 @end
 
 @implementation InvitationRecordViewController
-#pragma mark >>>>>> 懒加载
+
+
+
+#pragma mark - Init
 -(UITableView *)invitationTableView{
 
     if (!_invitationTableView) {
@@ -29,36 +33,50 @@
     return _invitationTableView;
 }
 
--(NSMutableArray *)invitationRecord{
+-(NSMutableArray *)dataArray{
 
-    if (!_invitationRecord) {
-        _invitationRecord = [NSMutableArray new];
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
     }
-    return _invitationRecord;
+    return _dataArray;
 }
-#pragma mark >>>>>> 生命周期
 
+
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self getData];
     self.navigationItem.title = @"邀请记录";
-    if (self.invitationRecord.count == 0) {
-        [self setViewWithNothingWithImageName:@"Hands" alerntTitle:@"您还没有邀请记录哦" buttonTitle:nil subContent:nil selector:nil imageFrame:CGRectMake(kScreenWidth / 2.5, kScreenHeight / 2.5, kScreenWidth / 5, kScreenWidth / 5.5)];
-    }else{
-        [self setView];
-    }
+    
+    //数据请求 - 邀请记录
+    [self invitationRecordWithURL:API_URL(@"/my/invites")];
+    
+    [self setView];
+
+    
+//    if (self.dataArray.count == 0) {
+//        [self setViewWithNothingWithImageName:@"Hands" alerntTitle:@"您还没有邀请记录哦" buttonTitle:nil subContent:nil selector:nil imageFrame:CGRectMake(kScreenWidth / 2.5, kScreenHeight / 2.5, kScreenWidth / 5, kScreenWidth / 5.5)];
+//    }else{
+//        [self setView];
+//    }
+    
 }
 
-#pragma mark >>>>>> 协议
+
+
+#pragma mark - Table Delegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
-    return self.invitationRecord.count;
+    return [self.dataArray count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
     InvitationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"InvitationCell" forIndexPath:indexPath];
+    
+    cell.model = self.dataArray[indexPath.row];
+    
     return cell;
 }
 
@@ -71,7 +89,10 @@
 
     return 0.1;
 }
-#pragma mark >>>>>> 自定义
+
+
+
+#pragma mark - Custom UI
 -(void)setView{
 
     [self.view addSubview:self.invitationTableView];
@@ -94,12 +115,44 @@
     [[BHJTools sharedTools]showShareView];
 }
 
--(void)getData{
 
-    for (int i = 0; i < 7; i ++) {
-        PersonerGroup *model = [[PersonerGroup alloc]init];
-        [self.invitationRecord addObject:model];
-    }
+
+#pragma mark - Data Request
+    //邀请记录
+-(void)invitationRecordWithURL:(NSString *)url{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:user_id forKey:@"user_id"];
+    [parameter setValue:@"1" forKey:@"page"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        
+    
+        for (NSDictionary *object in result[@"data"]) {
+            
+            InvitationModel *model = [[InvitationModel alloc]init];
+            [model setValuesForKeysWithDictionary:object];
+            [self.dataArray addObject:model];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.invitationTableView reloadData];
+        });
+    
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+        
+    }];
 }
+
+
+
 
 @end

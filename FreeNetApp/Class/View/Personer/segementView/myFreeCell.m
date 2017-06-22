@@ -25,15 +25,15 @@
 
 -(void)setModel:(OrderModel *)model{
 
-    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];//图片
-    
-    self.goods_name.text = model.goods_name;    //商品名
-    
-    self.goods_name.text = model.real_price;    //真实价格
-    
-    self.subTitle.text = model.goods_price;     //商品价格
-    
-    self.timeLabel.text = model.pay_time;       //支付时间
+//    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];//图片
+//    
+//    self.goods_name.text = model.goods_name;    //商品名
+//    
+//    self.goods_name.text = model.real_price;    //真实价格
+//    
+//    self.subTitle.text = model.goods_price;     //商品价格
+//    
+//    self.timeLabel.text = model.pay_time;       //支付时间
 }
 
 
