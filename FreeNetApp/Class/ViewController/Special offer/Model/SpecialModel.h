@@ -10,19 +10,24 @@
 
 @interface SpecialModel : GoodsModel
 
-@property (nonatomic,strong)NSString *original_price;
-@property (nonatomic,strong)NSString *price;
+@property (nonatomic,strong)NSString *cover_url;
+@property (nonatomic,strong)NSString *price;//原价
 @property (nonatomic,strong)NSString *title;
+@property (nonatomic,strong)NSString *introduction;//描述
+@property (nonatomic,strong)NSString *discount;// 折扣价
+@property (nonatomic,strong)NSString *sell;//已售数量
+
 
 /*
- id                    特价列表
- gid                  商品ID
- img                 商品图片
- name              商品名称
- original_price  商品原价
- price                商品现价
- num                 出售数量
- title                   商品描述
+ {
+ "id": 2,
+ "cover_url": "http://oss.ktvgo.cn/avatars/default.png",
+ "title": "哈哈是",
+ "price": "100.00",
+ "introduction": "在这个是啥子哟\n",
+ "shop": {
+ "id": 1
+ }
  
  
  */

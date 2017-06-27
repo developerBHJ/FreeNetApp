@@ -10,18 +10,18 @@
 
 @interface AddressModel : NSObject
 
-@property (nonatomic,strong)NSNumber *addressId;    //ID
+@property (nonatomic,strong)NSNumber *addressId;   //ID
 
-@property (nonatomic,strong)NSString *realname;     //姓名
+@property (nonatomic,strong)NSString *truename;    //姓名
 
-@property (nonatomic,strong)NSString *mobile;       //电话号
+@property (nonatomic,strong)NSString *mobile;      //电话号
 
-@property (nonatomic,strong)NSString *province_name;    //省
+@property (nonatomic,strong)NSString *province;    //省
 
-@property (nonatomic,strong)NSString *city_name;        //市
+@property (nonatomic,strong)NSString *city;        //市
 
-@property (nonatomic,strong)NSString *district_name;    //区
+@property (nonatomic,strong)NSString *district;    //区
 
-@property (nonatomic,strong)NSString *address;          //详细地址
+@property (nonatomic,strong)NSString *address;      //详细地址
 
 @end

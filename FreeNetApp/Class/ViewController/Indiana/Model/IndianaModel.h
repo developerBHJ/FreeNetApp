@@ -10,18 +10,40 @@
 
 @interface IndianaModel : GoodsModel
 
-@property (nonatomic,strong)NSString *purchase_price;
-@property (nonatomic,strong)NSString *snatch_price;
+@property (nonatomic,strong)NSDictionary *treasure;
 
 /*
  {
- id  夺宝表ID
- name 夺宝名称
- purchase_price  直购价格
- snatch_price  夺宝价格
- img  商品图片
+	"id": "夺宝列表ID",
+	"start_time": "开始时间"
+	"end_time": "结束时间"
+	"treasure" : {
+ "id": "夺宝商品ID"
+ "cover_url": "夺宝商品封面地址"
+ "title": "夺宝商品名称"
+ "price": "夺宝商品出售价格"
+ "start_price": "夺宝商品起拍价格"
+ }
  }
  
+ {
+ "status": 200,
+ "message": "获取数据成功",
+ "data": [
+ {
+ "id": 1,
+ "start_time": "2017-06-07T19:52:00.000Z",
+ "end_time": "2017-06-08T19:52:00.000Z",
+ "treasure": {
+ "id": 1,
+ "cover_url": "http://oss.ktvgo.cn/avatars/default.png",
+ "title": "这个是夺宝的商品名称",
+ "start_price": "10.00",
+ "price": "100.00"
+ }
+ },
+ ]
+ }
  
  */
 @end
