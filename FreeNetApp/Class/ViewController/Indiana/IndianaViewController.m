@@ -18,7 +18,8 @@
 #import "Banner.h"
 #import "IndianaModel.h"
 
-#define IndianaUrl @"http://192.168.0.254:1000/ingots/index"
+#define IndianaUrl @"http://192.168.0.254:4004/indiana/lists"
+#define kIndianaHot @"http://192.168.0.254:4004/indiana/hot_lists"
 
 @interface IndianaViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
@@ -63,7 +64,7 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id",@"1",@"page",@"3",@"type", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id", nil];
     }
     return _parameter;
 }
@@ -78,7 +79,6 @@
     
     self.viewControllerStatu = BHJViewControllerStatuIndiana;
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedCity:) name:@"selectedCity" object:nil];
     [self setNavgationBarView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
     [self getData];
@@ -120,21 +120,19 @@
     NSMutableArray *timeArr = [NSMutableArray arrayWithArray:@[@"12:00",@"14:00",@"16:00",@"19:00",@"21:00"]];
     [self.indianaData setObject:timeArr forKey:@"time"];
     //请求数据
-    [self getIndianaBannerWith:BannerUrl parameter:self.parameter];
-    [self getIndianaDataWithUrl:IndianaUrl parameter:self.parameter];
+    [self getIndianaDataWithUrl:IndianaUrl parameter:nil];
+    [self getIndianaHotDataWithUrl:kIndianaHot parameter:nil];
+    // 轮播图
+    NSString *str = [BannerUrl stringByAppendingString:@"1"];
+    [self getIndianaBannerWith:str parameter:nil];
 }
 
 -(void)selectedCity:(NSNotification *)sender{
     
     NSString *currentCity = sender.userInfo[@"userCity"];
-    NSString *city_id = sender.userInfo[@"city_id"];
-    if (city_id.length > 0) {
-        [self.parameter setValue:city_id forKey:@"region_id"];
-    }
     if (currentCity.length > 0) {
         [self.locationBtn setTitle:currentCity forState:UIControlStateNormal];
     }
-    [self getIndianaDataWithUrl:IndianaUrl parameter:self.parameter];
 }
 
 #pragma mark >>>> 网络获取数据
@@ -143,9 +141,10 @@
     NSMutableArray *data = [NSMutableArray new];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = dic[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 Banner *banner = [Banner mj_objectWithKeyValues:dic];
@@ -159,25 +158,46 @@
     }];
 }
 
-// 热门推荐数据
+// 夺宝数据
 -(void)getIndianaDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
-    NSMutableArray *data = [NSMutableArray new];
+    NSMutableArray *dataSource = [NSMutableArray new];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if (array.count > 0) {
-            for (NSDictionary *dic in array) {
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *arr = data[@"data"];
+        if (arr.count > 0) {
+            for (NSDictionary *dic in arr) {
                 IndianaModel *model = [IndianaModel mj_objectWithKeyValues:dic];
-                [data addObject:model];
+                [dataSource addObject:model];
             }
         }
-        NSLog(@"===%@",array);
-        [self.indianaData setObject:data forKey:@"indiana"];
-        //[self.indianaCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
-        // [self.indianaCollectionView reloadSections:[NSIndexSet indexSetWithIndex:3]];
+        [self.indianaData setObject:dataSource forKey:@"indiana"];
+        [self.indianaCollectionView reloadData];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求数据失败");
+    }];
+}
+
+// 夺宝热门推荐数据
+-(void)getIndianaHotDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
+    
+    NSMutableArray *dataSource = [NSMutableArray new];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *arr = data[@"data"];
+        if (arr.count > 0) {
+            for (NSDictionary *dic in arr) {
+                IndianaModel *model = [IndianaModel mj_objectWithKeyValues:dic];
+                [dataSource addObject:model];
+            }
+        }
+        [self.indianaData setObject:dataSource forKey:@"Hot"];
         [self.indianaCollectionView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求数据失败");
@@ -197,10 +217,11 @@
     }else if (section == 1){
         return 2;
     }else if (section == 2){
-        return 2;
+        NSArray *data = [self.indianaData objectForKey:@"Hot"];
+        return data.count;
     }else{
-       // NSArray *data = [self.indianaData objectForKey:@"indiana"];
-        return 2;
+        NSArray *data = [self.indianaData objectForKey:@"indiana"];
+        return data.count;
     }
 }
 
@@ -226,23 +247,22 @@
         return cell;
     }else if (indexPath.section == 2){
         indianaCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"indianaCell" forIndexPath:indexPath];
-        NSArray *data = [self.indianaData objectForKey:@"indiana"];
-      //  cell.model = data[0];
+        NSArray *data = [self.indianaData objectForKey:@"Hot"];
+        cell.model = data[indexPath.row];
         cell.delegate = self;
         //        cell.tryBtn.tag = 200;
         //        cell.buyBtn.tag = 201;
         cell.index = indexPath;
-        if (indexPath.row == 1) {
+        if (indexPath.row == 0) {
             cell.title.text = @"这么精彩 超值实惠";
             cell.title.textColor = [UIColor colorWithHexString:@"#e4504b"];
-          //  cell.model = data[1];
         }
         return cell;
     }else {
         NSArray *data = [self.indianaData objectForKey:@"indiana"];
         indianaCell_1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"indianaCell_1" forIndexPath:indexPath];
         cell.delegate = self;
-       // cell.model = data[indexPath.row + 2];
+        cell.model = data[indexPath.row];
         cell.index = indexPath;
         cell.buyBtn.tag = 300;
         cell.tryBtn.tag = 301;
@@ -291,10 +311,9 @@
             NSArray *banner = [self.indianaData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
-                //  [images addObject:model.content];
+                 [images addObject:model.image_url];
             }
-            // scrollView.imageURLStringsGroup = images;
-            scrollView.localizationImageNamesGroup = self.imageArr;
+            scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
         }else if (indexPath.section == 2){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];
@@ -386,14 +405,14 @@
             [self.navigationController pushViewController:moreVC animated:YES];
         }
     }else if (indexPath.section == 2){
-        NSArray *data = [self.indianaData objectForKey:@"indiana"];
+        NSArray *data = [self.indianaData objectForKey:@"Hot"];
         IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
         detailVC.model = data[indexPath.row];
         [self.navigationController pushViewController:detailVC animated:YES];
     }else if (indexPath.section == 3){
         IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
         NSArray *data = [self.indianaData objectForKey:@"indiana"];
-        detailVC.model = data[indexPath.row + 2];
+        detailVC.model = data[indexPath.row];
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }

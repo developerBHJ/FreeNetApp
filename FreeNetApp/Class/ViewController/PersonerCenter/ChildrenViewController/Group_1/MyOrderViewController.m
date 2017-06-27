@@ -114,11 +114,12 @@
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
 
-            [_dataArray removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            AttentionModel *model = self.dataArray[indexPath.row];
+            
             //删除关注
+            AttentionModel *model = self.dataArray[indexPath.row];
             [self myAttentionDeleteWithURL:API_URL(@"/my/focuseDel") Lid:model.shopId];
+            [_dataArray removeObjectAtIndex:indexPath.row];
         }]];
         
         [self presentViewController:alertController animated:YES completion:nil];
@@ -127,7 +128,7 @@
 
 
 
-#pragma mark >>> BaseTableViewCellDelegate
+#pragma mark - BaseTableViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)index{
     
     NSLog(@"cellRow:----%ld",(long)index.row);
@@ -136,7 +137,7 @@
 
 
 #pragma mark - 数据请求
-//关注
+//关注请求
 -(void)myAttentionWithURL:(NSString *)url{
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -169,13 +170,12 @@
     }];
 }
 
-
 //关注删除
 -(void)myAttentionDeleteWithURL:(NSString *)url Lid:(NSNumber *)lib{
 
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:lib forKey:@"lid"];
-    
+    NSLog(@"%@",parameter);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

@@ -81,13 +81,13 @@
         SDCycleScrollView *scrollview = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth - 20, kScreenHeight / 2 - 50) imageURLStringsGroup:self.imageArr];
         _cycleScrollView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight / 2)];
         UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, scrollview.bottom + 7, _cycleScrollView.width - 40, 15)];
-        titleLabel.text = self.model.name;
+        //titleLabel.text = self.model.name;
         [titleLabel setFont:[UIFont systemFontOfSize:15]];
         titleLabel.textColor = [UIColor colorWithHexString:@"#696969"];
         UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, titleLabel.bottom + 5, _cycleScrollView.width, 15)];
         priceLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
         [priceLabel setFont:[UIFont systemFontOfSize:15]];
-        NSString *str = [NSString stringWithFormat:@"¥%@",self.model.snatch_price];
+        NSString *str = [NSString stringWithFormat:@"¥%@",@"12"];
         NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:str];
         [attStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, 1)];
         priceLabel.attributedText = attStr;

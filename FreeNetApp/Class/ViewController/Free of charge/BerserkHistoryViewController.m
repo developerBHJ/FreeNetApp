@@ -8,15 +8,31 @@
 
 #import "BerserkHistoryViewController.h"
 #import "BerserkHistoryCell.h"
+#import "HistoryModel.h"
+
+#define kBerserkHistoryUrl @"http://192.168.0.254:4004/free/freelogs"
 
 @interface BerserkHistoryViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *berserkHistoryView;
 @property (nonatomic,strong)NSString *startTime;
+@property (nonatomic,strong)NSMutableArray *historyData;
+@property (nonatomic,assign)int lid;//列表id
+
 
 @end
 
 @implementation BerserkHistoryViewController
+
+-(id)initWithID:(int)lid{
+    
+    self = [super init];
+    if (self) {
+        self.lid = lid;
+    }
+    return self;
+}
+
 #pragma mark -- 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,12 +43,14 @@
     [backBtn addTarget:self action:@selector(viewDismiss:) forControlEvents:UIControlEventTouchUpInside];
     [backBtn setFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     [self.view addSubview:backBtn];
-
+    
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self.view addSubview:self.berserkHistoryView];
     [self.berserkHistoryView registerNib:[UINib nibWithNibName:@"BerserkHistoryCell" bundle:nil] forCellReuseIdentifier:@"BerserkHistoryCell"];
     [self getCurrentTime];
     self.view.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.35];
+    // 疯抢记录数据
+    [self getHistoryDataWithUrl:kBerserkHistoryUrl];
 }
 #pragma mark -- 自定义
 -(NSString *)getCurrentTime
@@ -46,8 +64,34 @@
 }
 
 -(void)viewDismiss:(UIButton *)sender{
-
+    
     self.view.hidden = YES;
+}
+
+
+-(void)getHistoryDataWithUrl:(NSString *)url{
+    
+    NSDictionary *paramater = [NSDictionary dictionaryWithObjectsAndKeys:@(self.lid),@"lid", nil];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *history = data[@"data"];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = @"正在加载...";
+        if (history.count > 0) {
+            for (NSDictionary *user in history) {
+                HistoryModel *model = [HistoryModel mj_objectWithKeyValues:user];
+                [self.historyData addObject:model];
+            }
+        }
+        [self.berserkHistoryView reloadData];
+        [hud hideAnimated:YES];
+        NSLog(@"%@",RequestSuccess);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",RequestFailure);
+    }];
 }
 #pragma mark -- 懒加载
 -(UITableView *)berserkHistoryView{
@@ -61,10 +105,19 @@
     }
     return _berserkHistoryView;
 }
+
+-(NSMutableArray *)historyData{
+    
+    if (!_historyData) {
+        _historyData = [NSMutableArray new];
+    }
+    return _historyData;
+}
+
 #pragma mark -- UITableViewDelegate,UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 6;
+    return self.historyData.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -82,26 +135,11 @@
     NSString *dural = [NSString stringWithFormat:@"%d秒前",second];
     cell.timeLabel.text = dural;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (indexPath.row == 0) {
-        cell.circleLabel.backgroundColor = [UIColor colorWithHexString:@"#e34a44"];
-        cell.leftView.image = [UIImage imageNamed:@"berserk_back_red"];
-        cell.user_name.textColor = [UIColor colorWithHexString:@"#e4504b"];
-        cell.user_level.image = [UIImage imageNamed:@"star"];
-        cell.markLabel.backgroundColor = [UIColor colorWithHexString:@"#e34a44"];
-        cell.user_image.borderColor = [UIColor colorWithHexString:@"#e34a44"];
-        cell.user_image.borderWidth = 2.5;
-        cell.firstLabel.hidden = YES;
-    }else{
-        cell.circleLabel.backgroundColor = [UIColor colorWithHexString:@"#bebebe"];
-        cell.leftView.image = [UIImage imageNamed:@"BGView_gray"];
-        cell.user_name.textColor = [UIColor colorWithHexString:@"#696969"];
-        cell.user_level.image = [UIImage imageNamed:@"moon"];
-        cell.markLabel.backgroundColor = [UIColor colorWithHexString:@"#bebebe"];
-        cell.firstLabel.hidden = NO;
-    }
+    // 疯抢记录数据
+    cell.model = self.historyData[indexPath.row];
+    
     if (self.historyState == HistoryViewStatusWithBerserk) {
         cell.awardLabel.hidden = NO;
-        cell.winningRate.text = @"18%";
     }else{
         cell.awardLabel.hidden = YES;
         NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:@"出价5次"];
@@ -118,7 +156,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-
+    
     return 10;
 }
 

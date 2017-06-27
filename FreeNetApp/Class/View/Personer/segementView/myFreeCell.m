@@ -25,6 +25,7 @@
 
 -(void)setModel:(OrderModel *)model{
 
+    _model = model;
 //    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];//图片
 //    
 //    self.goods_name.text = model.goods_name;    //商品名
@@ -34,6 +35,8 @@
 //    self.subTitle.text = model.goods_price;     //商品价格
 //    
 //    self.timeLabel.text = model.pay_time;       //支付时间
+    
+ 
 }
 
 

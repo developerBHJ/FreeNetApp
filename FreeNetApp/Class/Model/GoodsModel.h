@@ -11,21 +11,33 @@
 @interface GoodsModel : NSObject
 
 @property (nonatomic,assign)int id;
-@property (nonatomic,assign)int gid;
-@property (nonatomic,assign)int num;
-@property (nonatomic,strong)NSString *img;
-@property (nonatomic,strong)NSString *name;
-
-
+@property (nonatomic,strong)NSString *end_time;
+@property (nonatomic,strong)NSString *start_time;
 /*
- id                    特价列表
- gid                  商品ID
- img                 商品图片
- name              商品名称
- original_price  商品原价
- price                商品现价
- num                 出售数量
- title                   商品描述
+ {
+ "status": 200,
+ "message": "数据获取成功",
+ "data": [
+ {
+ "id": 2,
+ "start_time": "2017-06-07T19:52:00.000Z",
+ "end_time": "2017-06-09T19:52:00.000Z",
+ "is_hot": true,
+ "status": false,
+ "total": "2",
+ "created_at": null,
+ "updated_at": null,
+ "shop_free_id": 2,
+ "shop_free": {
+ "cover_url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=美食图片&step_word=&hs=2&pn=24&spn=0&d",
+ "title": "生活啦",
+ "price": "100.00",
+ "shop": {
+ "id": 1
+ }
+ }
+ }
+ ]
  
  */
 @end

@@ -51,16 +51,18 @@
 - (IBAction)loginAction:(UIButton *)sender {
     
     [self.view endEditing:YES];
-    NSUserDefaults *userInfo = [NSUserDefaults standardUserDefaults];
-    [userInfo setValue:@"succeed" forKey:@"login"];
-    [self.navigationController popViewControllerAnimated:YES];
-
-    if (self.user_nameTF.text.length > 0 && self.pwdTF.text.length > 0) {
+    
+    if (!self.user_nameTF.text.length || self.user_nameTF.text.length != 11) {
         
-     //   [self loginProjectWithURL:@"http://192.168.0.254:1000/center/logins"];
-    }else{
-        [ShowMessage showMessage:@"用户名/密码 为空" duration:3];
+        [ShowMessage showMessage:@"手机号码错误" duration:3];
+        return;
     }
+    if (!self.pwdTF.text.length) {
+        
+        [ShowMessage showMessage:@"密码不能为空" duration:3];
+        return;
+    }
+    [self loginProjectWithURL:API_URL(@"/sso/users/signin")];
 }
 
 
@@ -136,28 +138,33 @@
 -(void)loginProjectWithURL:(NSString *)url{
 
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:self.user_nameTF.text forKey:@"mobile"];
-    [parameter setValue:self.pwdTF.text forKey:@"password"];
+    [parameter setValue:self.pwdTF.text forKey:@"pwd"];
+NSLog(@"%@",parameter);
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"result = %@",result);
+        NSDictionary *dataDic = result[@"data"];
         
-        NSDictionary *res = result[@"res"];
-
+        NSLog(@"%@",result);
+        
         if ([result[@"status"] intValue] == 200) {
+        
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"token"] forKey:@"user_token"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"id"] forKey:@"user_id"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"mobile"] forKey:@"user_mobile"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"avatar_name"] forKey:@"user_avatar_name"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"avatar_url"] forKey:@"user_avatar_url"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"nickname"] forKey:@"user_nickname"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"sex"] forKey:@"user_sex"];
+            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"user_login"];
             
-            NSUserDefaults *userInfo = [NSUserDefaults standardUserDefaults];
-            [userInfo setValue:@"succeed" forKey:@"login"];
-            [userInfo setValue:res[@"id"] forKey:@"user_id"];//用户ID
-            [userInfo setValue:res[@"mobile"] forKey:@"user_mobile"];//手机号
-            [userInfo setValue:res[@"portrait"] forKey:@"user_headImage"];//头像
-            [userInfo setValue:result[@"token"] forKey:@"token"];//Token
-
+            
             [self.navigationController popViewControllerAnimated:YES];
         }else{
             [ShowMessage showMessage:result[@"message"] duration:3];

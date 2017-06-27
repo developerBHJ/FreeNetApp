@@ -19,7 +19,6 @@ typedef NS_ENUM(NSInteger,PageStatus) {
 
 @property (nonatomic,assign)PageStatus pageState;
 
-@property (nonatomic,strong)HotRecommend *detailModel;
-
+@property (nonatomic,strong)GoodsModel *model;
 
 @end

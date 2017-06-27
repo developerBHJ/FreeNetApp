@@ -12,10 +12,7 @@
 #import "addressCell.h"
 #import "AddAddressViewController.h"
 #import "addressCell_1.h"
-
 #import "AddressModel.h"
-
-#define kCount self.dataArray.count
 
 @interface AddressViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate>
 
@@ -26,6 +23,7 @@
 @end
 
 @implementation AddressViewController
+
 
 
 #pragma mark - Init
@@ -39,6 +37,8 @@
         _addressView.delegate = self;
         _addressView.dataSource = self;
         _addressView.backgroundColor = HWColor(225, 225, 225, 1.0);
+        [self.view addSubview:_addressView];
+
     }
     return _addressView;
 }
@@ -52,45 +52,49 @@
 }
 
 
-#pragma mark >>>>>>> 生命周期
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.addressView];
     self.navigationItem.title = @"收货地址";
     self.view.backgroundColor = HWColor(196, 196, 127, 1.0);
+    
+    
     [self.addressView registerNib:[UINib nibWithNibName:@"addAddressCell" bundle:nil] forCellWithReuseIdentifier:@"addAddressCell"];
     [self.addressView registerNib:[UINib nibWithNibName:@"addressEditCell" bundle:nil] forCellWithReuseIdentifier:@"addressEditCell"];
     [self.addressView registerNib:[UINib nibWithNibName:@"addressCell" bundle:nil] forCellWithReuseIdentifier:@"addressCell"];
     [self.addressView registerNib:[UINib nibWithNibName:@"addressCell_1" bundle:nil] forCellWithReuseIdentifier:@"addressCell_1"];
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(addAddress:) name:@"modifyAddress" object:nil];
+    
+    
+    //NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    //[center addObserver:self selector:@selector(addAddress:) name:@"modifyAddress" object:nil];
     
     
     //获取地址
-    [self fetchAddressWithURL:@"http://192.168.0.254:1000/personer/my_address"];
+    [self fetchAddressWithURL:API_URL(@"/users/addresses")];
 }
 
--(void)dealloc{
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"modifyAddress" object:nil];
-}
+//-(void)dealloc{
+//    
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"modifyAddress" object:nil];
+//}
 
 
 
-#pragma mark >>>>>>> 自定义
--(void)addAddress:(NSNotification *)sender{
-    
-    NSMutableArray *array = sender.userInfo[@"address"];
-    for (BaseModel *model in array) {
-        [self.addressData addObject:model];
-    }
-    [self.addressView reloadData];
-}
+//#pragma mark >>>>>>> 自定义
+//-(void)addAddress:(NSNotification *)sender{
+//    
+//    NSMutableArray *array = sender.userInfo[@"address"];
+//    for (BaseModel *model in array) {
+//        [self.addressData addObject:model];
+//    }
+//    [self.addressView reloadData];
+//}
 
 
 
-#pragma mark >>>>>>> UICollectionViewDelegate,UICollectionViewDataSource
+#pragma mark - Collection Delegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
     return 1;
@@ -98,15 +102,15 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
-    return kCount + 2;
+    return self.dataArray.count + 2;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row == kCount) {  //添加
+    if (indexPath.row == self.dataArray.count) {  //添加
         addAddressCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"addAddressCell" forIndexPath:indexPath];
         return cell;
-    }else if (indexPath.row == kCount + 1){ //编辑
+    }else if (indexPath.row == self.dataArray.count + 1){ //编辑
         addressEditCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"addressEditCell" forIndexPath:indexPath];
         return cell;
     }else{  //数据
@@ -133,7 +137,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row == kCount || (indexPath.row == kCount + 1)) {
+    if (indexPath.row == self.dataArray.count || (indexPath.row == self.dataArray.count + 1)) {
         return CGSizeMake(kScreenWidth - 20, kScreenHeight / 11.59);
     }else{
         if (self.isEdit == YES) {
@@ -153,39 +157,44 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row == kCount) {
+    if (indexPath.row == self.dataArray.count) {
         AddAddressViewController *addVC = [[AddAddressViewController alloc]init];
         [self setHidesBottomBarWhenPushed:YES];
         addVC.navgationTitle = @"创建收货地址";
         [self.navigationController pushViewController:addVC animated:YES];
-    }else if (indexPath.row == kCount + 1){
+    }else if (indexPath.row == self.dataArray.count + 1){
         self.isEdit = YES;
         [self.addressView reloadData];
     }
 }
 
-#pragma mark >>>>>>> BaseCollectionViewCellDelegate
+#pragma mark - BaseCollectionViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button indexPath:(NSIndexPath *)index{
     
     switch (button.tag) {
         case 1000:{
+                //设为默认
+            [self setToTheDefaultAddressWithURL:API_URL(@"/users/addresses/enabled") Index:index];
+            
             [button setTitle:@"默认地址" forState:UIControlStateNormal];
             [button setTitleColor:[UIColor colorWithHexString:@"e4504b"] forState:UIControlStateNormal];
             [button setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
         }
             break;
         case 1002:{
+                //添加
             AddAddressViewController *editVC = [[AddAddressViewController alloc]init];
+            
             editVC.addressViewStyle = AddressStyleEdit;
-            BaseModel *model = self.addressData[index.row];
-            editVC.addressModel = model;
-            editVC.index = index.row;
-            [self setHidesBottomBarWhenPushed:YES];
+            AddressModel *model = self.dataArray[index.row];
+            editVC.addressId = model.addressId;
+            
             [self.navigationController pushViewController:editVC animated:YES];
         }
             break;
         case 1001:{
-            [self deleteAddressWithURL:@"http://192.168.0.254:1000/personer/addressDel" Index:index];
+                //删除
+            [self deleteAddressWithURL:API_URL(@"/users/addresses/erase") Index:index];
         }
             break;
         default:
@@ -200,22 +209,21 @@
 
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
+    [parameter setValue:user_id forKey:@"user_id"];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
 
-        for (NSDictionary *data in result) {
+        for (NSDictionary *data in result[@"data"]) {
             AddressModel *model = [AddressModel new];
             [model setValuesForKeysWithDictionary:data];
             [self.dataArray addObject:model];
         }
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [self.addressView reloadData];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         });
@@ -229,40 +237,53 @@
 
 
 
-
-#pragma mark - 删除收货地址
--(void)deleteAddressWithURL:(NSString *)url Index:(NSIndexPath *)index{
-
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-
-    AddressModel *model = [AddressModel new];
-    model = self.dataArray[index.row];
+#pragma mark - 设为默认地址
+-(void)setToTheDefaultAddressWithURL:(NSString *)url Index:(NSIndexPath *)index{
     
+    AddressModel *model = self.dataArray[index.row];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:model.addressId forKey:@"did"];
+    [parameter setValue:model.addressId forKey:@"address_id"];
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    [manager.requestSerializer setValue:Token forHTTPHeaderField:@"token"];
-    
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
         
-        if ([result[@"status"] intValue] == 0) {
-            [ShowMessage showMessage:result[@"message"] duration:3];
-            [self.dataArray removeObjectAtIndex:index.row];
-            [self.addressView reloadData];
-        }else{
+        if ([result[@"status"] intValue] == 200) {
             [ShowMessage showMessage:result[@"message"] duration:3];
         }
         
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
+}
+
+
+
+#pragma mark - 删除收货地址
+-(void)deleteAddressWithURL:(NSString *)url  Index:(NSIndexPath *)index{
+
+    AddressModel *model = self.dataArray[index.row];
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:model.addressId forKey:@"address_id"];
+
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];    
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        
+        if ([result[@"status"] intValue] == 200) {
+            [ShowMessage showMessage:result[@"message"] duration:3];
+            [self.dataArray removeObjectAtIndex:index.row];
+            [self.addressView reloadData];
+        }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }

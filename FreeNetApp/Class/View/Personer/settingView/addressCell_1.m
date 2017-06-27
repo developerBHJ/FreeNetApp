@@ -20,7 +20,7 @@
 
 -(void)setModel:(AddressModel *)model{
 
-    self.nameLabel.text = model.realname;
+    self.nameLabel.text = model.truename;
     self.phoneLabel.text = model.mobile;
     self.addressLabel.text = model.address;
 }

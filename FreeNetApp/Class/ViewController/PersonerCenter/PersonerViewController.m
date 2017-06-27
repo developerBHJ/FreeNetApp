@@ -38,11 +38,13 @@
 @property (nonatomic,strong)NSMutableArray *personerData;
 @property (nonatomic,strong)NSMutableArray *groupData;
 @property (nonatomic,strong)NSMutableArray *segementArray;
-
 @end
 
 @implementation PersonerViewController
-#pragma mark - 懒加载
+
+
+
+#pragma mark - Init
 -(UITableView *)personTableView{
     
     if (!_personTableView) {
@@ -101,8 +103,10 @@
     }
     return _segementArray;
 }
-#pragma mark - 生命周期
 
+
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -110,6 +114,7 @@
     [self.personTableView registerNib:[UINib nibWithNibName:@"PersonerCell" bundle:nil] forCellReuseIdentifier:@"PersonerCell"];
     [self.personTableView registerClass:[BaseTableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.personTableView];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -121,18 +126,18 @@
 #pragma mark - 自定义
 -(void)setView{
     
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSString *loginstyle = [userDefault valueForKey:@"login"];
+
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"set"] style:UIBarButtonItemStylePlain target:self action:@selector(personerSetting:)];
     UIBarButtonItem *item2 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStylePlain target:self action:@selector(scanAction:)];
     
     //把右侧的两个按钮添加到rightBarButtonItem
-    if ([loginstyle isEqualToString:@"succeed"]) {
-        self.loginStyle = LoginSucceed;
+    BOOL loginStatus = [[NSUserDefaults standardUserDefaults]boolForKey:@"user_login"];
+    if (loginStatus == YES) {
+
         [self setGroupData];
         self.navigationItem.rightBarButtonItems = @[item1,item2];
     }else{
-        self.loginStyle = LoginFailure;
+
         [self setGroupDataWithSignOut];
         self.navigationItem.rightBarButtonItems = @[item1];
     }
@@ -231,7 +236,7 @@
 
 -(void)segementAction:(UIButton *)sender{
     
-    if (self.loginStyle != LoginSucceed) {
+    if (user_login == NO) {
         
         [ShowMessage showMessage:@"请先登录" duration:3];
     }else{
@@ -330,13 +335,13 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     if (section == 2) {
-        if (self.loginStyle == LoginSucceed) {
+        if (user_login == YES) {
             return self.personerData.count;
         }else{
             return 2;
         }
     }else if (section == 3){
-        if (self.loginStyle == LoginSucceed) {
+        if (user_login == YES) {
             return self.groupData.count;
         }else{
             return 1;
@@ -355,11 +360,10 @@
         firstCell.lev_butn.tag = 1002;
         firstCell.edtiBtn.tag = 1003;
         firstCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if (self.loginStyle == LoginSucceed) {
-            NSString *userName = [[NSUserDefaults standardUserDefaults]valueForKey:@"user_mobile"];
-            firstCell.user_name.text = userName;
-            NSString *headImage = [[NSUserDefaults standardUserDefaults]valueForKey:@"user_headImage"];
-            [firstCell.user_headImage sd_setBackgroundImageWithURL:[NSURL URLWithString:headImage] forState:(UIControlStateNormal)];
+        if (user_login == YES) {
+
+            firstCell.user_name.text = user_nickname;
+            [firstCell.user_headImage sd_setBackgroundImageWithURL:[NSURL URLWithString:user_avatar_url] forState:(UIControlStateNormal)];
         }else{
             firstCell.user_name.text = @"点击头像登陆";
             [firstCell.user_headImage setBackgroundImage:[[[UIImage imageNamed:@"signOut"] clipImageWithRadius:firstCell.user_headImage.width] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
@@ -401,7 +405,7 @@
     
     switch (button.tag) {
         case 1001:{
-            if (self.loginStyle == LoginSucceed) {
+            if (user_login == YES) {
                 [self setUserHeadImage];
             }else{
                 button.selected = YES;
@@ -423,6 +427,8 @@
     }
 }
 
+
+
 #pragma mark - 调用系统相册
 -(void)setUserHeadImage{
     
@@ -432,24 +438,22 @@
     [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
 }
 
-//选取照片代理
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
     PersonerCell_0 *cell = [self.personTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    UIImage *selectImage = [info[UIImagePickerControllerEditedImage] clipImageWithRadius:cell.user_headImage.width / 2];
-    
+    UIImage *selectImage = [info[UIImagePickerControllerOriginalImage] clipImageWithRadius:cell.user_headImage.width / 2];
     [cell.user_headImage setImage:selectImage forState:(UIControlStateNormal)];
     [self.personTableView reloadData];
     
     NSData *imageData = UIImageJPEGRepresentation(selectImage, 0.3);
-    
-    [self changeHeadImageWithURL:@"http://192.168.0.254:1000/center/avatar" Data:imageData];
+
+    //上传图片到阿里云
+    [self changeHeadImageWithURL:API_URL(@"/uploader/avatar") Data:imageData];
     
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-//取消选择照片
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -457,24 +461,81 @@
 
 
 
-#pragma mark - 修改头像
+#pragma mark - 上传头像到阿里云
 -(void)changeHeadImageWithURL:(NSString *)url Data:(NSData *)data{
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:data forKey:@"avatar"];
-    
+    NSString *base64Str = [data base64EncodedStringWithOptions:0];
+    [parameter setValue:base64Str forKey:@"data"];
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
+
+        if ([result[@"status"] intValue] == 200) {
+
+                //删除旧的阿里云图片
+            [self deletePictureWithURL:API_URL(@"/uploader/erase") ImageName:result[@"data"][@"name"] ImageURL:[self InterceptionOfString:result[@"data"][@"url"] Interception:@"?"]];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        if ([result[@"status"] intValue] == 0) {
-            [ShowMessage showMessage:result[@"message"] duration:3];
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
+}
+
+
+
+#pragma mark - 删除图片接口
+-(void)deletePictureWithURL:(NSString *)url ImageName:(NSString *)imageName ImageURL:(NSString *)imageUrl{
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:user_avatar_name forKey:@"name"];
+
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+
+        if ([result[@"status"] intValue] == 200) {
+            
+                //更新新的图片
+            [self updatePictureWithURL:API_URL(@"/users/avatar") ImageName:imageName ImageURL:imageUrl];
         }else{
+            [ShowMessage showMessage:@"失败" duration:3];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
+}
+
+
+
+#pragma mark - 更新头像接口
+-(void)updatePictureWithURL:(NSString *)url ImageName:(NSString *)imageName ImageURL:(NSString *)imageUrl{
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:user_id forKey:@"user_id"];
+    [parameter setValue:imageUrl forKey:@"avatar_url"];
+    [parameter setValue:imageName forKey:@"avatar_name"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+
+        if ([result[@"status"] intValue] == 200) {
+            
+            [[NSUserDefaults standardUserDefaults]setValue:imageName forKey:@"user_avatar_name"];
+            [[NSUserDefaults standardUserDefaults] setValue:imageUrl forKey:@"user_avatar_url"];
+
+        }else{
+            
             [ShowMessage showMessage:result[@"message"] duration:3];
         }
         
@@ -487,13 +548,13 @@
 
 
 
-
-
-
-
-
-
-
-
+#pragma mark - 截取指定字符串
+-(NSString *)InterceptionOfString:(NSString *)str Interception:(NSString *)interception{
+    
+    NSString *currentStr = str;
+    NSRange range = [currentStr rangeOfString:interception];
+    NSString *newStr = [currentStr substringToIndex:range.location];
+    return newStr;
+}
 
 @end

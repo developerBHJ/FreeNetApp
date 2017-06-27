@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BHJRatingBar.h"
+#import "FlagStoreModel.h"
 @interface flagShipHeadView : BHJReusableView<BHJRatingBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *store_image;
@@ -19,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalNum;
 
-
+@property (nonatomic,strong)FlagStoreModel *model;
 
 
 

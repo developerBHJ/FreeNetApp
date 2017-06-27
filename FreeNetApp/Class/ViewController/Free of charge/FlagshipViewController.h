@@ -10,6 +10,6 @@
 
 @interface FlagshipViewController : BHJViewController
 
-
+@property (nonatomic,assign)NSInteger cid;//店铺id
 
 @end

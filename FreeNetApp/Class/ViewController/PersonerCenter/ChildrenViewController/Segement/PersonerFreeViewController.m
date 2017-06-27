@@ -10,6 +10,8 @@
 #import "myFreeCell.h"
 #import "EvaluationViewController.h"
 #import "OrderDetailViewController.h"
+#import "CopounOrderCell.h"
+#import "OpenOrderCell.h"
 
 @interface PersonerFreeViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -28,6 +30,7 @@
         _myFreeView = [[UITableView alloc]initWithFrame:CGRectMake(0, 55, kScreenWidth, kScreenHeight - 55) style:UITableViewStylePlain];
         _myFreeView.delegate = self;
         _myFreeView.dataSource = self;
+        _myFreeView.backgroundColor = [UIColor colorWithHexString:@"#fafafa"];
     }
     return _myFreeView;
 }
@@ -98,6 +101,8 @@
         [self.myFreeData addObject:model];
     }
     [self.myFreeView registerNib:[UINib nibWithNibName:@"myFreeCell" bundle:nil] forCellReuseIdentifier:@"myFreeCell"];
+    [self.myFreeView registerNib:[UINib nibWithNibName:@"CopounOrderCell" bundle:nil] forCellReuseIdentifier:@"CopounOrderCell"];
+    [self.myFreeView registerNib:[UINib nibWithNibName:@"OpenOrderCell" bundle:nil] forCellReuseIdentifier:@"OpenOrderCell"];
     [self.view addSubview:self.myFreeView];
     
     UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, 55)];
@@ -172,6 +177,94 @@
 }
 
 
+/**
+ 根据不同的页面主题设置不同的cell样式
+
+ @param cell 当前cell
+ */
+-(void)setCellWithType:(BaseTableViewCell *)cell{
+    
+    NSIndexPath *indexPath = [self.myFreeView indexPathForCell:cell];
+    OrderModel *model = self.myFreeData[indexPath.row];
+    myFreeCell *freeCell = (myFreeCell *)cell;
+    NSString *title = self.segementItems[model.type];
+    
+    if ([cell isKindOfClass:[myFreeCell class]]) {
+        if ([title isEqualToString:@"待评价"]) {
+            [freeCell.payBtn setTitle:@"评价晒单" forState:UIControlStateNormal];
+        }else if ([title isEqualToString:@"待收货"]){
+            [freeCell.payBtn setTitle:@"查看物流" forState:UIControlStateNormal];
+        }else if ([title isEqualToString:@"待领奖"]){
+            [freeCell.payBtn setTitle:@"去领奖" forState:UIControlStateNormal];
+        }else if ([title isEqualToString:@"已领奖"] || [title isEqualToString:@"未使用"]){
+            [freeCell.payBtn setTitle:@"去使用" forState:UIControlStateNormal];
+        }else if ([title isEqualToString:@"待付款"]){
+            [freeCell.payBtn setTitle:@"去付款" forState:UIControlStateNormal];
+        }else{
+            [freeCell.payBtn setTitle:title forState:UIControlStateNormal];
+        }
+        if (model.type == self.segementItems.count - 1) {
+            [freeCell.payBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [freeCell.payBtn setBackgroundColor:[UIColor lightGrayColor]];
+        }else{
+            [freeCell.payBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [freeCell.payBtn setBackgroundColor:[UIColor colorWithHexString:@"#e4504b"]];
+        }
+    }
+    switch (self.viewControllerStatu) {
+        case BHJViewControllerStatuFree:
+        {
+            if (model.type == 0) {
+                freeCell.postageLabel.hidden = NO;
+            }else{
+                freeCell.postageLabel.hidden = YES;
+            }
+            freeCell.lotteryLabel.hidden = NO;
+            freeCell.lotteryNum.hidden = NO;
+        }
+            break;
+        case BHJViewControllerStatuIndiana:
+        {
+            freeCell.lotteryNum.hidden = YES;
+        }
+            break;
+        case BHJViewControllerStatuSpecial:
+        {
+            freeCell.lotteryNum.hidden = YES;
+        }
+            break;
+        case BHJViewControllerStatuCoupon:
+        {
+            
+        }
+            break;
+        case BHJViewControllerStatuOpen:
+        {
+            CopounOrderCell *copouncell = (CopounOrderCell *)cell;
+            if (model.type == 0) {
+                copouncell.useBtn.hidden = NO;
+                copouncell.markImage.hidden = YES;
+                copouncell.selectedImage.hidden = YES;
+                copouncell.backImage.image = [UIImage imageNamed:@"CopunBG_red"];
+            }else if(model.type == 1){
+                copouncell.useBtn.hidden = YES;
+                copouncell.markImage.hidden = NO;
+                copouncell.selectedImage.hidden = YES;
+                copouncell.backImage.image = [UIImage imageNamed:@"CopunBG_gray"];
+            }else{
+                copouncell.useBtn.hidden = YES;
+                copouncell.markImage.hidden = YES;
+                copouncell.selectedImage.hidden = NO;
+                copouncell.backImage.image = [UIImage imageNamed:@"CopunBG_gray"];
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
 #pragma mark >>> UITableViewDelegate,UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
@@ -180,31 +273,37 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if (self.viewControllerStatu == BHJViewControllerStatuOpen) {
+        return kScreenHeight / 8.38;
+    }else if (self.viewControllerStatu == BHJViewControllerStatuCoupon){
+        return kScreenHeight / 4.93;
+    }
     return kScreenHeight / 5.8;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    myFreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myFreeCell" forIndexPath:indexPath];
-    cell.delegate = self;
-    cell.index = indexPath;
-    cell.postageLabel.hidden = YES;
-    OrderModel *model = self.myFreeData[indexPath.row];
-    cell.model = model;
-    if (self.viewControllerStatu == BHJViewControllerStatuFree) {
-        if (model.type == 0) {
-            cell.postageLabel.hidden = NO;
-        }
-    }else{
-        cell.lotteryNum.hidden = YES;
-        [cell.payBtn setTitle:self.segementItems[model.type] forState:UIControlStateNormal];
-        if ([cell.payBtn.titleLabel.text isEqualToString:@"已完成"]) {
-            [cell.payBtn setTitle:@"交易完成" forState:UIControlStateNormal];
-            [cell.payBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [cell.payBtn setBackgroundColor:[UIColor lightGrayColor]];
-        }
+    if (self.viewControllerStatu == BHJViewControllerStatuOpen) {
+        CopounOrderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CopounOrderCell" forIndexPath:indexPath];
+        cell.delegate = self;
+        cell.index = indexPath;
+        OrderModel *model = self.myFreeData[indexPath.row];
+        cell.model = model;
+        [self setCellWithType:cell];
+        return cell;
+    }else if (self.viewControllerStatu == BHJViewControllerStatuCoupon){
+        OpenOrderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OpenOrderCell" forIndexPath:indexPath];
+        return cell;
     }
-    return cell;
+    else{
+        myFreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myFreeCell" forIndexPath:indexPath];
+        cell.delegate = self;
+        cell.index = indexPath;
+        OrderModel *model = self.myFreeData[indexPath.row];
+        cell.model = model;
+        [self setCellWithType:cell];
+        return cell;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -218,11 +317,54 @@
 #pragma mark >>> BaseTableViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)index{
     
-    if (index.row == 2) {
+    [self buttonClick:button];
+    switch (self.viewControllerStatu) {
+        case BHJViewControllerStatuFree:
+        {
+            
+        }
+            break;
+        case BHJViewControllerStatuIndiana:
+        {
+            
+        }
+            break;
+        case BHJViewControllerStatuSpecial:
+        {
+            
+        }
+            break;
+        case BHJViewControllerStatuCoupon:
+        {
+            
+        }
+            break;
+        case BHJViewControllerStatuOpen:
+        {
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)buttonClick:(UIButton *)sender{
+    
+    NSString *title = sender.titleLabel.text;
+    if ([title isEqualToString:@"评价晒单"]) {
         EvaluationViewController *evaluationVC = [[EvaluationViewController alloc]init];
         [self.navigationController pushViewController:evaluationVC animated:YES];
+    }else if ([title isEqualToString:@"查看物流"]){
+        
+    }else if ([title isEqualToString:@"去领奖"]){
+        
+    }else if ([title isEqualToString:@"去使用"]){
+        
+    }else if ([title isEqualToString:@"去付款"]){
+        
     }
-    NSLog(@"cellRow:----%ld",(long)index.row);
 }
 
 @end

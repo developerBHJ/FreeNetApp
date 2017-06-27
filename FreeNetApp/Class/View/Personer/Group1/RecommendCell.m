@@ -15,18 +15,17 @@
     
     self.pre_priceLabel.lineType = LineTypeMiddle;
     
-    // Initialization code
 }
 
 
 -(void)setModel:(SpecialModel *)model{
 
     _model = model;
-    self.good_name.text = model.name;
-    [self.good_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    self.good_name.text = model.title;
+    [self.good_image sd_setImageWithURL:[NSURL URLWithString:model.cover_url]];
     self.couponLabel.text = model.title;
-    self.priceLabel.text = model.price;
-    self.pre_priceLabel.text = model.original_price;
-    self.markLabel.text = [NSString stringWithFormat:@"已售 %d",model.num];
+    self.priceLabel.text = model.discount;
+    self.pre_priceLabel.text = model.price;
+    self.markLabel.text = [NSString stringWithFormat:@"已售 %@",model.sell];
 }
 @end

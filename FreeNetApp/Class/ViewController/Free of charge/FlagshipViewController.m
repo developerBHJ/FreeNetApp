@@ -31,6 +31,11 @@
 #import "FlagsFreeViewController.h"
 #import "MemberViewController.h"
 
+#import "FlagStoreModel.h"
+
+#define kFlagDetail @"http://192.168.0.254:4004/special/shops"
+#define kFocuseUrl @"http://192.168.0.254:4004/special/shopfocuse"
+
 @interface FlagshipViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,BHJReusableViewDelegate>
 
 @property (nonatomic,strong)UICollectionView *flagshipView;
@@ -38,6 +43,8 @@
 @property (nonatomic,strong)NSMutableArray *imageArr;
 @property (nonatomic,strong)NSMutableArray *dataBase;
 @property (nonatomic,strong)NSMutableArray *viewControllers;
+@property (nonatomic,strong)FlagStoreModel *model;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
 
 @end
 
@@ -75,14 +82,14 @@
 -(NSMutableArray *)imageArr{
     
     if (!_imageArr) {
-        _imageArr = [NSMutableArray arrayWithArray:@[@"图层-1",@"图层-3",@"图层-4"]];
+        _imageArr = [NSMutableArray new];
     }
     return _imageArr;
 }
 
 
 -(NSMutableArray *)dataBase{
-
+    
     if (!_dataBase) {
         _dataBase = [NSMutableArray arrayWithObjects:@"discount",@"flag_free",@"flag_cash",@"Membership_card", @"特价",@"免费",@"现金券",@"会员卡",nil];
     }
@@ -91,7 +98,7 @@
 
 
 -(NSMutableArray *)viewControllers{
-
+    
     if (!_viewControllers) {
         FlagsSpecialViewController *specialVC = [[FlagsSpecialViewController alloc]init];
         CashDetailViewController *cashDetailVC = [[CashDetailViewController alloc]init];
@@ -102,9 +109,19 @@
     return _viewControllers;
 }
 
+-(NSMutableDictionary *)paramater{
+    
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid", nil];
+    }
+    return _paramater;
+}
+
 #pragma mark - 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // 旗舰店数据
+    [self getFlagStoreDetailWithUrl:kFlagDetail paramater:self.paramater];
     
     [self setUpViews];
     
@@ -140,6 +157,56 @@
     [[BHJTools sharedTools]showShareView];
 }
 
+//旗舰店详情
+-(void)getFlagStoreDetailWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    AFHTTPSessionManager *mannager = [AFHTTPSessionManager manager];
+    mannager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [mannager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        self.model = [FlagStoreModel mj_objectWithKeyValues:dic];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.label.text = @"正在加载...";
+        if (self.model.shop_images.count > 0) {
+            for (NSDictionary *imageDic in self.model.shop_images) {
+                [self.imageArr addObject:imageDic[@"image_url"]];
+            }
+        }
+        [self.flagshipView reloadData];
+        [hud hideAnimated:YES];
+        NSLog(@"请求成功");
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败");
+    }];
+}
+
+//关注旗舰店
+-(void)focuseStoreWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    AFHTTPSessionManager *mannager = [AFHTTPSessionManager manager];
+    mannager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [mannager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        if ([dic[@"status"] integerValue] == 200) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.label.text = dic[@"message"];
+            UIButton *button = [self.view viewWithTag:1000];
+            [button setTitle:@"已关注" forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithHexString:@"#bebebe"] forState:UIControlStateNormal];
+            [button setImage:nil forState:UIControlStateNormal];
+            button.borderColor = [UIColor colorWithHexString:@"#bebebe"];
+            button.titleLabel.textAlignment = NSTextAlignmentCenter;
+            [button.titleLabel setFont:[UIFont systemFontOfSize:15]];
+            [self.flagshipView reloadData];
+            [hud hideAnimated:YES afterDelay:1.5];
+        }
+        NSLog(@"请求成功");
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败");
+    }];
+}
 #pragma mark - UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
@@ -169,9 +236,11 @@
     if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             flagCell_1 *cell_1 = [collectionView dequeueReusableCellWithReuseIdentifier:@"flagCell_1" forIndexPath:indexPath];
+            cell_1.address.text = self.model.address;
             return cell_1;
         }else {
             flagCell_2 *cell_2 = [collectionView dequeueReusableCellWithReuseIdentifier:@"flagCell_2" forIndexPath:indexPath];
+            cell_2.phoneNum.text = self.model.tel;
             cell_2.lineLabel.hidden = NO;
             if (indexPath.row == 2) {
                 cell_2.phoneNum.text = @"查看全部13家分店";
@@ -203,7 +272,7 @@
         specialDetailCell_5 *cell_5 = [collectionView dequeueReusableCellWithReuseIdentifier:@"specialDetailCell_5" forIndexPath:indexPath];
         cell_5.model = self.flagData[indexPath.row];
         return cell_5;
-  }
+    }
 }
 
 
@@ -260,14 +329,14 @@
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     
-
+    
     if (indexPath.section == 0) {
         UICollectionReusableView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView" forIndexPath:indexPath];
         for (UIView *view in headView.subviews) {
             [view removeFromSuperview];
         }
         SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 3.78)];
-        scrollView.localizationImageNamesGroup = self.imageArr;
+        scrollView.imageURLStringsGroup = self.imageArr;
         [headView addSubview:scrollView];
         return headView;
     }else if (indexPath.section == 1){
@@ -276,6 +345,7 @@
         headView_1.viewController = self;
         headView_1.indexPath = indexPath;
         headView_1.followBtn.tag = 1000;
+        headView_1.model = self.model;
         return headView_1;
     }else if (indexPath.section == 5){
         flagShipHeadView_1 *headView_1 = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"flagShipHeadView_1" forIndexPath:indexPath];
@@ -328,34 +398,29 @@
     
     switch (button.tag) {
         case 1000:{
-            [button setTitle:@"已关注" forState:UIControlStateNormal];
-            [button setTitleColor:[UIColor colorWithHexString:@"#bebebe"] forState:UIControlStateNormal];
-            [button setImage:nil forState:UIControlStateNormal];
-            button.borderColor = [UIColor colorWithHexString:@"#bebebe"];
-            button.titleLabel.textAlignment = NSTextAlignmentCenter;
-            [button.titleLabel setFont:[UIFont systemFontOfSize:15]];
-            [self.flagshipView reloadData];
+            [self.paramater setValue:user_id forKey:@"userId"];
+            [self focuseStoreWithUrl:kFocuseUrl paramater:self.paramater];
         }
             break;
         case 1001:{
             NSLog(@"%@",button.titleLabel.text);
         }
             break;
-
+            
         case 1003:{
-                NSLog(@"%@",button.titleLabel.text);
-            }
+            NSLog(@"%@",button.titleLabel.text);
+        }
             break;
         case 1004:{
             MoreCouponViewController *moreVC = [[MoreCouponViewController alloc]init];
             [self.navigationController pushViewController:moreVC animated:YES];
-            }
+        }
             break;
         case 1005:{
             EvaluateViewController *evaluateVC = [[EvaluateViewController alloc]init];
             evaluateVC.markData = [NSMutableArray arrayWithArray:@[@"味道很好 19",@"环境不错 19",@"服务态度很好 19",@"性价比高 19",@"交通方便 19",@"没有额外收费 18",@"就那样 19",@"交通方便 19",@"额外收费 19"]];
             [self.navigationController pushViewController:evaluateVC animated:YES];
-            }
+        }
             break;
             
         default:

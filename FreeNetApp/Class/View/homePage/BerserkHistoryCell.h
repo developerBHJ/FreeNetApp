@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "HistoryModel.h"
 @interface BerserkHistoryCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *user_image;
@@ -28,7 +28,7 @@
 
 +(instancetype)initWithTableView:(UITableView *)tableview;
 
-
+@property (nonatomic,strong)HistoryModel *model;
 
 
 @end

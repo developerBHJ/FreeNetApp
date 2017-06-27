@@ -10,21 +10,24 @@
 
 @interface Banner : NSObject
 
-@property (nonatomic,strong)NSString *content;
+@property (nonatomic,strong)NSString *title;
 @property (nonatomic,assign)int id;
-@property (nonatomic,assign)int link;
-@property (nonatomic,strong)NSString *name;
+@property (nonatomic,strong)NSString *url; //内容
+@property (nonatomic,strong)NSString *image_url;// 图片
+
 /*
  {
- content = "temp/ads/201612210455331571.jpg";
- id = 2;
- link = 1;
- name = "\U5e7f\U544a1";
+ "id": 1,
+ "title": "这是免费轮播图1",
+ "image_url": "http://oss.ktvgo.cn/avatars/default.png",
+ "schema": "这个是啥协议",
+ "url": "https://image.baidu.",
+ "expired_at": "2017-08-10T00:00:00.000Z",
+ "views": 0,
+ "status": true,
+ "channel": {
+ "title": "免费"
+ }
  },
- 
- id          广告ID
- name    广告名称
- link        广告链接
- content  图片地址
  */
 @end

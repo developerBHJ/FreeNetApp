@@ -163,6 +163,7 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:self.leftImage] style:UIBarButtonItemStylePlain target:self action:@selector(modifyLocation:)];
     }else{
         UIView *leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 70, 25)];
+        self.locationBtn.enabled = NO;
         self.locationBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.locationBtn setTitle:@"北京市" forState:UIControlStateNormal];
         [self.locationBtn setFrame:CGRectMake(0, 0, 60, 25)];
@@ -186,9 +187,12 @@
 // 定位
 -(void)location:(UIButton *)sender{
     
-    LocationViewController *locationVC = [[LocationViewController alloc]init];
-    [locationVC setDelegate:self];
-    [self.navigationController pushViewController:locationVC animated:YES];
+    if (self.viewControllerStatu == BHJViewControllerStatuFree || self.viewControllerStatu == BHJViewControllerStatuSpecial) {
+        sender.enabled = YES;
+        LocationViewController *locationVC = [[LocationViewController alloc]init];
+        [locationVC setDelegate:self];
+        [self.navigationController pushViewController:locationVC animated:YES];
+    }
 }
 
 // 地图定位

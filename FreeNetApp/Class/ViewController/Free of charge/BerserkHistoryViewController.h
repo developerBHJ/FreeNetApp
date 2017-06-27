@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger,HistoryViewStatus) {
 @interface BerserkHistoryViewController : BHJViewController
 
 @property (nonatomic,assign)HistoryViewStatus historyState;
-@property (nonatomic,strong)NSMutableArray *historyData;
+
+-(id)initWithID:(int)lid;
 
 @end

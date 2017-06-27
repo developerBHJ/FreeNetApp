@@ -10,6 +10,7 @@
 #import "searchCell.h"
 #import "SearchModel.h"
 #import "CashDetailViewController.h"
+
 @interface BHJSearchViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic,strong)UISearchBar *searchBar;
@@ -57,7 +58,7 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id",@"1",@"page", nil];
         switch (self.viewControllerStatu) {
             case 0:
             {
@@ -128,7 +129,6 @@
 }
 
 
-
 #pragma mark - UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
@@ -167,7 +167,7 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     
     if (searchText.length > 0) {
-        [self.parameter setValue:searchText forKey:@"title"];
+        [self.parameter setValue:searchText forKey:@"keyword"];
         [self searchDataWithURL:SearchUrl parameter:self.parameter];
     }
 }

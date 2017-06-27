@@ -14,7 +14,7 @@
 #import "Banner.h"
 #import "SpecialModel.h"
 
-#define SpecialUrl @"http://192.168.0.254:1000/special/index"
+#define SpecialUrl @"http://192.168.0.254:4004/special/lists"
 
 @interface SpecialViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
@@ -59,7 +59,7 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id",@"1",@"page",@"2",@"type", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id",@"1",@"page", nil];
     }
     return _parameter;
 }
@@ -120,8 +120,10 @@
     NSMutableArray *timeArr = [NSMutableArray arrayWithArray:@[@"12:00",@"14:00",@"16:00",@"19:00",@"21:00"]];
     [self.specialData setObject:timeArr forKey:@"time"];
     // 请求数据
-    [self getSpecialBannerWith:BannerUrl parameter:self.parameter];
     [self getSpecialDataWithUrl:SpecialUrl parameter:self.parameter];
+    // 轮播图
+    NSString *str = [BannerUrl stringByAppendingString:@"1"];
+    [self getSpecialBannerWith:str parameter:nil];
 }
 
 
@@ -143,9 +145,10 @@
     NSMutableArray *data = [NSMutableArray new];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = dic[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 Banner *banner = [Banner mj_objectWithKeyValues:dic];
@@ -159,7 +162,7 @@
     }];
 }
 
-// 热门推荐数据
+// 特价数据
 -(void)getSpecialDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *data = [NSMutableArray new];
@@ -167,7 +170,8 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = dic[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 SpecialModel *model = [SpecialModel mj_objectWithKeyValues:dic];
@@ -194,8 +198,8 @@
     }else if (section == 1){
         return 2;
     }else {
-     //   NSArray *data = [self.specialData objectForKey:@"like"];
-        return 4;
+        NSArray *data = [self.specialData objectForKey:@"like"];
+        return data.count;
     }
 }
 
@@ -222,7 +226,7 @@
     }else {
         RecommendCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCell" forIndexPath:indexPath];
         NSArray *data = [self.specialData objectForKey:@"like"];
-     //   cell.model = data[indexPath.row];
+        cell.model = data[indexPath.row];
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, kScreenHeight / 15, kScreenHeight / 15)];
         if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 0) {
             imageView.image = [[UIImage imageNamed:@"taocan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -269,10 +273,9 @@
             NSArray *banner = [self.specialData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
-              //  [images addObject:model.content];
+               [images addObject:model.image_url];
             }
-            // scrollView.imageURLStringsGroup = images;
-            scrollView.localizationImageNamesGroup = self.imageArr;
+            scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
         }else if (indexPath.section == 2){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];

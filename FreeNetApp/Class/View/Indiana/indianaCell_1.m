@@ -36,9 +36,9 @@
 -(void)setModel:(IndianaModel *)model{
     
     _model = model;
-    self.goods_name.text = model.name;
-    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
-    self.priceLabel.text = model.purchase_price;
-    self.discuntPrice.text = model.snatch_price;
+    self.goods_name.text = model.treasure[@"title"];
+    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.treasure[@"cover_url"]]];
+    self.priceLabel.text = model.treasure[@"price"];
+    self.discuntPrice.text = model.treasure[@"start_price"];
 }
 @end

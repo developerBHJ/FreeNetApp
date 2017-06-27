@@ -15,8 +15,8 @@
 #import "Banner.h"
 #import "ClassModel.h"
 #define HotUrl @"http://192.168.0.254:4004/free/sfplans"
-#define TimeUrl @"http://192.168.0.254:1000/free/timecates"
-#define ClassUrl @"http://192.168.0.254:1000/personer/class"
+#define TimeUrl @"http://192.168.0.254:4004/free/timecation"
+#define ClassUrl @""
 
 @interface FreeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
@@ -63,7 +63,7 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id",@"1",@"page",@"1",@"type", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id", nil];
     }
     return _parameter;
 }
@@ -127,14 +127,14 @@
     NSMutableArray *timeArr = [NSMutableArray arrayWithArray:@[@"12:00",@"14:00",@"16:00",@"19:00",@"21:00"]];
     [self.homeViewData setObject:timeArr forKey:@"time"];
     // 分类
-    [self getClassDataWith:ClassUrl parameter:nil];
+   // [self getClassDataWith:ClassUrl parameter:nil];
     //热门推荐
-  //  [self getHotRecommendDataWithUrl:HotUrl parameter:self.parameter];
+    [self getHotRecommendDataWithUrl:HotUrl parameter:self.parameter];
     //整点开抢
-    [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
+   // [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
     // 轮播图
-    [self.parameter setValue:@"1" forKey:@"type"];
-    [self getHomeBannerWith:BannerUrl parameter:self.parameter];
+    NSString *str = [BannerUrl stringByAppendingString:@"1"];
+    [self getHomeBannerWith:str parameter:nil];
 }
 
 // 整点开抢
@@ -210,9 +210,11 @@
     NSMutableArray *data = [NSMutableArray new];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = dic[@"data"];
+        NSLog(@"%@",array);
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 Banner *banner = [Banner mj_objectWithKeyValues:dic];
@@ -255,7 +257,8 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = dic[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 HotRecommend *hot = [HotRecommend mj_objectWithKeyValues:dic];
@@ -306,8 +309,8 @@
     }else if (section == 1){
         return 2;
     }else if (section == 2){
-       // NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
-        return 3;
+        NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
+        return dataArr.count;
     }else if (section == 4){
        // NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         return 5;
@@ -342,7 +345,7 @@
         cell.index = indexPath;
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
         HotRecommend *model = dataArr[indexPath.row];
-      //  cell.model = model;
+        cell.model = model;
         return cell;
     }else if(indexPath.section == 4){
         homeCell_2 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"homeCell_2" forIndexPath:indexPath];
@@ -361,7 +364,7 @@
         cell.time_s2.text = [hourMinuteSecond substringWithRange:NSMakeRange(7, 1)];
         NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         HotRecommend *model = dataArr[indexPath.row];
-       // cell.model = model;
+        cell.model = model;
         return cell;
     }
     return nil;
@@ -411,10 +414,9 @@
             NSArray *banner = [self.homeViewData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
-                [images addObject:model.content];
+                [images addObject:model.image_url];
             }
-            // scrollView.imageURLStringsGroup = images;
-            scrollView.localizationImageNamesGroup = self.imageArr;
+            scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
         }else if (indexPath.section == 2){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];
@@ -548,14 +550,14 @@
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-        berserkVC.detailModel = model;
+        berserkVC.model = model;
         [self.navigationController pushViewController:berserkVC animated:YES];
     }else if (indexPath.section == 4){
         NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-        berserkVC.detailModel = model;
-        [self.navigationController pushViewController:berserkVC animated:YES];
+        berserkVC.model = model;
+      //  [self.navigationController pushViewController:berserkVC animated:YES];
     }
     
 }
@@ -566,8 +568,8 @@
     //    if (button.tag == 200) {
     //        NSLog(@"cellRow:%ld tag:%ld",cellRow,button.tag);
     //    }else{
-    BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-    [self.navigationController pushViewController:berserkVC animated:YES];
+  //  BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
+   // [self.navigationController pushViewController:berserkVC animated:YES];
     //    }
 }
 

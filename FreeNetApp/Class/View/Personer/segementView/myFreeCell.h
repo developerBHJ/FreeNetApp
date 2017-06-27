@@ -29,5 +29,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *postageLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *lotteryNum;
+@property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
+
+
+
 
 @end

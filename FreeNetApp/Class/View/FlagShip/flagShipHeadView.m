@@ -15,7 +15,6 @@
 
     [self.ratingView setImageDeselected:@"star_half" halfSelected:nil fullSelected:@"star_red" andDelegate:self];
     self.ratingView.isIndicator = YES;
-    [self.ratingView displayRating:4];
     [self.followBtn setImage:[[UIImage imageNamed:@"add_red"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [self.followBtn layoutButtonWithEdgeInsetsStyle:BHJButtonEdgeInsetsStyleLeft imageTitleSpace:5];
 
@@ -36,5 +35,17 @@
 
 
 }
+
+-(void)setModel:(FlagStoreModel *)model{
+
+    _model = model;
+    self.store_name.text = model.title;
+    self.address.text = model.address;
+    [self.ratingView displayRating:model.rate];
+    self.timeLabel.text = model.open_time;
+    [self.store_image sd_setImageWithURL:[NSURL URLWithString:model.logo_url]];
+}
+
+
 
 @end

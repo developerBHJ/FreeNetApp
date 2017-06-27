@@ -37,7 +37,7 @@
 
 
 
-#pragma mark >>>> 生命周期
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -45,62 +45,9 @@
     self.saveAddress.layer.masksToBounds = YES;
     self.zipTF.delegate = self;
     self.zipTF.returnKeyType = UIReturnKeyDone;
-    if (self.addressViewStyle == AddressStyleEdit) {
-      //  [self setViewWithModelData];
-    }
-    
-//    NSArray *addressArray = [[BHJTools sharedTools]readNSArrayFromSandboxWithName:@"area.plist"];
-//    NSLog(@"地址plist文件 = %@",addressArray);
-    
-//    NSMutableArray *provinceArray = [NSMutableArray array];
-//    for (NSDictionary *provinceDic in addressArray) {
-//        [provinceArray addObject:provinceDic[@"province_name"]];
-//    }
-//    NSLog(@"%@",provinceArray);
-    
-   
-        if (self.isBool) {
-    
-            self.isBool = NO;
-            ZYLPickerView *zylpvc = [[ZYLPickerView alloc] initWithFrame:CGRectMake(0,kScreenHeight - 280, kScreenWidth, 280)];
-            
-            [self.view addSubview:zylpvc];
-            __weak __typeof(self) weakself = self;
-            
-            zylpvc.SelectBlock = ^(NSString *proCityName){
-                
-                if (proCityName != nil) {
-                    
-//                    NSRange range = [proCityName rangeOfString:@" "];
-//                    NSString *str = [proCityName substringToIndex:range.location];
-//                    NSString *strt = [proCityName substringFromIndex:range.location + range.length];
-//                    
-//                    if ([str isEqualToString:strt]) {
-//                        proCityName = str;
-//                    }
-                    
-                    //UILabel *label = [self.view viewWithTag:1000 + indexPath.row];
-                    //label.text = proCityName;
-                    
-                    //self.cityStr = [NSString stringWithFormat:@"%@,%@",str,strt];
-                    //请求医院
-                    //[self fetchHospitalWithURL:@"https://api.mamtree.com/doctor/hoss"];
-                }
-                weakself.isBool = YES;
-            };
-        }
-}
 
-
-
-#pragma mark >>>> 自定义
--(void)setViewWithModelData{
-
-    self.nameTF.text = self.addressModel.name;
-    self.phoneNumTF.text = self.addressModel.phoneNumber;
-    self.cityTF.text = self.addressModel.city;
-    self.addressTF.text = self.addressModel.address;
-    self.zipTF.text = self.addressModel.zip;
+    
+    NSLog(@"%@",self.addressId);
 }
 
 
@@ -119,6 +66,7 @@
 
 
 
+#pragma mark - 设置默认
 - (IBAction)selectedAction:(BHJVerifyCodeButton *)sender {
     
     if (!sender.isClick) {
@@ -144,43 +92,7 @@
 #pragma mark - 添加收货地址
 -(void)addShippingAddressWithURL:(NSString *)url{
 
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:self.nameTF.textColor forKey:@"name"];
-    [parameter setValue:self.phoneNumTF.textColor forKey:@"mobile"];
-    [parameter setValue:@"" forKey:@"province_id"];
-    [parameter setValue:@"" forKey:@"province_name"];
-    [parameter setValue:@"" forKey:@"city_id"];
-    [parameter setValue:@"" forKey:@"city_name"];
-    [parameter setValue:@"" forKey:@"district_id"];
-    [parameter setValue:@"" forKey:@"district_name"];
-    [parameter setValue:self.addressTF.text forKey:@"address"];
-    [parameter setValue:self.zipTF.textColor forKey:@"zipcode"];
-    
-    
-    if (self.selectBtn.isClick == YES) {
-        [parameter setValue:@"1" forKey:@"default"];
-    }else{
-        [parameter setValue:@"0" forKey:@"default"];
-    }
-    NSLog(@"添加地址参数 = %@",parameter);
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
-        
-        if ([result[@"status"] intValue] == 0) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
-    }];
+
 }
 
 
@@ -189,42 +101,7 @@
 -(void)editShippingAddressWithURL:(NSString *)url{
 
     
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:self.nameTF.textColor forKey:@"name"];
-    [parameter setValue:self.phoneNumTF.textColor forKey:@"mobile"];
-    [parameter setValue:@"" forKey:@"province_id"];
-    [parameter setValue:@"" forKey:@"province_name"];
-    [parameter setValue:@"" forKey:@"city_id"];
-    [parameter setValue:@"" forKey:@"city_name"];
-    [parameter setValue:@"" forKey:@"district_id"];
-    [parameter setValue:@"" forKey:@"district_name"];
-    [parameter setValue:self.addressTF.text forKey:@"address"];
-    [parameter setValue:self.zipTF.textColor forKey:@"zipcode"];
-    
-    
-    if (self.selectBtn.isClick == YES) {
-        [parameter setValue:@"1" forKey:@"default"];
-    }else{
-        [parameter setValue:@"0" forKey:@"default"];
-    }
-    NSLog(@"编辑地址参数 = %@",parameter);
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
-        
-        if ([result[@"status"] intValue] == 0) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
-    }];
+
 }
 
 

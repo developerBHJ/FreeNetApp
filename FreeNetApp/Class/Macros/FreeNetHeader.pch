@@ -26,9 +26,15 @@
 // 百度地图
 #define BDMapKey @"CYEc5h2tYM6GDZc2bhOw2cAHcZI5d3LQ"
 // 轮播图
-#define BannerUrl @"http://192.168.0.254:1000/banner/index"
+#define BannerUrl @"http://192.168.0.254:4004/ads/"
 // 搜索
-#define SearchUrl @"http://192.168.0.254:1000/free/searchs"
+#define SearchUrl @"http://192.168.0.254:4004/publics/search"
+
+
+#define RequestSuccess @"请求成功"
+#define RequestFailure @"请求失败"
+
+
 
 #pragma mark - 第三方
 
@@ -48,7 +54,7 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <UMSocialCore/UMSocialCore.h>
 #import <UShareUI/UShareUI.h>
-
+#import <MJRefresh.h>
 #import <MJExtension/MJExtension.h>
 
 
@@ -89,6 +95,7 @@
 #import "UIImage+Extension.h"
 #import "UIImageView+ImgaeFill.h"
 #import "NSString+Additions.h"
+
 //封装提示框
 #import "ShowMessage.h"
 
@@ -96,10 +103,14 @@
 
 
 //本地个人信息
-#define Token [[NSUserDefaults standardUserDefaults]objectForKey:@"token"]
+#define user_login [[NSUserDefaults standardUserDefaults]boolForKey:@"user_login"]
+#define user_token [[NSUserDefaults standardUserDefaults]objectForKey:@"user_token"]
 #define user_id @"1"
-
-
+#define user_mobile [[NSUserDefaults standardUserDefaults]objectForKey:@"user_mobile"]
+#define user_avatar_name [[NSUserDefaults standardUserDefaults]objectForKey:@"user_avatar_name"]
+#define user_avatar_url [[NSUserDefaults standardUserDefaults]objectForKey:@"user_avatar_url"]
+#define user_nickname [[NSUserDefaults standardUserDefaults]objectForKey:@"user_nickname"]
+#define user_sex [[NSUserDefaults standardUserDefaults]objectForKey:@"user_sex"]
 
 //接口地址
 #define API @"http://192.168.0.254:4004"

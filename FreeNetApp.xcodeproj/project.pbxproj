@@ -44,6 +44,9 @@
 		0C145ACE1E07789700796B67 /* specialDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C145ACC1E07789700796B67 /* specialDetailCell.m */; };
 		0C145ACF1E07789700796B67 /* specialDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C145ACD1E07789700796B67 /* specialDetailCell.xib */; };
 		0C1464AC1DD968860059DC41 /* BHJSegementHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1464AB1DD968860059DC41 /* BHJSegementHeadView.m */; };
+		0C1599BB1EFD167C002DD534 /* OrderHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1599BA1EFD167C002DD534 /* OrderHeaderView.m */; };
+		0C1599BE1EFD2232002DD534 /* OrderDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1599BD1EFD2232002DD534 /* OrderDetailBottomView.m */; };
+		0C1599C71F011FBD002DD534 /* FlagStoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1599C61F011FBD002DD534 /* FlagStoreModel.m */; };
 		0C179E931E13CCCD0088A2D5 /* HairDiscountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C179E921E13CCCD0088A2D5 /* HairDiscountViewController.m */; };
 		0C184E931E4D66170099F3D5 /* BHJStoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C184E921E4D66170099F3D5 /* BHJStoreModel.m */; };
 		0C1ABA5D1DFE99FD009C4B4F /* IndianaIslandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1ABA5C1DFE99FD009C4B4F /* IndianaIslandViewController.m */; };
@@ -122,6 +125,8 @@
 		0C5BC28C1DEEB7B000FC2C5B /* EvaluationFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C5BC28B1DEEB7B000FC2C5B /* EvaluationFooterView.xib */; };
 		0C5C69F91DF94A7D00282C02 /* BerserkHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C5C69F81DF94A7D00282C02 /* BerserkHeadView.m */; };
 		0C5C69FB1DF94A8900282C02 /* BerserkHeadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C5C69FA1DF94A8900282C02 /* BerserkHeadView.xib */; };
+		0C601A021EFBCFE300D4F59A /* OpenOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C601A001EFBCFE300D4F59A /* OpenOrderCell.m */; };
+		0C601A031EFBCFE300D4F59A /* OpenOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C601A011EFBCFE300D4F59A /* OpenOrderCell.xib */; };
 		0C60ECD91E1356C2000CA1BE /* memberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C60ECD71E1356C2000CA1BE /* memberCell.m */; };
 		0C60ECDA1E1356C2000CA1BE /* memberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C60ECD81E1356C2000CA1BE /* memberCell.xib */; };
 		0C613F101DE96B6700529703 /* couponHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C613F0F1DE96B6700529703 /* couponHeadView.m */; };
@@ -243,6 +248,7 @@
 		0CA2BCB41EA0BD0D00B50E9D /* VVeboLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA2BCB11EA0BD0D00B50E9D /* VVeboLabel.m */; };
 		0CA349651DE98A2000B09ACC /* cashCouponCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA349631DE98A2000B09ACC /* cashCouponCell.m */; };
 		0CA349661DE98A2000B09ACC /* cashCouponCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA349641DE98A2000B09ACC /* cashCouponCell.xib */; };
+		0CA557BB1F023976005A4E78 /* HistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA557BA1F023976005A4E78 /* HistoryModel.m */; };
 		0CA60F331DEEA6EF00382717 /* EvaluationCell_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA60F311DEEA6EF00382717 /* EvaluationCell_0.m */; };
 		0CA60F341DEEA6EF00382717 /* EvaluationCell_0.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA60F321DEEA6EF00382717 /* EvaluationCell_0.xib */; };
 		0CA60F381DEEB01A00382717 /* EvaluationCell_1.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA60F361DEEB01A00382717 /* EvaluationCell_1.m */; };
@@ -250,6 +256,10 @@
 		0CA60F3D1DEEB03200382717 /* EvaluationCell_2.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA60F3B1DEEB03200382717 /* EvaluationCell_2.m */; };
 		0CA60F3E1DEEB03200382717 /* EvaluationCell_2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA60F3C1DEEB03200382717 /* EvaluationCell_2.xib */; };
 		0CA649BD1EFA77E7006A5DD9 /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA649BC1EFA77E7006A5DD9 /* OrderDetailViewController.m */; };
+		0CA649C21EFBA859006A5DD9 /* SpecialOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA649C01EFBA859006A5DD9 /* SpecialOrderCell.m */; };
+		0CA649C31EFBA859006A5DD9 /* SpecialOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA649C11EFBA859006A5DD9 /* SpecialOrderCell.xib */; };
+		0CA649C71EFBA881006A5DD9 /* CopounOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA649C51EFBA881006A5DD9 /* CopounOrderCell.m */; };
+		0CA649C81EFBA881006A5DD9 /* CopounOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA649C61EFBA881006A5DD9 /* CopounOrderCell.xib */; };
 		0CA6A51C1DE417590090929D /* myExchangeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA6A51A1DE417590090929D /* myExchangeCell.m */; };
 		0CA6A51D1DE417590090929D /* myExchangeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA6A51B1DE417590090929D /* myExchangeCell.xib */; };
 		0CA7A9631E35F75B00061A56 /* indianaDetailWinningView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA7A9621E35F75B00061A56 /* indianaDetailWinningView.m */; };
@@ -336,6 +346,10 @@
 		0CDED54E1DE02AA500FD7A63 /* InvitationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CDED54C1DE02AA500FD7A63 /* InvitationCell.xib */; };
 		0CDF1A431DE6EDD4006ABB63 /* homeFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CDF1A411DE6EDD4006ABB63 /* homeFooterView.m */; };
 		0CDF1A441DE6EDD4006ABB63 /* homeFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CDF1A421DE6EDD4006ABB63 /* homeFooterView.xib */; };
+		0CE261BC1EFD06BE004FAE5D /* OrderAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE261B71EFD06BE004FAE5D /* OrderAddressCell.m */; };
+		0CE261BD1EFD06BE004FAE5D /* OrderAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CE261B81EFD06BE004FAE5D /* OrderAddressCell.xib */; };
+		0CE261BE1EFD06BE004FAE5D /* OrderDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE261BA1EFD06BE004FAE5D /* OrderDetailCell.m */; };
+		0CE261BF1EFD06BE004FAE5D /* OrderDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CE261BB1EFD06BE004FAE5D /* OrderDetailCell.xib */; };
 		0CE8BB7A1DD5C77C0076398A /* UIButton+BHJButtonCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE8BB791DD5C77C0076398A /* UIButton+BHJButtonCategory.m */; };
 		0CEA879C1E0BD16D00E8AD4A /* couponDetailCell_1.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEA879A1E0BD16D00E8AD4A /* couponDetailCell_1.m */; };
 		0CEA879D1E0BD16D00E8AD4A /* couponDetailCell_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEA879B1E0BD16D00E8AD4A /* couponDetailCell_1.xib */; };
@@ -345,6 +359,12 @@
 		0CEB2C0F1E04E85600F743F9 /* answerCell_2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB2C0D1E04E85600F743F9 /* answerCell_2.xib */; };
 		0CEB77091E0A249B007F7307 /* specialiDetailCell_7.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEB77071E0A249B007F7307 /* specialiDetailCell_7.m */; };
 		0CEB770A1E0A249B007F7307 /* specialiDetailCell_7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB77081E0A249B007F7307 /* specialiDetailCell_7.xib */; };
+		0CEE11AD1EFD0B94001464AE /* OrderStoreAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEE11AB1EFD0B94001464AE /* OrderStoreAddressCell.m */; };
+		0CEE11AE1EFD0B94001464AE /* OrderStoreAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEE11AC1EFD0B94001464AE /* OrderStoreAddressCell.xib */; };
+		0CEE11B21EFD0C67001464AE /* OrderStorePhoneNumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEE11B01EFD0C67001464AE /* OrderStorePhoneNumCell.m */; };
+		0CEE11B31EFD0C67001464AE /* OrderStorePhoneNumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEE11B11EFD0C67001464AE /* OrderStorePhoneNumCell.xib */; };
+		0CEE11B71EFD1449001464AE /* OrderDetailCell_1.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEE11B51EFD1449001464AE /* OrderDetailCell_1.m */; };
+		0CEE11B81EFD1449001464AE /* OrderDetailCell_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEE11B61EFD1449001464AE /* OrderDetailCell_1.xib */; };
 		0CEEE30B1DE69898007AEE97 /* homeCell_1.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CEEE3091DE69898007AEE97 /* homeCell_1.m */; };
 		0CEEE30C1DE69898007AEE97 /* homeCell_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CEEE30A1DE69898007AEE97 /* homeCell_1.xib */; };
 		0CF174721DFEA9A400F2B32A /* isLandCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF174701DFEA9A400F2B32A /* isLandCell.m */; };
@@ -482,6 +502,12 @@
 		0C145ACD1E07789700796B67 /* specialDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = specialDetailCell.xib; sourceTree = "<group>"; };
 		0C1464AA1DD968860059DC41 /* BHJSegementHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHJSegementHeadView.h; sourceTree = "<group>"; };
 		0C1464AB1DD968860059DC41 /* BHJSegementHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHJSegementHeadView.m; sourceTree = "<group>"; };
+		0C1599B91EFD167C002DD534 /* OrderHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderHeaderView.h; sourceTree = "<group>"; };
+		0C1599BA1EFD167C002DD534 /* OrderHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderHeaderView.m; sourceTree = "<group>"; };
+		0C1599BC1EFD2232002DD534 /* OrderDetailBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailBottomView.h; sourceTree = "<group>"; };
+		0C1599BD1EFD2232002DD534 /* OrderDetailBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailBottomView.m; sourceTree = "<group>"; };
+		0C1599C51F011FBD002DD534 /* FlagStoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagStoreModel.h; sourceTree = "<group>"; };
+		0C1599C61F011FBD002DD534 /* FlagStoreModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagStoreModel.m; sourceTree = "<group>"; };
 		0C179E911E13CCCD0088A2D5 /* HairDiscountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HairDiscountViewController.h; sourceTree = "<group>"; };
 		0C179E921E13CCCD0088A2D5 /* HairDiscountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HairDiscountViewController.m; sourceTree = "<group>"; };
 		0C184E911E4D66170099F3D5 /* BHJStoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHJStoreModel.h; sourceTree = "<group>"; };
@@ -616,6 +642,9 @@
 		0C5C69F71DF94A7D00282C02 /* BerserkHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BerserkHeadView.h; sourceTree = "<group>"; };
 		0C5C69F81DF94A7D00282C02 /* BerserkHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BerserkHeadView.m; sourceTree = "<group>"; };
 		0C5C69FA1DF94A8900282C02 /* BerserkHeadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BerserkHeadView.xib; sourceTree = "<group>"; };
+		0C6019FF1EFBCFE300D4F59A /* OpenOrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenOrderCell.h; sourceTree = "<group>"; };
+		0C601A001EFBCFE300D4F59A /* OpenOrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenOrderCell.m; sourceTree = "<group>"; };
+		0C601A011EFBCFE300D4F59A /* OpenOrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OpenOrderCell.xib; sourceTree = "<group>"; };
 		0C60ECD61E1356C2000CA1BE /* memberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memberCell.h; sourceTree = "<group>"; };
 		0C60ECD71E1356C2000CA1BE /* memberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = memberCell.m; sourceTree = "<group>"; };
 		0C60ECD81E1356C2000CA1BE /* memberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = memberCell.xib; sourceTree = "<group>"; };
@@ -813,6 +842,8 @@
 		0CA349621DE98A2000B09ACC /* cashCouponCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cashCouponCell.h; sourceTree = "<group>"; };
 		0CA349631DE98A2000B09ACC /* cashCouponCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cashCouponCell.m; sourceTree = "<group>"; };
 		0CA349641DE98A2000B09ACC /* cashCouponCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = cashCouponCell.xib; sourceTree = "<group>"; };
+		0CA557B91F023976005A4E78 /* HistoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryModel.h; sourceTree = "<group>"; };
+		0CA557BA1F023976005A4E78 /* HistoryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryModel.m; sourceTree = "<group>"; };
 		0CA60F301DEEA6EF00382717 /* EvaluationCell_0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluationCell_0.h; sourceTree = "<group>"; };
 		0CA60F311DEEA6EF00382717 /* EvaluationCell_0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluationCell_0.m; sourceTree = "<group>"; };
 		0CA60F321DEEA6EF00382717 /* EvaluationCell_0.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EvaluationCell_0.xib; sourceTree = "<group>"; };
@@ -824,6 +855,12 @@
 		0CA60F3C1DEEB03200382717 /* EvaluationCell_2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EvaluationCell_2.xib; sourceTree = "<group>"; };
 		0CA649BB1EFA77E7006A5DD9 /* OrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailViewController.h; sourceTree = "<group>"; };
 		0CA649BC1EFA77E7006A5DD9 /* OrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailViewController.m; sourceTree = "<group>"; };
+		0CA649BF1EFBA859006A5DD9 /* SpecialOrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialOrderCell.h; sourceTree = "<group>"; };
+		0CA649C01EFBA859006A5DD9 /* SpecialOrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialOrderCell.m; sourceTree = "<group>"; };
+		0CA649C11EFBA859006A5DD9 /* SpecialOrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpecialOrderCell.xib; sourceTree = "<group>"; };
+		0CA649C41EFBA881006A5DD9 /* CopounOrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CopounOrderCell.h; sourceTree = "<group>"; };
+		0CA649C51EFBA881006A5DD9 /* CopounOrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CopounOrderCell.m; sourceTree = "<group>"; };
+		0CA649C61EFBA881006A5DD9 /* CopounOrderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CopounOrderCell.xib; sourceTree = "<group>"; };
 		0CA6A5191DE417590090929D /* myExchangeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myExchangeCell.h; sourceTree = "<group>"; };
 		0CA6A51A1DE417590090929D /* myExchangeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = myExchangeCell.m; sourceTree = "<group>"; };
 		0CA6A51B1DE417590090929D /* myExchangeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = myExchangeCell.xib; sourceTree = "<group>"; };
@@ -972,6 +1009,12 @@
 		0CDF1A401DE6EDD4006ABB63 /* homeFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeFooterView.h; sourceTree = "<group>"; };
 		0CDF1A411DE6EDD4006ABB63 /* homeFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeFooterView.m; sourceTree = "<group>"; };
 		0CDF1A421DE6EDD4006ABB63 /* homeFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = homeFooterView.xib; sourceTree = "<group>"; };
+		0CE261B61EFD06BE004FAE5D /* OrderAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderAddressCell.h; sourceTree = "<group>"; };
+		0CE261B71EFD06BE004FAE5D /* OrderAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderAddressCell.m; sourceTree = "<group>"; };
+		0CE261B81EFD06BE004FAE5D /* OrderAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderAddressCell.xib; sourceTree = "<group>"; };
+		0CE261B91EFD06BE004FAE5D /* OrderDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailCell.h; sourceTree = "<group>"; };
+		0CE261BA1EFD06BE004FAE5D /* OrderDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailCell.m; sourceTree = "<group>"; };
+		0CE261BB1EFD06BE004FAE5D /* OrderDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderDetailCell.xib; sourceTree = "<group>"; };
 		0CE8BB781DD5C77C0076398A /* UIButton+BHJButtonCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+BHJButtonCategory.h"; sourceTree = "<group>"; };
 		0CE8BB791DD5C77C0076398A /* UIButton+BHJButtonCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+BHJButtonCategory.m"; sourceTree = "<group>"; };
 		0CEA87991E0BD16D00E8AD4A /* couponDetailCell_1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = couponDetailCell_1.h; sourceTree = "<group>"; };
@@ -986,6 +1029,15 @@
 		0CEB77061E0A249B007F7307 /* specialiDetailCell_7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = specialiDetailCell_7.h; sourceTree = "<group>"; };
 		0CEB77071E0A249B007F7307 /* specialiDetailCell_7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = specialiDetailCell_7.m; sourceTree = "<group>"; };
 		0CEB77081E0A249B007F7307 /* specialiDetailCell_7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = specialiDetailCell_7.xib; sourceTree = "<group>"; };
+		0CEE11AA1EFD0B94001464AE /* OrderStoreAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderStoreAddressCell.h; sourceTree = "<group>"; };
+		0CEE11AB1EFD0B94001464AE /* OrderStoreAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderStoreAddressCell.m; sourceTree = "<group>"; };
+		0CEE11AC1EFD0B94001464AE /* OrderStoreAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderStoreAddressCell.xib; sourceTree = "<group>"; };
+		0CEE11AF1EFD0C67001464AE /* OrderStorePhoneNumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderStorePhoneNumCell.h; sourceTree = "<group>"; };
+		0CEE11B01EFD0C67001464AE /* OrderStorePhoneNumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderStorePhoneNumCell.m; sourceTree = "<group>"; };
+		0CEE11B11EFD0C67001464AE /* OrderStorePhoneNumCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderStorePhoneNumCell.xib; sourceTree = "<group>"; };
+		0CEE11B41EFD1449001464AE /* OrderDetailCell_1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailCell_1.h; sourceTree = "<group>"; };
+		0CEE11B51EFD1449001464AE /* OrderDetailCell_1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailCell_1.m; sourceTree = "<group>"; };
+		0CEE11B61EFD1449001464AE /* OrderDetailCell_1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderDetailCell_1.xib; sourceTree = "<group>"; };
 		0CEEE3081DE69898007AEE97 /* homeCell_1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = homeCell_1.h; sourceTree = "<group>"; };
 		0CEEE3091DE69898007AEE97 /* homeCell_1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = homeCell_1.m; sourceTree = "<group>"; };
 		0CEEE30A1DE69898007AEE97 /* homeCell_1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = homeCell_1.xib; sourceTree = "<group>"; };
@@ -1412,6 +1464,7 @@
 		0C3CC5491DD6C0A00064C2BC /* Segement */ = {
 			isa = PBXGroup;
 			children = (
+				0CA649BE1EFBA836006A5DD9 /* OrderView */,
 				0C3CC54C1DD6C0A00064C2BC /* PersonerFreeViewController.h */,
 				0C3CC54D1DD6C0A00064C2BC /* PersonerFreeViewController.m */,
 				0C3CC54E1DD6C0A00064C2BC /* PersonerIndianaViewController.h */,
@@ -1810,6 +1863,41 @@
 			path = Special;
 			sourceTree = "<group>";
 		};
+		0CA649BE1EFBA836006A5DD9 /* OrderView */ = {
+			isa = PBXGroup;
+			children = (
+				0CA649BF1EFBA859006A5DD9 /* SpecialOrderCell.h */,
+				0CA649C01EFBA859006A5DD9 /* SpecialOrderCell.m */,
+				0CA649C11EFBA859006A5DD9 /* SpecialOrderCell.xib */,
+				0CA649C41EFBA881006A5DD9 /* CopounOrderCell.h */,
+				0CA649C51EFBA881006A5DD9 /* CopounOrderCell.m */,
+				0CA649C61EFBA881006A5DD9 /* CopounOrderCell.xib */,
+				0C6019FF1EFBCFE300D4F59A /* OpenOrderCell.h */,
+				0C601A001EFBCFE300D4F59A /* OpenOrderCell.m */,
+				0C601A011EFBCFE300D4F59A /* OpenOrderCell.xib */,
+				0CE261B61EFD06BE004FAE5D /* OrderAddressCell.h */,
+				0CE261B71EFD06BE004FAE5D /* OrderAddressCell.m */,
+				0CE261B81EFD06BE004FAE5D /* OrderAddressCell.xib */,
+				0CE261B91EFD06BE004FAE5D /* OrderDetailCell.h */,
+				0CE261BA1EFD06BE004FAE5D /* OrderDetailCell.m */,
+				0CE261BB1EFD06BE004FAE5D /* OrderDetailCell.xib */,
+				0CEE11AA1EFD0B94001464AE /* OrderStoreAddressCell.h */,
+				0CEE11AB1EFD0B94001464AE /* OrderStoreAddressCell.m */,
+				0CEE11AC1EFD0B94001464AE /* OrderStoreAddressCell.xib */,
+				0CEE11AF1EFD0C67001464AE /* OrderStorePhoneNumCell.h */,
+				0CEE11B01EFD0C67001464AE /* OrderStorePhoneNumCell.m */,
+				0CEE11B11EFD0C67001464AE /* OrderStorePhoneNumCell.xib */,
+				0CEE11B41EFD1449001464AE /* OrderDetailCell_1.h */,
+				0CEE11B51EFD1449001464AE /* OrderDetailCell_1.m */,
+				0CEE11B61EFD1449001464AE /* OrderDetailCell_1.xib */,
+				0C1599B91EFD167C002DD534 /* OrderHeaderView.h */,
+				0C1599BA1EFD167C002DD534 /* OrderHeaderView.m */,
+				0C1599BC1EFD2232002DD534 /* OrderDetailBottomView.h */,
+				0C1599BD1EFD2232002DD534 /* OrderDetailBottomView.m */,
+			);
+			path = OrderView;
+			sourceTree = "<group>";
+		};
 		0CB2C8531DD4546700814404 = {
 			isa = PBXGroup;
 			children = (
@@ -2067,6 +2155,10 @@
 				0CD24A971ECB0A9C000C6EDF /* HotRecommend.m */,
 				0CC68B4C1ECC47DD00877474 /* ClassModel.h */,
 				0CC68B4D1ECC47DD00877474 /* ClassModel.m */,
+				0C1599C51F011FBD002DD534 /* FlagStoreModel.h */,
+				0C1599C61F011FBD002DD534 /* FlagStoreModel.m */,
+				0CA557B91F023976005A4E78 /* HistoryModel.h */,
+				0CA557BA1F023976005A4E78 /* HistoryModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2395,6 +2487,7 @@
 				0C81429F1DE307A800BA0012 /* addressCell.xib in Resources */,
 				0CDED5361DE0033200FD7A63 /* AboutFreeNetViewController.xib in Resources */,
 				0C8142A31DE307A800BA0012 /* addressEditCell.xib in Resources */,
+				0CE261BD1EFD06BE004FAE5D /* OrderAddressCell.xib in Resources */,
 				0C02E6C11E10C84100899874 /* flagShipHeadView_1.xib in Resources */,
 				0C780F7A1E0CF6AA00ACA044 /* flagShipHeadView.xib in Resources */,
 				0C780F7F1E0D00CD00ACA044 /* flagCell_1.xib in Resources */,
@@ -2416,17 +2509,21 @@
 				0C66BE961E09257C0000D8A1 /* specialDetailCell_4.xib in Resources */,
 				0C31815D1E0784C0005147B5 /* specialDetailCell_1.xib in Resources */,
 				0C8412C61E10BC5F00D4403C /* flagCell_5.xib in Resources */,
+				0CA649C31EFBA859006A5DD9 /* SpecialOrderCell.xib in Resources */,
 				0C2171931E03F5000061FC1F /* answerHeadView.xib in Resources */,
 				0CDD8F621DFB93BE00DDAFB1 /* BerserkHistoryCell.xib in Resources */,
 				24F4B64A1EC3083600FDE000 /* AffirmPasswordViewController.xib in Resources */,
 				0C92193B1DFE58C90007166F /* shareCell.xib in Resources */,
+				0CEE11B81EFD1449001464AE /* OrderDetailCell_1.xib in Resources */,
 				0C3E09991DEBDF57001182EE /* UserLevelHeadView.xib in Resources */,
+				0CEE11AE1EFD0B94001464AE /* OrderStoreAddressCell.xib in Resources */,
 				0C145ACF1E07789700796B67 /* specialDetailCell.xib in Resources */,
 				0CF3F2311E09138C006E9F87 /* specialDetailCell_3.xib in Resources */,
 				0C7851921E247EBC005FF52C /* topFunCouponView.xib in Resources */,
 				0C8142A51DE307A800BA0012 /* MoreCell.xib in Resources */,
 				0CD26F9B1DED2EA10047B5FC /* EvaluationCell.xib in Resources */,
 				0C8730461E12643900EBB5E8 /* winningCell.xib in Resources */,
+				0C601A031EFBCFE300D4F59A /* OpenOrderCell.xib in Resources */,
 				0CEA879D1E0BD16D00E8AD4A /* couponDetailCell_1.xib in Resources */,
 				0C5645171E2CB2070051A307 /* IndianaResaurantCell.xib in Resources */,
 				0C2B698C1E0BC28400D9B0A7 /* couponDetailHeadView.xib in Resources */,
@@ -2450,6 +2547,7 @@
 				0C4BCDFE1DD9C008004E21D5 /* RegisterViewController.xib in Resources */,
 				0C81429D1DE307A800BA0012 /* addAddressCell.xib in Resources */,
 				0C52F4AE1E051BDF006D9395 /* answerHeadView_2.xib in Resources */,
+				0CE261BF1EFD06BE004FAE5D /* OrderDetailCell.xib in Resources */,
 				0C5BC28C1DEEB7B000FC2C5B /* EvaluationFooterView.xib in Resources */,
 				0CD26F931DED1F440047B5FC /* AccelerationViewController.xib in Resources */,
 				0C51923A1DE3DD0A0022F8E3 /* myFreeCell.xib in Resources */,
@@ -2457,6 +2555,7 @@
 				0CA211A91DE448C900E456D9 /* topFunCell.xib in Resources */,
 				0C72DE3D1E1E13F000AC5140 /* couponDropViewCell.xib in Resources */,
 				0C1C9F731E24C85C00E97C8B /* QuickspotView.xib in Resources */,
+				0CA649C81EFBA881006A5DD9 /* CopounOrderCell.xib in Resources */,
 				0CAF57941DF912560028F3CB /* BerserkeCell_0.xib in Resources */,
 				0CB5D7A61DF9538C0014AA55 /* BerserkCell_4.xib in Resources */,
 				0CA211AE1DE4509600E456D9 /* TopfunViewController.xib in Resources */,
@@ -2470,6 +2569,7 @@
 				0C66BEA01E0932430000D8A1 /* specialDetailCell_6.xib in Resources */,
 				0C964A431E1CD4DD00C6C594 /* couponClassCell.xib in Resources */,
 				0C76C4A51EFA4EF500EFE1C7 /* RechargeRecordViewController.xib in Resources */,
+				0CEE11B31EFD0C67001464AE /* OrderStorePhoneNumCell.xib in Resources */,
 				0CA60F391DEEB01A00382717 /* EvaluationCell_1.xib in Resources */,
 				0CDED5381DE0033200FD7A63 /* FindPWDViewController.xib in Resources */,
 				0C863B7D1DDDB31100DB15EF /* RecommendCell.xib in Resources */,
@@ -2524,7 +2624,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		808CB4A5054C5D5D7B72C8CD /* [CP] Embed Pods Frameworks */ = {
@@ -2624,10 +2724,12 @@
 				0C531AE81DEEC8BD00F75C47 /* BHJCalendarModel.m in Sources */,
 				0C58EBCE1EAB0AFF0067D1D7 /* LineDashPolyline.m in Sources */,
 				0CF30AD51E8278C600930487 /* BHJRatingBar.m in Sources */,
+				0CEE11AD1EFD0B94001464AE /* OrderStoreAddressCell.m in Sources */,
 				0CD415FF1E1B7C3C003D8310 /* GYZCityHeaderView.m in Sources */,
 				0C048E271E83DE6300FDAAE7 /* BHJScreenView.m in Sources */,
 				2407A82E1EF7BC0B009B892A /* InvitationModel.m in Sources */,
 				0CFCCFD61DDEB9EB007745E0 /* BHJNavigationViewController.m in Sources */,
+				0CA557BB1F023976005A4E78 /* HistoryModel.m in Sources */,
 				0CD415FE1E1B7C3C003D8310 /* GYZCityGroupCell.m in Sources */,
 				0C3ED57E1E2381A200F90CEA /* topFunBuyView.m in Sources */,
 				0CDD8F611DFB93BE00DDAFB1 /* BerserkHistoryCell.m in Sources */,
@@ -2652,6 +2754,7 @@
 				0C96A35F1E0B801F0075FDFE /* CashDetailViewController.m in Sources */,
 				0CEA879C1E0BD16D00E8AD4A /* couponDetailCell_1.m in Sources */,
 				0CDED5431DE0033200FD7A63 /* VerificationModeViewController.m in Sources */,
+				0C601A021EFBCFE300D4F59A /* OpenOrderCell.m in Sources */,
 				0C3CC56D1DD6C2D50064C2BC /* DailyRecommendationViewController.m in Sources */,
 				0C857E2A1E4C084E00C63EB5 /* MHSheetFoot.m in Sources */,
 				0CDED53E1DE0033200FD7A63 /* ModifyUserNameViewController.m in Sources */,
@@ -2662,6 +2765,7 @@
 				0C1464AC1DD968860059DC41 /* BHJSegementHeadView.m in Sources */,
 				0C67DEA61DE814F800F3AD6A /* indianaCell_1.m in Sources */,
 				0C3CC5461DD6BDF80064C2BC /* PersonerSettingViewController.m in Sources */,
+				0C1599BB1EFD167C002DD534 /* OrderHeaderView.m in Sources */,
 				0C8142B01DE3093400BA0012 /* RechargeCell.m in Sources */,
 				0C048E371E83E0A000FDAAE7 /* UIView+RotateAnimationProtocol.m in Sources */,
 				0C857E281E4C084E00C63EB5 /* MHSheetCell.m in Sources */,
@@ -2672,10 +2776,12 @@
 				0C2C0C341DD4669A00F3F945 /* UIView+LBExtension.m in Sources */,
 				0C9BC92A1E1CA5400081C09D /* sharePlatformView.m in Sources */,
 				0C8142A01DE307A800BA0012 /* addressCell_1.m in Sources */,
+				0CEE11B71EFD1449001464AE /* OrderDetailCell_1.m in Sources */,
 				0C2B698B1E0BC28400D9B0A7 /* couponDetailHeadView.m in Sources */,
 				0C9630AE1EBB265400E70458 /* FlagsSpecialViewController.m in Sources */,
 				0C8142A61DE307A800BA0012 /* MoreCell_1.m in Sources */,
 				0C58EBC71EAB0AE60067D1D7 /* MapViewController.m in Sources */,
+				0C1599BE1EFD2232002DD534 /* OrderDetailBottomView.m in Sources */,
 				0CCC013A1E039F06005E422B /* answerCell.m in Sources */,
 				0C2C779E1E5EB62C001E248E /* BHJPaperView.m in Sources */,
 				0C048E651E84B53E00FDAAE7 /* GCDTimer.m in Sources */,
@@ -2695,12 +2801,15 @@
 				0C3E6D291DDD5CD000FEB9B8 /* AddAddressViewController.m in Sources */,
 				0C841B561E0D0225006EBB83 /* flagCell_2.m in Sources */,
 				0C8B80AF1DF01278005F1ABF /* PersonalTagViewController.m in Sources */,
+				0CE261BC1EFD06BE004FAE5D /* OrderAddressCell.m in Sources */,
 				0CD415E81E1B3A9D003D8310 /* LocationViewController.m in Sources */,
 				0C78E75E1DEE6BCB00C965F4 /* HeadModel.m in Sources */,
 				0C670DCE1E15F3BE008867F9 /* DiscountViewController.m in Sources */,
 				0CAF57981DF932DD0028F3CB /* BerserkCell.m in Sources */,
+				0CA649C71EFBA881006A5DD9 /* CopounOrderCell.m in Sources */,
 				0C8730491E127CB900EBB5E8 /* MemberViewController.m in Sources */,
 				0CDBA5AD1E0BB50A00BC1BE7 /* couponModel.m in Sources */,
+				0C1599C71F011FBD002DD534 /* FlagStoreModel.m in Sources */,
 				0C78E75F1DEE6BCB00C965F4 /* Model.m in Sources */,
 				0C9630AB1EBB263800E70458 /* FlagsFreeViewController.m in Sources */,
 				0C5192391DE3DD0A0022F8E3 /* myFreeCell.m in Sources */,
@@ -2748,6 +2857,7 @@
 				0CFCCFD91DDED2C8007745E0 /* CouponViewController.m in Sources */,
 				0C531AE51DEEC85D00F75C47 /* BHJCalendarView.m in Sources */,
 				0C2C0C3A1DD466EB00F3F945 /* BHJTabBarController.m in Sources */,
+				0CA649C21EFBA859006A5DD9 /* SpecialOrderCell.m in Sources */,
 				0C08C50F1E35D95900ABDF2B /* ModifyPayPwdViewController.m in Sources */,
 				0CCABE271DDC4B9E00365660 /* PersonerGroup.m in Sources */,
 				244183DD1EC9B94E00ED7B31 /* STPickerSingle.m in Sources */,
@@ -2768,6 +2878,7 @@
 				0C878BBC1E1636B300B765AB /* discountDecriptionView.m in Sources */,
 				0CCA1C791DE928CC001A9FA4 /* BHJDisplayView.m in Sources */,
 				0CB4EAEF1E24B44D001E1487 /* BHJCustomView.m in Sources */,
+				0CEE11B21EFD0C67001464AE /* OrderStorePhoneNumCell.m in Sources */,
 				0C3CC5581DD6C1080064C2BC /* MyOrderViewController.m in Sources */,
 				0CD26F921DED1F440047B5FC /* AccelerationViewController.m in Sources */,
 				0C048E621E84B53E00FDAAE7 /* GCDGroup.m in Sources */,
@@ -2787,6 +2898,7 @@
 				0C3CC5641DD6C2250064C2BC /* InvitationRecordViewController.m in Sources */,
 				0CDED5451DE0033200FD7A63 /* VerificationViewController.m in Sources */,
 				0C5C69F91DF94A7D00282C02 /* BerserkHeadView.m in Sources */,
+				0CE261BE1EFD06BE004FAE5D /* OrderDetailCell.m in Sources */,
 				0CA60F381DEEB01A00382717 /* EvaluationCell_1.m in Sources */,
 				0C81429C1DE307A800BA0012 /* addAddressCell.m in Sources */,
 				0C863B7C1DDDB31100DB15EF /* RecommendCell.m in Sources */,

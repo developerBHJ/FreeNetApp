@@ -46,7 +46,6 @@
     }
 }
 
-
 - (void)timerFunc
 {
     NSDate *date = [NSDate date];
@@ -64,9 +63,10 @@
 -(void)setModel:(HotRecommend *)model{
 
     _model = model;
-    self.subTitle.text = model.name;
-    self.priceLabel.text = model.sell_price;
-    [self.goodsImage sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    self.subTitle.text = model.shop_free[@"title"];
+    self.priceLabel.text = model.shop_free[@"price"];
+    [self.goodsImage sd_setImageWithURL:[NSURL URLWithString:model.shop_free[@"cover_url"]]];
+    self.pepoleNum.text = [NSString stringWithFormat:@"%d人正在抢",model.total];
 }
 
 @end

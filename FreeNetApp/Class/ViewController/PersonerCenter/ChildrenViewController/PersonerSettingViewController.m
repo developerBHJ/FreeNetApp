@@ -15,6 +15,7 @@
 #import "AddressViewController.h"
 #import "MoreContentViewController.h"
 
+#import "LoginViewController.h"
 @interface PersonerSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *personerSettingTableView;
@@ -23,7 +24,10 @@
 @end
 
 @implementation PersonerSettingViewController
-#pragma mark - 懒加载
+
+
+
+#pragma mark - Init
 -(UITableView *)personerSettingTableView{
     
     if (!_personerSettingTableView) {
@@ -43,7 +47,9 @@
     return _Elements;
 }
 
-#pragma mark - 生命周期
+
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -64,7 +70,6 @@
     [signOutBtn addTarget:self action:@selector(signOut:) forControlEvents:UIControlEventTouchUpInside];
     [self setViewWithData];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -113,7 +118,7 @@
 
 
 
-#pragma mark - UITableViewDelegate,UITableViewDataSource
+#pragma mark - Table Delegate
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
 
     return 2;
@@ -150,7 +155,6 @@
     }
     return cell;
 }
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -208,37 +212,40 @@
 
 
 
-#pragma mark - 退出登录
+#pragma mark - 退出账户
 -(void)signOut:(UIButton *)sender{
     
-    [self logOutWithURL:@"https://api.limian.com/Auth/logout"];
+    [self logOutWithURL:API_URL(@"/sso/users/logout")];
 }
 
 
 
-#pragma mark - 注销登录响应事件
+#pragma mark - 退出账户响应
 -(void)logOutWithURL:(NSString *)url{
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    [manager.requestSerializer setValue:Token forHTTPHeaderField:@"token"];
-    
-    [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:url parameters:@{@"user_id":user_id} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
 
-        if ([result[@"code"] intValue] == 200) {
+        if ([result[@"status"] intValue] == 200) {
+            NSLog(@"退出成功");
+            [ShowMessage showMessage:@"退出成功" duration:3];
             
-            [[NSUserDefaults standardUserDefaults]setValue:@"failure" forKey:@"login"];
-            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"token"];
+            [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"user_login"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_id"];
-            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_headImage"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_token"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_mobile"];
-            
-            [self.navigationController popViewControllerAnimated:YES];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_avatar_name"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_avatar_url"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_sex"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_nickname"];
+
+            LoginViewController *loginVC = [[LoginViewController alloc]init];
+            [self.navigationController pushViewController:loginVC animated:YES];
         }else{
-            [ShowMessage showMessage:@"退出失败" duration:3];
+            [ShowMessage showMessage:@"退出失败 请稍后再试" duration:3];
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

@@ -12,20 +12,20 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-
-
+    
+    
 }
 
 
 -(void)setModel:(SpecialModel *)model{
-
+    
     _model = model;
-    self.goods_name.text = model.name;
-    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    self.goods_name.text = model.title;
+    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.cover_url]];
     self.subTitle.text = model.title;
     self.priceLabel.text = model.price;
-    self.prePriceLabel.text = model.original_price;
-    self.buyNumber.text = [NSString stringWithFormat:@"%d人已购买",model.num];
+    self.prePriceLabel.text = model.price;
+    // self.buyNumber.text = [NSString stringWithFormat:@"%d人已购买",model.num];
 }
 
 

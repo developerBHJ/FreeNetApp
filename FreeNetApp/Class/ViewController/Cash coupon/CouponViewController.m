@@ -12,6 +12,7 @@
 #import "HairDiscountViewController.h"
 #import "couponHeadView.h"
 #import "BHJDropModel.h"
+
 @interface CouponViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,couponHeadViewDelegate>
 
 @property (nonatomic,strong)UICollectionView *couponView;
@@ -27,6 +28,7 @@
 @end
 
 @implementation CouponViewController
+
 
 
 #pragma mark - Init
@@ -127,25 +129,30 @@
     return _rightArr;
 }
 
--(NSMutableDictionary *)parameter{
-    
-    if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id",@"1",@"page",@"3",@"type", nil];
-    }
-    return _parameter;
-}
 
-#pragma mark >>>> ViewDidLoad
+
+#pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.viewControllerStatu = BHJViewControllerStatuCoupon;
     self.leftImage = @"address";
+    
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getLocationAddress:) name:GETLOCATIONNOTIFICATION object:nil];
+    
+    
     [self setNavgationBarView];
+    
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
     
+    //构造UI
     [self setView];
+    
+    
+    //请求现金券
+    [self fetchCashCouponWithURL:API_URL(@"/coupons/lists")];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -167,6 +174,9 @@
         self.titleLabel.text = @"当前位置：正在定位中...";
     }
 }
+
+
+
 #pragma mark - 自定义
 // 搜索
 -(void)searchAction:(UIBarButtonItem *)sender{
@@ -204,7 +214,9 @@
     }];
 }
 
-#pragma mark >>>> UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
+
+
+#pragma mark - Collection Delegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
     return 5;
@@ -280,5 +292,45 @@
     
     [self refresh:self.refreshBtn];
 }
+
+
+
+#pragma mark - 数据请求
+-(void)fetchCashCouponWithURL:(NSString *)url{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:@"" forKey:@"lng"]; //经度
+    [parameter setValue:@"" forKey:@"lat"]; //维度
+    [parameter setValue:@"" forKey:@"industry_id"]; //分区ID
+    [parameter setValue:@"" forKey:@"region_id"]; //地区ID
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSLog(@"%@",result);
+        
+        
+        
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.couponView reloadData];
+        });
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+        
+    }];
+}
+
+
+
+
+
+
+
 
 @end

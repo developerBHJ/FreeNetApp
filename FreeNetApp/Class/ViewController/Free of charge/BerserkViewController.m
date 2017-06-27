@@ -23,10 +23,11 @@
 
 #define DURATION 0.3f
 
-#define HotDetail @"http://192.168.0.254:1000/free/good_details"
+#define HotDetail @"http://192.168.0.254:4004/free/details"
 
 @interface BerserkViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic,strong)HotRecommend *detailModel;
 @property (nonatomic,strong)UITableView *BerserkView;
 @property (nonatomic,strong)NSMutableArray *BerserkData;
 @property (nonatomic,strong)NSMutableArray *imageArr;
@@ -67,7 +68,7 @@
 -(NSMutableArray *)imageArr{
     
     if (!_imageArr) {
-        _imageArr = [NSMutableArray arrayWithArray:@[@"图层-1",@"图层-3",@"图层-4"]];
+        _imageArr = [NSMutableArray new];
     }
     return _imageArr;
 }
@@ -75,7 +76,7 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.detailModel.id),@"id", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.model.id),@"lid", nil];
     }
     return _parameter;
 }
@@ -107,6 +108,9 @@
 #pragma mark - 自定义
 -(void)setUpView{
     
+    // 获取详情数据
+    [self getFreeDetailDataWithUrl:HotDetail parameter:self.parameter];
+    
     self.navigationItem.title = @"疯抢90秒";
     UIBarButtonItem *right = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(share:)];
     UIBarButtonItem *right1 = [[UIBarButtonItem alloc]initWithTitle:@"游戏规则" style:UIBarButtonItemStylePlain target:self action:@selector(gameRule:)];
@@ -124,12 +128,6 @@
     [self setBottomView];
     [self.view addSubview:self.BerserkView];
     
-    
-    self.historyVC = [[BerserkHistoryViewController alloc]init];
-    self.historyVC.historyState = HistoryViewStatusWithBerserk;
-    [self addChildViewController:self.historyVC];
-    self.historyVC.view.hidden = YES;
-    [self.view addSubview:self.historyVC.view];
 }
 
 -(void)timerEvent{
@@ -220,7 +218,7 @@
     UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(centerBtnClick:)];
     [self.progressView addGestureRecognizer:tapGR];
     [centerView addSubview:self.progressView];
-
+    
     CGFloat btnWidth = (kScreenWidth - CGRectGetWidth(centerView.frame)) / 5;
     CGFloat btnHeight = CGRectGetHeight(self.bottomView.frame);
     JXButton *historyButton = [[BHJTools sharedTools]creatButtonWithTitle:@"疯抢记录" image:@"berserk_1_nomal" selector:@selector(bottomEvent:) Frame:CGRectMake(10, 5, btnWidth, btnHeight - 8) viewController:self selectedImage:@"berserk_1_selected" tag:500];
@@ -252,14 +250,14 @@
             break;
         case 501:{
             if (self.isClick) {
-               // [self hiddenHistoryView];
+                // [self hiddenHistoryView];
                 self.isClick = NO;
             }
             NSLog(@"增加机会");
         }
             break;
         case 503:{
-           // [self hiddenHistoryView];
+            // [self hiddenHistoryView];
             self.isClick = NO;
             [self.myTimer setFireDate:[NSDate distantFuture]];
             self.progressView.progressTotal = 90;
@@ -270,7 +268,7 @@
         }
             break;
         case 502:{
-           // [self hiddenHistoryView];
+            // [self hiddenHistoryView];
             self.isClick = NO;
             [self.myTimer setFireDate:[NSDate distantFuture]];
             self.progressView.progressTotal = 90;
@@ -337,7 +335,7 @@
 
 
 -(void)showHistoryView{
-
+    
     [UIView animateWithDuration:0 animations:^{
         [self transitionWithType:kCATransitionMoveIn WithSubtype:kCATransitionFromLeft ForView:self.historyVC.view];
         self.historyVC.view.hidden = NO;
@@ -350,7 +348,7 @@
 
 
 -(void)hiddenHistoryView{
-
+    
     [UIView animateWithDuration:0 animations:^{
         [self transitionWithType:kCATransitionMoveIn WithSubtype:kCATransitionFromRight ForView:self.view];
         self.historyVC.view.hidden = YES;
@@ -361,18 +359,28 @@
 }
 
 #pragma mark - 请求网络数据
--(void)getIndianaDetailDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
+-(void)getFreeDetailDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *arr = data[@"images"];
-        for (NSDictionary *dic in arr) {
-            [self.imageArr addObject:dic[@"image_path"]];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        if ([dic[@"status"] intValue] == 200) {
+            NSDictionary *data = dic[@"data"];
+            self.detailModel = [HotRecommend mj_objectWithKeyValues:data];
+            NSArray *images = data[@"shop_free"][@"shop_free_images"];
+            for (NSDictionary *imageDic in images) {
+                [self.imageArr addObject:imageDic[@"image_url"]];
+            }
+            self.historyVC = [[BerserkHistoryViewController alloc]initWithID:self.detailModel.id];
+            self.historyVC.historyState = HistoryViewStatusWithBerserk;
+            [self addChildViewController:self.historyVC];
+            self.historyVC.view.hidden = YES;
+            [self.view addSubview:self.historyVC.view];
+            NSLog(@"image=%@",self.imageArr);
+            [self.BerserkView reloadData];
         }
-        [self.BerserkView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求数据失败");
     }];
@@ -437,14 +445,14 @@
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         if (indexPath.row == 0) {
             SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 2)];
-            scrollView.localizationImageNamesGroup = self.imageArr;
+            scrollView.imageURLStringsGroup = self.imageArr;
             [baseCell addSubview:scrollView];
             baseCell.selectionStyle = UITableViewCellSelectionStyleNone;
             return baseCell;
         }else{
             BerserkCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell" forIndexPath:indexPath];
-            cell.goodsName.text = self.detailModel.name;
-            cell.priceLabel.text = self.detailModel.sell_price;
+            cell.goodsName.text = self.detailModel.shop_free[@"title"];
+            cell.priceLabel.text = self.detailModel.shop_free[@"price"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
@@ -453,6 +461,7 @@
         cell_0.selectionStyle = UITableViewCellSelectionStyleNone;
         cell_0.cornerRadius = 5;
         cell_0.delegate = self;
+        cell_0.titleLabel.text = self.detailModel.shop_free[@"title"];
         cell_0.nextBtn.tag = 1000;
         return cell_0;
     }else if (indexPath.section == 2){
@@ -557,6 +566,7 @@
     switch (button.tag) {
         case 1000:{
             FlagshipViewController *flagsVC = [[FlagshipViewController alloc]init];
+            flagsVC.cid = self.detailModel.id;
             [self.navigationController pushViewController:flagsVC animated:YES];
         }
             break;
@@ -566,7 +576,7 @@
         }
             break;
         case 3000:{
-
+            
             NSLog(@"赞👍");
         }
             break;

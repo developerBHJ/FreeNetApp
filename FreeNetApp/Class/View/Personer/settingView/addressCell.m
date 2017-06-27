@@ -18,7 +18,7 @@
 
 -(void)setModel:(AddressModel *)model{
     
-    self.user_name.text = model.realname;
+    self.user_name.text = model.truename;
     self.user_phone.text = model.mobile;
     self.user_address.text = model.address;
 }

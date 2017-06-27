@@ -8,14 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger,LoginStyle) {
-    
-    LoginFailure = 0,// 登陆失败
-    LoginSucceed = 1,// 登陆成功
-};
-
 @interface PersonerViewController : UIViewController
 
-@property (nonatomic,assign)LoginStyle loginStyle;
 
 @end

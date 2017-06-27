@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OrderAddressCell" rowHeight="77" id="KGk-i7-Jjw" customClass="OrderAddressCell">
+            <rect key="frame" x="0.0" y="0.0" width="364" height="77"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="364" height="76.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="address" translatesAutoresizingMaskIntoConstraints="NO" id="sTr-Rp-PMw">
+                        <rect key="frame" x="10" y="29.5" width="14" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="57Q-AO-1PM"/>
+                            <constraint firstAttribute="width" constant="14" id="9NM-VJ-DLg"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="18351514137" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zhq-8e-yfs">
+                        <rect key="frame" x="279.5" y="16.5" width="74.5" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="陕西省西安高新区锦业二路和发大厦B座17209" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eat-iy-XFf">
+                        <rect key="frame" x="34" y="41" width="320" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="小白" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lHK-5h-Hzr">
+                        <rect key="frame" x="34" y="15" width="29" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Zhq-8e-yfs" secondAttribute="trailing" constant="10" id="2Wi-gy-hSf"/>
+                    <constraint firstItem="sTr-Rp-PMw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="3SH-1m-cIM"/>
+                    <constraint firstItem="lHK-5h-Hzr" firstAttribute="leading" secondItem="sTr-Rp-PMw" secondAttribute="trailing" constant="10" id="9ne-5T-cv6"/>
+                    <constraint firstAttribute="trailing" secondItem="eat-iy-XFf" secondAttribute="trailing" constant="10" id="a9P-E2-wci"/>
+                    <constraint firstItem="lHK-5h-Hzr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="gAO-sz-Tp5"/>
+                    <constraint firstItem="eat-iy-XFf" firstAttribute="top" secondItem="Zhq-8e-yfs" secondAttribute="bottom" constant="10" id="nNB-SZ-2yk"/>
+                    <constraint firstItem="eat-iy-XFf" firstAttribute="leading" secondItem="lHK-5h-Hzr" secondAttribute="leading" id="vHz-oE-JES"/>
+                    <constraint firstItem="Zhq-8e-yfs" firstAttribute="centerY" secondItem="lHK-5h-Hzr" secondAttribute="centerY" id="wVj-TL-pNy"/>
+                </constraints>
+            </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="sTr-Rp-PMw" firstAttribute="centerY" secondItem="KGk-i7-Jjw" secondAttribute="centerY" id="LIn-Ey-5ny"/>
+            </constraints>
+            <connections>
+                <outlet property="address" destination="eat-iy-XFf" id="CIn-ZC-eh5"/>
+                <outlet property="phoneNum" destination="Zhq-8e-yfs" id="fhl-Bd-rLd"/>
+                <outlet property="userName" destination="lHK-5h-Hzr" id="THg-QO-th3"/>
+            </connections>
+            <point key="canvasLocation" x="57" y="70.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="address" width="14" height="18"/>
+    </resources>
+</document>

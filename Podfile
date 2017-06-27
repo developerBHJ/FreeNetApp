@@ -21,6 +21,10 @@ pod 'TTRangeSlider', '~> 1.0.5'
 pod 'MDRadialProgress', '~> 1.3.2'
 pod 'AMapSearch'
 pod 'AMapLocation'
+pod 'MJRefresh'
+
+
+
 pod 'MJExtension'
 pod 'AMap3DMap'
 

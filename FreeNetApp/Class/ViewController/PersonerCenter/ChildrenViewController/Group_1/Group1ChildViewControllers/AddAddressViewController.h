@@ -19,9 +19,8 @@ typedef NS_ENUM(NSInteger,AddressStyle) {
 
 @interface AddAddressViewController : BHJViewController
 
-@property (nonatomic,strong)BaseModel *addressModel;
 @property (nonatomic,assign)AddressStyle addressViewStyle;
-@property (nonatomic,assign)NSInteger index;
 
+@property (nonatomic,assign)NSNumber *addressId;
 
 @end

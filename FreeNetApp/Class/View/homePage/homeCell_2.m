@@ -61,8 +61,8 @@
 -(void)setModel:(HotRecommend *)model{
     
     _model = model;
-    self.subTitle.text = model.name;
-    self.price.text = model.sell_price;
-    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
+  //  self.subTitle.text = model.name;
+  //  self.price.text = model.sell_price;
+  //  [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
 }
 @end

@@ -26,8 +26,6 @@
     
     
     
-    
-    
 }
 
 -(void)setupChildViewControllers{
