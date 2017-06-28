@@ -30,11 +30,7 @@
 // 搜索
 #define SearchUrl @"http://192.168.0.254:4004/publics/search"
 
-
-#define RequestSuccess @"请求成功"
-#define RequestFailure @"请求失败"
-
-
+#define WeakSelf(weakSelf)      __weak __typeof(&*self)    weakSelf  = self;
 
 #pragma mark - 第三方
 
@@ -95,7 +91,7 @@
 #import "UIImage+Extension.h"
 #import "UIImageView+ImgaeFill.h"
 #import "NSString+Additions.h"
-
+#import "BHJNetWorkTools.h"     // 网络请求的封装
 //封装提示框
 #import "ShowMessage.h"
 

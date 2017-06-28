@@ -361,13 +361,10 @@
 #pragma mark - 请求网络数据
 -(void)getFreeDetailDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if ([dic[@"status"] intValue] == 200) {
-            NSDictionary *data = dic[@"data"];
+        if ([responseObject[@"status"] intValue] == 200) {
+            NSDictionary *data = responseObject[@"data"];
             self.detailModel = [HotRecommend mj_objectWithKeyValues:data];
             NSArray *images = data[@"shop_free"][@"shop_free_images"];
             for (NSDictionary *imageDic in images) {
@@ -381,8 +378,8 @@
             NSLog(@"image=%@",self.imageArr);
             [self.BerserkView reloadData];
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 

@@ -30,4 +30,13 @@
 }
 
 
+-(void)setStoreModel:(FlagStoreModel *)storeModel{
+
+    _storeModel = storeModel;
+    self.store_name.text = storeModel.title;
+    self.addressLabel.text = storeModel.address;
+    
+}
+
+
 @end

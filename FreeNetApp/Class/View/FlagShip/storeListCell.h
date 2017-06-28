@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "FlagStoreModel.h"
 @interface storeListCell : BaseTableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *store_name;
@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *distance;
 @property (weak, nonatomic) IBOutlet UIButton *phoneBtn;
 
-
+@property (nonatomic,strong)FlagStoreModel *storeModel;
 
 
 

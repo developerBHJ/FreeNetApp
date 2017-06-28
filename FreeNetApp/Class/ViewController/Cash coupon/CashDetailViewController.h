@@ -10,6 +10,7 @@
 
 @interface CashDetailViewController : BHJViewController
 
-@property (nonatomic,strong)NSNumber *searchId;
+@property (nonatomic,strong)NSNumber *coucponsId;
+
 
 @end

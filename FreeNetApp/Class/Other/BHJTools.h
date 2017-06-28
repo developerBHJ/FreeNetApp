@@ -6,7 +6,6 @@
 //  Copyright © 2016年 BHJ. All rights reserved.
 //
 #import "JXButton.h"
-
 #import <Foundation/Foundation.h>
 
 @interface BHJTools : NSObject

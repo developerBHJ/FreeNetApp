@@ -10,4 +10,7 @@
 
 @interface StoreListViewController : BHJViewController
 
+@property (nonatomic,strong)NSArray *storeList;
+
+
 @end

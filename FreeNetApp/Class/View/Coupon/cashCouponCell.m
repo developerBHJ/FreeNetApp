@@ -16,4 +16,16 @@
     self.pre_Price.lineType = LineTypeMiddle;
 }
 
+-(void)setModel:(CashCouponModel *)model{
+
+    _model = model;
+    self.address.text = model.shop[@"title"];
+    self.distance.text = [NSString stringWithFormat:@"%@m",model.invater];
+    self.titleLabel.text = model.title;
+    self.currentPrice.text = model.discount;
+    self.pre_Price.text = model.price;
+    self.saleNum.text = [NSString stringWithFormat:@"已售 %@",model.selltotal];
+}
+
+
 @end

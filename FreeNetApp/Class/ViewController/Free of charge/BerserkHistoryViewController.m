@@ -72,14 +72,9 @@
 -(void)getHistoryDataWithUrl:(NSString *)url{
     
     NSDictionary *paramater = [NSDictionary dictionaryWithObjectsAndKeys:@(self.lid),@"lid", nil];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
         
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *history = data[@"data"];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.label.text = @"正在加载...";
+        NSArray *history = responseObject[@"data"];
         if (history.count > 0) {
             for (NSDictionary *user in history) {
                 HistoryModel *model = [HistoryModel mj_objectWithKeyValues:user];
@@ -87,10 +82,8 @@
             }
         }
         [self.berserkHistoryView reloadData];
-        [hud hideAnimated:YES];
-        NSLog(@"%@",RequestSuccess);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"%@",RequestFailure);
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 #pragma mark -- 懒加载

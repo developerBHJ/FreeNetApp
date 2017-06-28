@@ -21,6 +21,7 @@
 @property (nonatomic,strong)NSArray *shop_images;
 @property (nonatomic,strong)NSString *logo_url;//店铺封面
 
+
 /*
  {
  "id": 1,

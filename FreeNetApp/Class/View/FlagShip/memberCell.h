@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MemeberModel.h"
 @interface memberCell : BaseCollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *memberView;
@@ -15,9 +15,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *discount;
 @property (weak, nonatomic) IBOutlet UILabel *number;
 @property (weak, nonatomic) IBOutlet UIButton *rightBtn;
+@property (weak, nonatomic) IBOutlet UILabel *title;
 
 
-
+@property (nonatomic,strong)MemeberModel *model;
 
 
 

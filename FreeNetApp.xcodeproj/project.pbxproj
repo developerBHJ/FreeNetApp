@@ -266,6 +266,10 @@
 		0CA7A9651E35F76800061A56 /* indianaDetailWinningView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA7A9641E35F76800061A56 /* indianaDetailWinningView.xib */; };
 		0CA839BA1E1363C900D458F7 /* memberCell_1.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA839B81E1363C900D458F7 /* memberCell_1.m */; };
 		0CA839BB1E1363C900D458F7 /* memberCell_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CA839B91E1363C900D458F7 /* memberCell_1.xib */; };
+		0CA9390A1F034D2800FB7019 /* BHJNetWorkTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA939091F034D2800FB7019 /* BHJNetWorkTools.m */; };
+		0CA9390D1F03902400FB7019 /* FlagsCoupunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA9390C1F03902400FB7019 /* FlagsCoupunViewController.m */; };
+		0CA939141F03AAA900FB7019 /* CashCouponModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA939131F03AAA900FB7019 /* CashCouponModel.m */; };
+		0CA939171F03B4F300FB7019 /* MemeberModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA939161F03B4F300FB7019 /* MemeberModel.m */; };
 		0CADB2A51E7A98AE00154FBD /* UIImageView+ImgaeFill.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CADB2A41E7A98AE00154FBD /* UIImageView+ImgaeFill.m */; };
 		0CAF57561DF8F3600028F3CB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CAF57551DF8F3600028F3CB /* QuartzCore.framework */; };
 		0CAF57931DF912560028F3CB /* BerserkeCell_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAF57911DF912560028F3CB /* BerserkeCell_0.m */; };
@@ -870,6 +874,14 @@
 		0CA839B71E1363C900D458F7 /* memberCell_1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memberCell_1.h; sourceTree = "<group>"; };
 		0CA839B81E1363C900D458F7 /* memberCell_1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = memberCell_1.m; sourceTree = "<group>"; };
 		0CA839B91E1363C900D458F7 /* memberCell_1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = memberCell_1.xib; sourceTree = "<group>"; };
+		0CA939081F034D2800FB7019 /* BHJNetWorkTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHJNetWorkTools.h; sourceTree = "<group>"; };
+		0CA939091F034D2800FB7019 /* BHJNetWorkTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHJNetWorkTools.m; sourceTree = "<group>"; };
+		0CA9390B1F03902400FB7019 /* FlagsCoupunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagsCoupunViewController.h; sourceTree = "<group>"; };
+		0CA9390C1F03902400FB7019 /* FlagsCoupunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagsCoupunViewController.m; sourceTree = "<group>"; };
+		0CA939121F03AAA900FB7019 /* CashCouponModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CashCouponModel.h; sourceTree = "<group>"; };
+		0CA939131F03AAA900FB7019 /* CashCouponModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CashCouponModel.m; sourceTree = "<group>"; };
+		0CA939151F03B4F300FB7019 /* MemeberModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemeberModel.h; sourceTree = "<group>"; };
+		0CA939161F03B4F300FB7019 /* MemeberModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemeberModel.m; sourceTree = "<group>"; };
 		0CADB2A31E7A98AE00154FBD /* UIImageView+ImgaeFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+ImgaeFill.h"; sourceTree = "<group>"; };
 		0CADB2A41E7A98AE00154FBD /* UIImageView+ImgaeFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+ImgaeFill.m"; sourceTree = "<group>"; };
 		0CAF57551DF8F3600028F3CB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1298,6 +1310,8 @@
 				0C9630AA1EBB263800E70458 /* FlagsFreeViewController.m */,
 				0C9630AC1EBB265400E70458 /* FlagsSpecialViewController.h */,
 				0C9630AD1EBB265400E70458 /* FlagsSpecialViewController.m */,
+				0CA9390B1F03902400FB7019 /* FlagsCoupunViewController.h */,
+				0CA9390C1F03902400FB7019 /* FlagsCoupunViewController.m */,
 			);
 			path = "Free of charge";
 			sourceTree = "<group>";
@@ -1321,6 +1335,7 @@
 		0C1DB09A1DD475E00011410F /* Cash coupon */ = {
 			isa = PBXGroup;
 			children = (
+				0CA9390E1F03A78200FB7019 /* Model */,
 				0CFCCFD71DDED2C8007745E0 /* CouponViewController.h */,
 				0CFCCFD81DDED2C8007745E0 /* CouponViewController.m */,
 				0C96A35D1E0B801F0075FDFE /* CashDetailViewController.h */,
@@ -1898,6 +1913,15 @@
 			path = OrderView;
 			sourceTree = "<group>";
 		};
+		0CA9390E1F03A78200FB7019 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0CA939121F03AAA900FB7019 /* CashCouponModel.h */,
+				0CA939131F03AAA900FB7019 /* CashCouponModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		0CB2C8531DD4546700814404 = {
 			isa = PBXGroup;
 			children = (
@@ -2067,6 +2091,8 @@
 				0C99A69E1DFE3D2800EFCE87 /* BHJPwdView.m */,
 				0CFCCFE31DDED8E4007745E0 /* BHJTools.h */,
 				0CFCCFE41DDED8E4007745E0 /* BHJTools.m */,
+				0CA939081F034D2800FB7019 /* BHJNetWorkTools.h */,
+				0CA939091F034D2800FB7019 /* BHJNetWorkTools.m */,
 				0C96A3601E0B83A90075FDFE /* JXButton.h */,
 				0C96A3611E0B83A90075FDFE /* JXButton.m */,
 				0C531AE31DEEC85D00F75C47 /* BHJCalendarView.h */,
@@ -2159,6 +2185,8 @@
 				0C1599C61F011FBD002DD534 /* FlagStoreModel.m */,
 				0CA557B91F023976005A4E78 /* HistoryModel.h */,
 				0CA557BA1F023976005A4E78 /* HistoryModel.m */,
+				0CA939151F03B4F300FB7019 /* MemeberModel.h */,
+				0CA939161F03B4F300FB7019 /* MemeberModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2712,6 +2740,7 @@
 				0C884EF11E1113E100125F8F /* WinningRecordViewController.m in Sources */,
 				0C8B80B21DF0172B005F1ABF /* PersonalHobby.m in Sources */,
 				0C58EBC81EAB0AE60067D1D7 /* StepDetailViewController.m in Sources */,
+				0CA939141F03AAA900FB7019 /* CashCouponModel.m in Sources */,
 				0CFCCFE51DDED8E4007745E0 /* BHJTools.m in Sources */,
 				0C145ACE1E07789700796B67 /* specialDetailCell.m in Sources */,
 				0CFCCFD01DDEA865007745E0 /* RecommendationDetailViewController.m in Sources */,
@@ -2719,6 +2748,7 @@
 				0CEEE30B1DE69898007AEE97 /* homeCell_1.m in Sources */,
 				244183DB1EC9B94E00ED7B31 /* STPickerArea.m in Sources */,
 				0C145ACA1E0772C900796B67 /* SpecialDetailViewController.m in Sources */,
+				0CA939171F03B4F300FB7019 /* MemeberModel.m in Sources */,
 				0C2171911E03F4F50061FC1F /* answerHeadView.m in Sources */,
 				0CF3F2301E09138C006E9F87 /* specialDetailCell_3.m in Sources */,
 				0C531AE81DEEC8BD00F75C47 /* BHJCalendarModel.m in Sources */,
@@ -2800,12 +2830,14 @@
 				0C76C4A41EFA4EF500EFE1C7 /* RechargeRecordViewController.m in Sources */,
 				0C3E6D291DDD5CD000FEB9B8 /* AddAddressViewController.m in Sources */,
 				0C841B561E0D0225006EBB83 /* flagCell_2.m in Sources */,
+				0CA9390A1F034D2800FB7019 /* BHJNetWorkTools.m in Sources */,
 				0C8B80AF1DF01278005F1ABF /* PersonalTagViewController.m in Sources */,
 				0CE261BC1EFD06BE004FAE5D /* OrderAddressCell.m in Sources */,
 				0CD415E81E1B3A9D003D8310 /* LocationViewController.m in Sources */,
 				0C78E75E1DEE6BCB00C965F4 /* HeadModel.m in Sources */,
 				0C670DCE1E15F3BE008867F9 /* DiscountViewController.m in Sources */,
 				0CAF57981DF932DD0028F3CB /* BerserkCell.m in Sources */,
+				0CA9390D1F03902400FB7019 /* FlagsCoupunViewController.m in Sources */,
 				0CA649C71EFBA881006A5DD9 /* CopounOrderCell.m in Sources */,
 				0C8730491E127CB900EBB5E8 /* MemberViewController.m in Sources */,
 				0CDBA5AD1E0BB50A00BC1BE7 /* couponModel.m in Sources */,

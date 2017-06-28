@@ -236,5 +236,28 @@
 
 
 
+#pragma mark - 现金劵详情
+-(void)fetchCouponsDetailWithURL:(NSString *)url{
+
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:self.coucponsId forKey:@"lid"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSLog(@"%@",result);
+        
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
+}
+
+
+
 
 @end

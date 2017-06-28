@@ -14,13 +14,15 @@
 #import "flagCell_5.h"
 
 #import "SearchRouteViewController.h"
-
+#import "MemeberModel.h"
+#define kFlagsMemberUrl @"http://192.168.0.254:4004/special/shopvip"
 
 @interface MemberViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate>
 
 @property (nonatomic,strong)UICollectionView *memberView;
-@property (nonatomic,strong)NSMutableArray *memberCard;
 @property (nonatomic,assign)BOOL isReceived;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
+@property (nonatomic,strong)MemeberModel *model;
 
 @end
 
@@ -38,18 +40,19 @@
     return _memberView;
 }
 
-
--(NSMutableArray *)memberCard{
+-(NSMutableDictionary *)paramater{
     
-    if(!_memberCard){
-        _memberCard = [NSMutableArray new];
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
     }
-    return _memberCard;
+    return _paramater;
 }
 #pragma mark - 生命周期
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self requestDataWith:kFlagsMemberUrl paramater:self.paramater];
     
     [self setUpView];
     
@@ -61,7 +64,7 @@
     self.isReceived = NO;
     self.navigationItem.title = @"会员卡";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(share:)];
-
+    
     [self.view addSubview:self.memberView];
     [self.memberView registerNib:[UINib nibWithNibName:@"couponDetailCell_2" bundle:nil] forCellWithReuseIdentifier:@"couponDetailCell_2"];
     [self.memberView registerNib:[UINib nibWithNibName:@"memberCell" bundle:nil] forCellWithReuseIdentifier:@"memberCell"];
@@ -73,10 +76,23 @@
 
 
 -(void)share:(UIBarButtonItem *)sender{
-
+    
     [[BHJTools sharedTools]showShareView];
 }
 
+-(void)requestDataWith:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weakself);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] ==  200) {
+            weakself.model = [MemeberModel mj_objectWithKeyValues:responseObject[@"data"]];
+        }
+        [weakself.memberView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark - UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
@@ -99,6 +115,7 @@
         cell.delegate = self;
         cell.index = indexPath;
         cell.rightBtn.tag = 1000;
+        cell.model = self.model;
         if (self.isReceived) {
             cell.bottomView.hidden = YES;
         }else{

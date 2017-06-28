@@ -12,8 +12,6 @@
 @interface StoreListViewController ()<UITableViewDelegate,UITableViewDataSource,BaseTableViewCellDelegate>
 
 @property (nonatomic,strong)UITableView *storeListView;
-@property (nonatomic,strong)NSMutableArray *storeList;
-
 
 @end
 
@@ -28,14 +26,6 @@
         _storeListView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
     return _storeListView;
-}
-
--(NSMutableArray *)storeList{
-    
-    if (!_storeList) {
-        _storeList = [NSMutableArray new];
-    }
-    return _storeList;
 }
 #pragma mark - 生命周期
 - (void)viewDidLoad {
@@ -52,7 +42,7 @@
     UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 12)];
     headView.backgroundColor = HWColor(224, 218, 220, 1.0);
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, headView.height)];
-    titleLabel.text = @"47家店通用";
+    titleLabel.text = [NSString stringWithFormat:@"%ld家店通用",self.storeList.count];
     [titleLabel setFont:[UIFont systemFontOfSize:15]];
     titleLabel.textColor = [UIColor colorWithHexString:@"#696969"];
     [headView addSubview:titleLabel];
@@ -62,7 +52,7 @@
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 10;
+    return self.storeList.count;
 }
 
 
@@ -71,6 +61,7 @@
     storeListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"storeListCell" forIndexPath:indexPath];
     cell.delegate = self;
     cell.index = indexPath;
+    cell.storeModel = self.storeList[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -84,7 +75,12 @@
 #pragma mark - BaseTableViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)index{
     
-    NSLog(@"row:%ld",(long)index.row);
+    FlagStoreModel *model = self.storeList[index.row];
+    MHActionSheet *actionSheet = [[MHActionSheet alloc] initSheetWithTitle:nil style:MHSheetStyleDefault itemTitles:@[model.tel] distance:kScreenHeight / 5];
+    [actionSheet didFinishSelectIndex:^(NSInteger index, NSString *title) {
+        NSString *text = [NSString stringWithFormat:@"第%ld行,%@",(long)index, title];
+        NSLog(@"%@",text);
+    }];
 }
 
 @end

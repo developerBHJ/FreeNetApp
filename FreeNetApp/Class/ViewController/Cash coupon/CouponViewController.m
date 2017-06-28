@@ -138,7 +138,6 @@
     self.viewControllerStatu = BHJViewControllerStatuCoupon;
     self.leftImage = @"address";
     
-    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getLocationAddress:) name:GETLOCATIONNOTIFICATION object:nil];
     
     
@@ -174,9 +173,6 @@
         self.titleLabel.text = @"当前位置：正在定位中...";
     }
 }
-
-
-
 #pragma mark - 自定义
 // 搜索
 -(void)searchAction:(UIBarButtonItem *)sender{
@@ -272,7 +268,7 @@
 
 
 
-#pragma mark >>>> couponHeadViewDelegate
+#pragma mark - couponHeadViewDelegate
 -(void)couponHeadViewMethodWith:(couponHeaderViewStyle)viewStyle selectRow:(NSInteger)row selectedItem:(NSInteger)item{
     
     if (viewStyle == couponHeaderViewStyleWithLeft) {
@@ -302,7 +298,8 @@
     [parameter setValue:@"" forKey:@"lng"]; //经度
     [parameter setValue:@"" forKey:@"lat"]; //维度
     [parameter setValue:@"" forKey:@"industry_id"]; //分区ID
-    [parameter setValue:@"" forKey:@"region_id"]; //地区ID
+    [parameter setValue:@"2" forKey:@"region_id"]; //地区ID
+    [parameter setValue:@"" forKey:@"page"];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -310,8 +307,6 @@
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
         NSLog(@"%@",result);
-        
-        
         
         
         

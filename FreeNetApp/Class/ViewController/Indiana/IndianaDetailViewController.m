@@ -134,7 +134,7 @@
     [super viewDidLoad];
     
     [self getIndianaDetailDataWithUrl:DetailUrl parameter:self.parameter];
-
+    
     [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:0];
     [self setUpView];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -214,7 +214,7 @@
     [self setBottomView];
     [self.view addSubview:self.bottomScrollView];
     [self.view addSubview:self.cycleScrollView];
-
+    
     
     self.historyVC = [[BerserkHistoryViewController alloc]init];
     self.historyVC.historyState = HistoryViewStatusWithIndiana;
@@ -455,19 +455,16 @@
 #pragma mark - 请求网络数据
 -(void)getIndianaDetailDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        self.detailModel = [IndianaDetailModel mj_objectWithKeyValues:data];
-        NSArray *arr = data[@"images"];
+        self.detailModel = [IndianaDetailModel mj_objectWithKeyValues:responseObject];
+        NSArray *arr = responseObject[@"images"];
         for (NSDictionary *dic in arr) {
             [self.imageArr addObject:dic[@"image_path"]];
         }
         [self.BerserkView reloadData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 

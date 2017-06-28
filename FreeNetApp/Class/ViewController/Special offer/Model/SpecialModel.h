@@ -29,6 +29,28 @@
  "id": 1
  }
  
+ {
+ "id": 3,
+ "cover_name": "",
+ "cover_url": "http://oss.ktvgo.cn/avatars/default.png",
+ "title": "横说竖说",
+ "price": "100.00",
+ "discount": "80.00",
+ "sell": 80,
+ "qty": 100,
+ "introduction": "西小熊猫",
+ "is_appointment": true,
+ "is_hot": true,
+ "is_return": true,
+ "is_expired_return": true,
+ "status": true,
+ "created_at": null,
+ "updated_at": null,
+ "deleted_at": null,
+ "catelog_id": null,
+ "shop_id": 1,
+ "paytotal": "0"
+ },
  
  */
 

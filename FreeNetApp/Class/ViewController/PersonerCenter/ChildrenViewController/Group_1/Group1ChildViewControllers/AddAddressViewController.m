@@ -8,11 +8,6 @@
 
 #import "AddAddressViewController.h"
 
-#import "STPickerView.h"
-#import "STPickerArea.h"
-
-#import "ZYLPickerView.h"
-
 @interface AddAddressViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -27,8 +22,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *addressTF;//详细地址
 @property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
-@property (weak, nonatomic) IBOutlet UILabel *zipLabel;
-@property (weak, nonatomic) IBOutlet UITextField *zipTF;//邮政编码
 
 @property (nonatomic,assign)BOOL isBool;
 @end
@@ -43,11 +36,11 @@
     
     self.saveAddress.layer.cornerRadius = 5;
     self.saveAddress.layer.masksToBounds = YES;
-    self.zipTF.delegate = self;
-    self.zipTF.returnKeyType = UIReturnKeyDone;
-
     
-    NSLog(@"%@",self.addressId);
+    if (self.addressViewStyle == AddressStyleEdit) {
+        NSString *url = [NSString stringWithFormat:@"%@%@",API_URL(@"/users/addresses/"),self.addressId];
+        [self fetchAddressDetailWithURL:url];
+    }
 }
 
 
@@ -57,10 +50,10 @@
     
     if (self.addressViewStyle == AddressStyleAdd) {
         //添加地址
-        [self addShippingAddressWithURL:@"http://192.168.0.254:1000/personer/add_address"];
+        [self addShippingAddressWithURL:API_URL(@"/users/addresses")];
     }else if(self.addressViewStyle == AddressStyleEdit){
         //编辑地址
-        [self editShippingAddressWithURL:@"http://192.168.0.254:1000/personer/edit_address"];
+        [self editShippingAddressWithURL:API_URL(@"/users/addresses/update")];
     }
 }
 
@@ -80,19 +73,70 @@
 
 
 
-#pragma mark - TextField Delegate
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
+#pragma mark - 获取地址详细信息
+-(void)fetchAddressDetailWithURL:(NSString *)url{
 
-    [self.view endEditing:YES];
-    return YES;
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:self.addressId forKey:@"address_id"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        NSDictionary *dataDic = result[@"data"];
+        
+        self.nameTF.text = dataDic[@"truename"];
+        self.phoneNumTF.text = dataDic[@"mobile"];
+        self.cityTF.text = [NSString stringWithFormat:@"%@ %@ %@",dataDic[@"province"],dataDic[@"city"],dataDic[@"district"]];
+        self.addressTF.text = dataDic[@"address"];
+        
+        if ([dataDic[@"status"] boolValue] == YES) {
+
+            [self.selectBtn setBackgroundImage:[UIImage imageNamed:@"selected_red"] forState:(UIControlStateNormal)];
+        }else{
+            [self.selectBtn setBackgroundImage:[UIImage imageNamed:@"nomal"] forState:(UIControlStateNormal)];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
 }
+
+
 
 
 
 #pragma mark - 添加收货地址
 -(void)addShippingAddressWithURL:(NSString *)url{
 
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:self.addressId forKey:@"address_id"];
+    [parameter setValue:self.nameTF.text forKey:@"truename"];
+    [parameter setValue:self.phoneNumTF.text forKey:@"mobile"];
+    [parameter setValue:@"陕西省" forKey:@"province"];
+    [parameter setValue:@"西安市" forKey:@"city"];
+    [parameter setValue:@"未央区" forKey:@"district"];
+    [parameter setValue:self.addressTF.text forKey:@"address"];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
 
+        if ([result[@"status"] intValue] == 200) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [ShowMessage showMessage:result[@"message"] duration:3];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
 }
 
 
@@ -100,10 +144,33 @@
 #pragma mark - 编辑地址
 -(void)editShippingAddressWithURL:(NSString *)url{
 
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:self.addressId forKey:@"address_id"];
+    [parameter setValue:self.nameTF.text forKey:@"truename"];
+    [parameter setValue:self.phoneNumTF.text forKey:@"mobile"];
+    [parameter setValue:@"陕西省" forKey:@"province"];
+    [parameter setValue:@"西安市" forKey:@"city"];
+    [parameter setValue:@"未央区" forKey:@"district"];
+    [parameter setValue:self.addressTF.text forKey:@"address"];
     
-
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
+        
+        if ([result[@"status"] intValue] == 200) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [ShowMessage showMessage:result[@"message"] duration:3];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [ShowMessage showMessage:@"网络异常" duration:3];
+    }];
 }
-
 
 
 

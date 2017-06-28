@@ -78,7 +78,7 @@
     [super viewDidLoad];
     
     self.viewControllerStatu = BHJViewControllerStatuIndiana;
-
+    
     [self setNavgationBarView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
     [self getData];
@@ -139,12 +139,8 @@
 -(void)getIndianaBannerWith:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *array = dic[@"data"];
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfo:url parameters:parameter success:^(id  _Nullable responseObject) {
+        NSArray *array = responseObject[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 Banner *banner = [Banner mj_objectWithKeyValues:dic];
@@ -153,8 +149,8 @@
         }
         [self.indianaData setObject:data forKey:@"banner"];
         [self.indianaCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -162,12 +158,9 @@
 -(void)getIndianaDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *dataSource = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *arr = data[@"data"];
+        NSArray *arr = responseObject[@"data"];
         if (arr.count > 0) {
             for (NSDictionary *dic in arr) {
                 IndianaModel *model = [IndianaModel mj_objectWithKeyValues:dic];
@@ -176,8 +169,8 @@
         }
         [self.indianaData setObject:dataSource forKey:@"indiana"];
         [self.indianaCollectionView reloadData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -185,12 +178,9 @@
 -(void)getIndianaHotDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *dataSource = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *arr = data[@"data"];
+        NSArray *arr = responseObject[@"data"];
         if (arr.count > 0) {
             for (NSDictionary *dic in arr) {
                 IndianaModel *model = [IndianaModel mj_objectWithKeyValues:dic];
@@ -199,8 +189,8 @@
         }
         [self.indianaData setObject:dataSource forKey:@"Hot"];
         [self.indianaCollectionView reloadData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -311,7 +301,7 @@
             NSArray *banner = [self.indianaData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
-                 [images addObject:model.image_url];
+                [images addObject:model.image_url];
             }
             scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
@@ -441,7 +431,7 @@
     //            [[BHJTools sharedTools]pushWithNavigationController:self.navigationController ViewController:isLandVC];
     //        }
     //            break;
-    //            
+    //
     //        default:
     //            break;
     //    }

@@ -155,8 +155,6 @@
     
     CashDetailViewController *cashDetailVC = [CashDetailViewController new];
     
-    SearchModel *model = self.dataArray[indexPath.row];
-    cashDetailVC.searchId = model.searchId;
     
     [self.navigationController pushViewController:cashDetailVC animated:YES];
 }

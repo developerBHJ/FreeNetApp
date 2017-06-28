@@ -23,7 +23,14 @@
 }
 
 
+-(void)setModel:(MemeberModel *)model{
 
+    _model = model;
+    [self.memberView sd_setImageWithURL:[NSURL URLWithString:model.cover_url]];
+    self.title.text = model.title;
+    self.discount.text = model.discount;
+    self.number.text = [NSString stringWithFormat:@"%@人领过",model.sellall];
+}
 
 
 @end

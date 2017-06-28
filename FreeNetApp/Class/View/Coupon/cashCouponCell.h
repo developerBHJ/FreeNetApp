@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CashCouponModel.h"
 @interface cashCouponCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *address;
@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *validityLabel;
 
 
-
+@property (nonatomic,strong)CashCouponModel *model;
 
 
 @end

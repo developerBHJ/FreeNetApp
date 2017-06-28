@@ -22,9 +22,7 @@ pod 'MDRadialProgress', '~> 1.3.2'
 pod 'AMapSearch'
 pod 'AMapLocation'
 pod 'MJRefresh'
-
-
-
+pod 'SVProgressHUD'
 pod 'MJExtension'
 pod 'AMap3DMap'
 

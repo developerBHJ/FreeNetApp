@@ -27,7 +27,7 @@
 #import "StoreListViewController.h"
 
 #import "FlagsSpecialViewController.h"
-#import "CashDetailViewController.h"
+#import "FlagsCoupunViewController.h"
 #import "FlagsFreeViewController.h"
 #import "MemberViewController.h"
 
@@ -35,6 +35,8 @@
 
 #define kFlagDetail @"http://192.168.0.254:4004/special/shops"
 #define kFocuseUrl @"http://192.168.0.254:4004/special/shopfocuse"
+#define kStoreListUrl @"http://192.168.0.254:4004/special/shopbranch"
+#define kEvaluateUrl @"http://192.168.0.254:4004/special/productComments"
 
 @interface FlagshipViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,BHJReusableViewDelegate>
 
@@ -45,6 +47,8 @@
 @property (nonatomic,strong)NSMutableArray *viewControllers;
 @property (nonatomic,strong)FlagStoreModel *model;
 @property (nonatomic,strong)NSMutableDictionary *paramater;
+@property (nonatomic,strong)NSMutableArray *storeArray;
+@property (nonatomic,strong)NSMutableArray *evaluateArr;
 
 @end
 
@@ -67,7 +71,6 @@
     if (!_flagData) {
         _flagData = [NSMutableArray new];
         for (int i = 0; i < 4; i ++) {
-            
             BaseModel *model = [[BaseModel alloc]init];
             model.content = @"每次去都很满意，味道好，服务周到，菜好吃又有特色,物美价廉真不错，物美价廉真不错，物美价廉真不错，物美价廉真不错，物美价廉真不错";
             if (i == 0 || i == 2) {
@@ -101,9 +104,13 @@
     
     if (!_viewControllers) {
         FlagsSpecialViewController *specialVC = [[FlagsSpecialViewController alloc]init];
-        CashDetailViewController *cashDetailVC = [[CashDetailViewController alloc]init];
+        specialVC.cid = self.cid;
+        FlagsCoupunViewController *cashDetailVC = [[FlagsCoupunViewController alloc]init];
+        cashDetailVC.cid = self.cid;
         FlagsFreeViewController *berserkVC = [[FlagsFreeViewController alloc]init];
+        berserkVC.cid = self.cid;
         MemberViewController *memberVC = [[MemberViewController alloc]init];
+        memberVC.cid = self.cid;
         _viewControllers = [NSMutableArray arrayWithObjects:specialVC, berserkVC,cashDetailVC,memberVC,nil];
     }
     return _viewControllers;
@@ -117,11 +124,31 @@
     return _paramater;
 }
 
+-(NSMutableArray *)storeArray{
+    
+    if (!_storeArray) {
+        _storeArray = [NSMutableArray new];
+    }
+    return _storeArray;
+}
+
+-(NSMutableArray *)evaluateArr{
+    
+    if (!_evaluateArr) {
+        _evaluateArr = [NSMutableArray new];
+    }
+    return _evaluateArr;
+}
 #pragma mark - 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
     // 旗舰店数据
     [self getFlagStoreDetailWithUrl:kFlagDetail paramater:self.paramater];
+    // 分店数据
+    [self requrestStoreListWithUrl:kStoreListUrl paramater:self.paramater];
+    // 评论数据
+    // [self.paramater setValue:@(self.cid) forKey:@"cid"];
+    // [self requrestEvaluateDataWithUrl:kEvaluateUrl paramater:self.paramater];
     
     [self setUpViews];
     
@@ -160,24 +187,17 @@
 //旗舰店详情
 -(void)getFlagStoreDetailWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
     
-    AFHTTPSessionManager *mannager = [AFHTTPSessionManager manager];
-    mannager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [mannager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
         
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        self.model = [FlagStoreModel mj_objectWithKeyValues:dic];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.label.text = @"正在加载...";
+        self.model = [FlagStoreModel mj_objectWithKeyValues:responseObject];
         if (self.model.shop_images.count > 0) {
             for (NSDictionary *imageDic in self.model.shop_images) {
                 [self.imageArr addObject:imageDic[@"image_url"]];
             }
         }
         [self.flagshipView reloadData];
-        [hud hideAnimated:YES];
-        NSLog(@"请求成功");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -205,6 +225,28 @@
         NSLog(@"请求成功");
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败");
+    }];
+}
+
+//旗舰店分店列表
+-(void)requrestStoreListWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        self.storeArray = [FlagStoreModel mj_objectArrayWithKeyValuesArray:responseObject];
+        [self.flagshipView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+//旗舰店评价列表
+-(void)requrestEvaluateDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        NSLog(@"%@",responseObject);
+        
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 #pragma mark - UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate
@@ -243,7 +285,7 @@
             cell_2.phoneNum.text = self.model.tel;
             cell_2.lineLabel.hidden = NO;
             if (indexPath.row == 2) {
-                cell_2.phoneNum.text = @"查看全部13家分店";
+                cell_2.phoneNum.text = [NSString stringWithFormat:@"查看全部%ld家分店",self.storeArray.count];
                 cell_2.ringhtView.image = [UIImage imageNamed:@"right_arrow"];
                 cell_2.height.constant = 10;
                 cell_2.lineLabel.hidden = YES;
@@ -376,13 +418,14 @@
             SearchRouteViewController *searchRouteVC = [[SearchRouteViewController alloc]init];
             [self.navigationController pushViewController:searchRouteVC animated:YES];
         }else if (indexPath.row == 1){
-            MHActionSheet *actionSheet = [[MHActionSheet alloc] initSheetWithTitle:nil style:MHSheetStyleDefault itemTitles:@[@"010-466686789",@"010-466686789"] distance:kScreenHeight / 5];
+            MHActionSheet *actionSheet = [[MHActionSheet alloc] initSheetWithTitle:nil style:MHSheetStyleDefault itemTitles:@[self.model.tel] distance:kScreenHeight / 5];
             [actionSheet didFinishSelectIndex:^(NSInteger index, NSString *title) {
                 NSString *text = [NSString stringWithFormat:@"第%ld行,%@",(long)index, title];
                 NSLog(@"%@",text);
             }];
         }else{
             StoreListViewController *storeListVC = [[StoreListViewController alloc]init];
+            storeListVC.storeList = self.storeArray;
             [self.navigationController pushViewController:storeListVC animated:YES];
         }
     }else if (indexPath.section == 2){

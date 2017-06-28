@@ -29,7 +29,9 @@
 
 @end
 
+
 @implementation FreeViewController
+
 #pragma mark >>>> 懒加载
 -(UICollectionView *)homeCollectionView{
     
@@ -127,11 +129,11 @@
     NSMutableArray *timeArr = [NSMutableArray arrayWithArray:@[@"12:00",@"14:00",@"16:00",@"19:00",@"21:00"]];
     [self.homeViewData setObject:timeArr forKey:@"time"];
     // 分类
-   // [self getClassDataWith:ClassUrl parameter:nil];
+    // [self getClassDataWith:ClassUrl parameter:nil];
     //热门推荐
     [self getHotRecommendDataWithUrl:HotUrl parameter:self.parameter];
     //整点开抢
-   // [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
+    // [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
     // 轮播图
     NSString *str = [BannerUrl stringByAppendingString:@"1"];
     [self getHomeBannerWith:str parameter:nil];
@@ -208,12 +210,10 @@
 -(void)getHomeBannerWith:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    WeakSelf(weakself);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfo:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *array = dic[@"data"];
+        NSArray *array = responseObject[@"data"];
         NSLog(@"%@",array);
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
@@ -221,62 +221,58 @@
                 [data addObject:banner];
             }
         }
-        [self.homeViewData setObject:data forKey:@"banner"];
-        [self.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+        [weakself.homeViewData setObject:data forKey:@"banner"];
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
 // 分类数据
 -(void)getClassDataWith:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weakself);
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSArray *array = responseObject[@"data"];
         for (NSDictionary *dic in array) {
             ClassModel *model = [ClassModel mj_objectWithKeyValues:dic];
             [data addObject:model];
             NSLog(@"%d===%@",model.id,model.name);
         }
         [[NSNotificationCenter defaultCenter]postNotificationName:GETCLASSLIST object:nil userInfo:@{@"class":data}];
-        [self.homeViewData setObject:data forKey:@"class"];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+        [weakself.homeViewData setObject:data forKey:@"class"];
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
 // 热门推荐数据
 -(void)getHotRecommendDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weakself);
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *array = dic[@"data"];
+        NSArray *array = responseObject[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 HotRecommend *hot = [HotRecommend mj_objectWithKeyValues:dic];
                 [data addObject:hot];
             }
         }
-        NSLog(@"----------------%@",array);
-        [self.homeViewData setObject:data forKey:@"hot"];
-        [self.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
-        NSLog(@"请求数据成功");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+        [weakself.homeViewData setObject:data forKey:@"hot"];
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
 // 整点抢数据
 -(void)getTimeDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weakself);
     NSMutableArray *data = [NSMutableArray new];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -289,8 +285,8 @@
                 [data addObject:hot];
             }
         }
-        [self.homeViewData setObject:data forKey:@"Time"];
-        [self.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:4]];
+        [weakself.homeViewData setObject:data forKey:@"Time"];
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:4]];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求数据失败");
     }];
@@ -312,7 +308,7 @@
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
         return dataArr.count;
     }else if (section == 4){
-       // NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
+        // NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         return 5;
     }
     return 0;
@@ -557,7 +553,7 @@
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
         berserkVC.model = model;
-      //  [self.navigationController pushViewController:berserkVC animated:YES];
+        //  [self.navigationController pushViewController:berserkVC animated:YES];
     }
     
 }
@@ -568,8 +564,8 @@
     //    if (button.tag == 200) {
     //        NSLog(@"cellRow:%ld tag:%ld",cellRow,button.tag);
     //    }else{
-  //  BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-   // [self.navigationController pushViewController:berserkVC animated:YES];
+    //  BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
+    // [self.navigationController pushViewController:berserkVC animated:YES];
     //    }
 }
 

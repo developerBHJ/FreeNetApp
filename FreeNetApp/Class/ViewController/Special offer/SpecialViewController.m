@@ -74,7 +74,7 @@
     [super viewDidLoad];
     
     self.viewControllerStatu = BHJViewControllerStatuSpecial;
-
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedCity:) name:@"selectedCity" object:nil];
     [self setNavgationBarView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
@@ -100,7 +100,7 @@
     [self.specialCollectionView registerNib:[UINib nibWithNibName:@"homeCell" bundle:nil] forCellWithReuseIdentifier:@"homeCell"];
     [self.specialCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView"];
     [self.specialCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-
+    
     [self.specialCollectionView registerNib:[UINib nibWithNibName:@"RecommendCell" bundle:nil] forCellWithReuseIdentifier:@"RecommendCell"];
     
     [self.specialCollectionView registerNib:[UINib nibWithNibName:@"homeFooterView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"homeFooterView"];
@@ -132,7 +132,7 @@
     NSString *currentCity = sender.userInfo[@"userCity"];
     NSString *city_id = sender.userInfo[@"city_id"];
     if (city_id.length > 0) {
-       [self.parameter setValue:city_id forKey:@"region_id"];
+        [self.parameter setValue:city_id forKey:@"region_id"];
     }
     if (currentCity.length > 0) {
         [self.locationBtn setTitle:currentCity forState:UIControlStateNormal];
@@ -143,12 +143,8 @@
 -(void)getSpecialBannerWith:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *array = dic[@"data"];
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfo:url parameters:parameter success:^(id  _Nullable responseObject) {
+        NSArray *array = responseObject[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 Banner *banner = [Banner mj_objectWithKeyValues:dic];
@@ -157,8 +153,8 @@
         }
         [self.specialData setObject:data forKey:@"banner"];
         [self.specialCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -166,12 +162,9 @@
 -(void)getSpecialDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray *array = dic[@"data"];
+        NSArray *array = responseObject[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 SpecialModel *model = [SpecialModel mj_objectWithKeyValues:dic];
@@ -180,9 +173,8 @@
         }
         [self.specialData setObject:data forKey:@"like"];
         [self.specialCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
-        NSLog(@"请求数据成功");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 #pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
@@ -273,7 +265,7 @@
             NSArray *banner = [self.specialData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
-               [images addObject:model.image_url];
+                [images addObject:model.image_url];
             }
             scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];

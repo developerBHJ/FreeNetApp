@@ -9,10 +9,15 @@
 #import "FlagsSpecialViewController.h"
 #import "RecommendCell.h"
 #import "SpecialDetailViewController.h"
+#import "SpecialModel.h"
+#define kFlagsSpecialUrl @"http://192.168.0.254:4004/special/shopspecial"
+
 @interface FlagsSpecialViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic,strong)UICollectionView *specialCollectionView;
-@property (nonatomic,strong)NSMutableDictionary *specialData;
+@property (nonatomic,strong)NSMutableArray *specialData;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
+
 
 @end
 
@@ -26,17 +31,24 @@
         _specialCollectionView.delegate = self;
         _specialCollectionView.dataSource = self;
         _specialCollectionView.backgroundColor = [UIColor colorWithHexString:@"#f0f0f0"];
-        
     }
     return _specialCollectionView;
 }
 
--(NSMutableDictionary *)specialData{
+-(NSMutableArray *)specialData{
     
     if (!_specialData) {
-        _specialData = [NSMutableDictionary new];
+        _specialData = [NSMutableArray new];
     }
     return _specialData;
+}
+
+-(NSMutableDictionary *)paramater{
+    
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
+    }
+    return _paramater;
 }
 #pragma mark >>>> 生命周期
 
@@ -48,25 +60,34 @@
     [self.specialCollectionView registerNib:[UINib nibWithNibName:@"RecommendCell" bundle:nil] forCellWithReuseIdentifier:@"RecommendCell"];
     [self.view addSubview:self.specialCollectionView];
     
+    [self requestDataWith:kFlagsSpecialUrl paramater:self.paramater];
+    
 }
 
 #pragma mark >>>> 自定义方法
-
-#pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+-(void)requestDataWith:(NSString *)url paramater:(NSDictionary *)paramater{
     
-    return 1;
+    WeakSelf(weakself);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        weakself.specialData = [SpecialModel mj_objectArrayWithKeyValuesArray:responseObject];
+        [weakself.specialCollectionView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
 }
-
+#pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
-    return 5;
+    return self.specialData.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     RecommendCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCell" forIndexPath:indexPath];
     cell.markLabel.text = @"已售 1022";
+    cell.model = self.specialData[indexPath.row];
+    
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, kScreenHeight / 15, kScreenHeight / 15)];
     if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 0) {
         imageView.image = [[UIImage imageNamed:@"taocan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -74,7 +95,6 @@
         imageView.image = [[UIImage imageNamed:@"yuyue"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
     [cell addSubview:imageView];
-    return cell;
     return cell;
 }
 
