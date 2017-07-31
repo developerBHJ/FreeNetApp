@@ -16,6 +16,7 @@
     [self.ratingView setImageDeselected:@"star_half" halfSelected:nil fullSelected:@"star_red" andDelegate:self];
     self.ratingView.isIndicator = YES;
     [self.ratingView displayRating:4];
+    [self.evaluateBtn layoutButtonWithEdgeInsetsStyle:BHJButtonEdgeInsetsStyleRight imageTitleSpace:5];
 }
 
 -(void)ratingBar:(BHJRatingBar *)ratingBar ratingChanged:(float)newRating{

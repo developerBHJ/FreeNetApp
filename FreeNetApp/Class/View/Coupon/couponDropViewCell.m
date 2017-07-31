@@ -24,12 +24,6 @@
 -(void)setModel:(BHJDropModel *)model{
     
     _model = model;
-    self.titleLabel.text = model.title;
-    if (model.subTitle.length) {
-        self.subTitleLabel.hidden = NO;
-        self.subTitleLabel.text = model.subTitle;
-    }else{
-        self.subTitleLabel.hidden = YES;
-    }
+    self.titleLabel.text = model.name;
 }
 @end

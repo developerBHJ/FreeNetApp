@@ -56,9 +56,9 @@
 -(void)setModel:(IndianaDetailModel *)model{
 
     _model = model;
-    self.sliderView.selectedMinimum = [model.snatch_price intValue];
-    self.indianaPrice.text = model.snatch_price;
-    self.currentPrice.text = model.snatch_price;
+    self.sliderView.selectedMinimum = [model.treasure[@"start_price"] intValue];
+    self.indianaPrice.text = model.treasure[@"start_price"];
+    self.currentPrice.text = model.treasure[@"price"];
 }
 #pragma mark TTRangeSliderViewDelegate
 -(void)rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum{

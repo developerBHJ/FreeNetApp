@@ -30,7 +30,7 @@
     if (model.isSelected) {
         self.selectedImage.image = [[UIImage imageNamed:@"selected_red"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }else{
-        self.selectedImage.image = [[UIImage imageNamed:@"nomal"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        self.selectedImage.image = [UIImage imageNamed:@"nomal"];
     }
 }
 

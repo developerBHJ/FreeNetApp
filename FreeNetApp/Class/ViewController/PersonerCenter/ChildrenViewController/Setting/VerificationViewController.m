@@ -54,7 +54,6 @@
         
     [self verificationVerificationCodeWithURL:@"https://api.limian.com/Auth/registerValidation"];
     }else{
-    
         [ShowMessage showMessage:@"请再检查下您所填写的内容" duration:3];
     }
 }

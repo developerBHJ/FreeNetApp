@@ -10,4 +10,7 @@
 
 @interface OpenRiceHistoryViewController : BHJViewController
 
+-(instancetype)initWithLid:(NSNumber *)lid;
+@property (nonatomic,strong)NSNumber *lid;
+
 @end

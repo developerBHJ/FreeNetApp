@@ -35,13 +35,13 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"登录";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
+    self.navigationItem.hidesBackButton = YES;
+    //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
     self.user_nameTF.delegate = self;
-
 }
 
 -(void)back:(UIBarButtonItem *)sender{
-
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -136,13 +136,13 @@
 
 #pragma mark - 登录响应事件
 -(void)loginProjectWithURL:(NSString *)url{
-
+    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:self.user_nameTF.text forKey:@"mobile"];
     [parameter setValue:self.pwdTF.text forKey:@"pwd"];
-NSLog(@"%@",parameter);
+    NSLog(@"%@",parameter);
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -154,24 +154,27 @@ NSLog(@"%@",parameter);
         NSLog(@"%@",result);
         
         if ([result[@"status"] intValue] == 200) {
-        
+            
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"token"] forKey:@"user_token"];
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"id"] forKey:@"user_id"];
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"mobile"] forKey:@"user_mobile"];
-            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"avatar_name"] forKey:@"user_avatar_name"];
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"avatar_url"] forKey:@"user_avatar_url"];
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"nickname"] forKey:@"user_nickname"];
             [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"sex"] forKey:@"user_sex"];
+            [[NSUserDefaults standardUserDefaults]setValue:dataDic[@"user"][@"age"] forKey:@"user_age"];
             [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"user_login"];
             
+            NSNotification *singOut = [[NSNotification alloc]initWithName:@"singOut" object:nil userInfo:@{@"isSuccess":@(0)}];
+            [[NSNotificationCenter defaultCenter]postNotification:singOut];
             
-            [self.navigationController popViewControllerAnimated:YES];
+            PersonerViewController *personalVC = [[PersonerViewController alloc]init];
+            [self.navigationController pushViewController:personalVC animated:YES];
         }else{
             [ShowMessage showMessage:result[@"message"] duration:3];
         }
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-       
+        
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];

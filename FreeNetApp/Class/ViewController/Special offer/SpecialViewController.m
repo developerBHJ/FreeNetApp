@@ -172,7 +172,7 @@
             }
         }
         [self.specialData setObject:data forKey:@"like"];
-        [self.specialCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
+        [self.specialCollectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -180,15 +180,13 @@
 #pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
-    return 3;
+    return 2;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
     if (section == 0){
         return 8;
-    }else if (section == 1){
-        return 2;
     }else {
         NSArray *data = [self.specialData objectForKey:@"like"];
         return data.count;
@@ -207,13 +205,6 @@
         cell.markImage.contentMode =  UIViewContentModeScaleAspectFit;
         cell.markImage.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         cell.markImage.clipsToBounds  = YES;
-        return cell;
-    }else if (indexPath.section == 1){
-        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-        NSMutableArray *arr = [self.specialData objectForKey:@"section_2"];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, cell.width, cell.height)];
-        imageView.image = [[UIImage imageNamed:arr[indexPath.row]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [cell addSubview:imageView];
         return cell;
     }else {
         RecommendCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCell" forIndexPath:indexPath];
@@ -234,21 +225,18 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0){
-        return CGSizeMake((kScreenWidth - 35) / 4, kScreenHeight / 7);
-    }else if (indexPath.section == 1){
-        return CGSizeMake((kScreenWidth - 25) / 2, kScreenHeight / 7);
-    }return CGSizeMake(kScreenWidth, kScreenHeight / 6);
+        return CGSizeMake((kScreenWidth - 35) / 4, 81);
+    }
+    return CGSizeMake(kScreenWidth, 95);
 }
 
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    
-    if (section == 1) {
-        return UIEdgeInsetsMake(5, 10, 10, 10);
-    }else if (section == 2){
-        return UIEdgeInsetsMake(2, 0, 5, 0);
+
+    if (section == 1){
+        return UIEdgeInsetsMake(5, 0, 5, 0);
     }else{
-        return UIEdgeInsetsMake(10, 10, 0, 10);
+        return UIEdgeInsetsMake(10, 10, 5, 10);
     }
 }
 
@@ -261,7 +249,7 @@
             [view removeFromSuperview];
         }
         if (indexPath.section == 0) {
-            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 4.73)];
+            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
             NSArray *banner = [self.specialData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
@@ -269,7 +257,7 @@
             }
             scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
-        }else if (indexPath.section == 2){
+        }else if (indexPath.section == 1){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];
             titleLabel.text = @"猜你喜欢";
             headView.backgroundColor = [UIColor whiteColor];
@@ -286,7 +274,7 @@
         footerView.delegate = self;
         footerView.viewController = self;
         footerView.indexPath = indexPath;
-        if (indexPath.section == 2) {
+        if (indexPath.section == 1) {
             return footerView;
         }
     }
@@ -297,19 +285,16 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
     if (section == 0) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.73);
-    }else if (section == 2){
-        return CGSizeMake(kScreenWidth - 20, kScreenHeight / 14.2);
-    }
-    else{
-        return CGSizeMake(0, 0);
+        return CGSizeMake(kScreenWidth, 120);
+    }else {
+        return CGSizeMake(kScreenWidth - 20, 40);
     }
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
     
-    if (section == 2) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+    if (section == 1) {
+        return CGSizeMake(kScreenWidth, 38);
     }else{
         return CGSizeMake(0, 0);
     }
@@ -318,24 +303,18 @@
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     
-    if (section == 2) {
+    if (section == 1) {
         return 2;
-    }else if (section == 1){
-        return 10;
-    }
-    else{
+    }else{
         return 5;
     }
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     
-    if (section == 2) {
+    if (section == 1) {
         return 2;
-    }else if (section == 1){
-        return 5;
-    }
-    else{
+    }else{
         return 5;
     }
 }
@@ -356,29 +335,29 @@
             [self.navigationController pushViewController:openVC animated:YES];
         }else if (indexPath.row == 4){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 8;
+            restaurantVC.type = @(1);
             restaurantVC.viewStyle = ViewStleWithSpecialData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else if (indexPath.row == 5){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 9;
+            restaurantVC.type = @(2);
             restaurantVC.viewStyle = ViewStleWithSpecialData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else if (indexPath.row == 6){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 10;
+            restaurantVC.type = @(3);
             restaurantVC.viewStyle = ViewStleWithSpecialData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else{
             MoreClassViewController *moreVC = [[MoreClassViewController alloc]init];
             [self.navigationController pushViewController:moreVC animated:YES];
         }
-    }else if (indexPath.section == 2){
+    }else if (indexPath.section == 1){
         
         NSArray *data = [self.specialData objectForKey:@"like"];
         SpecialModel *model = data[indexPath.row];
         SpecialDetailViewController *detailVC = [[SpecialDetailViewController alloc]init];
-        detailVC.model = model;
+        detailVC.lid = model.id;
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }

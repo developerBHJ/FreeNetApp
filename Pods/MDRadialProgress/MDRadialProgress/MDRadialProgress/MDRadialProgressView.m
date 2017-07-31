@@ -121,7 +121,6 @@
 {
 	_progressCounter = progressCounter;
 	[self notifyProgressChange];
-    
     // setNeedsDisplay needs to be in the main queue to update
 	// the drawRect if the caller of this method is in a different queue.
 	dispatch_async(dispatch_get_main_queue(), ^{

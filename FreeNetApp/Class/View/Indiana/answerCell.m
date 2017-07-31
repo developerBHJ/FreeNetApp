@@ -33,7 +33,10 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.cornerRadius = 4;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -45,14 +48,13 @@
 - (void)setModel:(AnswerModel *)model {
     
     _model = model;
-    self.myLabel.text = _model.content;
+    self.myLabel.text = _model.title;
     if (model.imageName.length) {
         self.myImageView.hidden = NO;
         self.myImageView.image = [UIImage imageNamed:model.imageName];
         self.backView.frame = _model.contentImageFrame;
         self.myImageView.frame = CGRectMake(15,10, CGRectGetWidth(self.backView.frame) - 30, CGRectGetHeight(self.backView.frame) - 40);
-    }
-    else {
+    }else {
         self.myImageView.hidden = YES;
     }
 }

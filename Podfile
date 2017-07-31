@@ -25,5 +25,6 @@ pod 'MJRefresh'
 pod 'SVProgressHUD'
 pod 'MJExtension'
 pod 'AMap3DMap'
+pod 'CocoaAsyncSocket', '~> 7.6.1'
 
 end

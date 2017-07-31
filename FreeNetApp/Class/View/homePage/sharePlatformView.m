@@ -12,10 +12,10 @@
 
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
-
+    
     self = [super initWithCoder:aDecoder];
     if (self) {
-
+        
     }
     return self;
 }
@@ -48,7 +48,7 @@
 
 
 - (IBAction)qqShare:(UIButton *)sender {
-  
+    
     if (self.block) {
         self.block(sender.tag);
     }
@@ -131,13 +131,24 @@
 }
 
 -(void)returnButtonTag:(platformViewBlock)block{
-
+    
     self.block = block;
 }
 
 
 -(void)tapAction:(UITapGestureRecognizer *)sender{
-
+    
     [self removeFromSuperview];
 }
+
+
+-(void)setProduct:(OpenGoods *)product{
+    
+    _product = product;
+    [self.goodsImage sd_setImageWithURL:[NSURL URLWithString:product.goods[@"cover_url"]]];
+    self.goods_name.text = product.goods[@"title"];
+    self.store_name.text = product.shop[@"title"];
+    self.storeAddress.text = product.shop[@"address"];
+}
+
 @end

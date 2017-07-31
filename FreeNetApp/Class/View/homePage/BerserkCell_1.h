@@ -7,6 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HotRecommend.h"
+typedef NS_ENUM(NSInteger,cellStatus) {
+    
+    cellStatusWithNomal,
+    cellStatusWithLead,
+    cellStatusWithWinning
+};
 
 @interface BerserkCell_1 : UITableViewCell
 
@@ -18,5 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
 
 @property (nonatomic,strong)NSTimer *timerNow;
+@property (nonatomic,assign)cellStatus status;
+@property (nonatomic,strong)HotRecommend *model;
 
 @end

@@ -30,8 +30,6 @@
 @property (nonatomic,strong)UITableView *leftView;
 @property (nonatomic,strong)UITableView *rightView;
 
-
-
 @end
 
 @implementation couponHeadView
@@ -141,7 +139,6 @@
     
     self.btnSelected = !self.isSelected;
     self.headerViewStatue = couponHeaderViewStyleWithLeft;
-    
     if (self.btnSelected) {
         [self setupCover];
         self.firstImage.transform = CGAffineTransformMakeRotation(M_PI);
@@ -149,18 +146,27 @@
         self.leftView.backgroundColor = [UIColor colorWithHexString:@"#f7f7f7"];
         self.rightView.backgroundColor = [UIColor colorWithHexString:@"eeeeee"];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        self.leftView.frame = CGRectMake(0, self.bottom + 1, MainScreen_width / 2, 42.5 * self.leftData.count);
-        self.rightView.frame = CGRectMake(MainScreen_width / 2, self.bottom + 1, MainScreen_width / 2, 42.5 * self.leftData.count);
-        [UIView animateWithDuration:0.2 animations:^{
-            [window addSubview:self.leftView];
-            [window addSubview:self.rightView];
-            [self.leftView reloadData];
-            [self.leftView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
-            [self.tempData removeAllObjects];
-            BHJDropModel *model = self.leftData[0];
-            self.tempData = [NSMutableArray arrayWithArray:model.items];
-            [self.rightView reloadData];
-        }];
+        if (self.isCoupon) {
+            self.leftView.frame = CGRectMake(0, self.bottom + 1, MainScreen_width / 2, 42.5 * self.leftData.count);
+            self.rightView.frame = CGRectMake(MainScreen_width / 2, self.bottom + 1, MainScreen_width / 2, 42.5 * self.leftData.count);
+            [UIView animateWithDuration:0.2 animations:^{
+                [window addSubview:self.leftView];
+                [window addSubview:self.rightView];
+                [self.leftView reloadData];
+                [self.leftView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+                [self.tempData removeAllObjects];
+                BHJDropModel *model = self.leftData[0];
+                self.tempData = [NSMutableArray arrayWithArray:model.items];
+                [self.rightView reloadData];
+            }];
+        }else{
+            self.leftView.frame = CGRectMake(0, self.bottom + 1, MainScreen_width, 42.5 * self.leftData.count);
+            [UIView animateWithDuration:0.2 animations:^{
+                [window addSubview:self.leftView];
+                [self.leftView reloadData];
+            }];
+        }
+        
     }else{
         [self removeMenu];
     }
@@ -175,18 +181,11 @@
         self.secondImage.transform = CGAffineTransformMakeRotation(M_PI);
         [self.locationBtn setTitleColor:[UIColor colorWithHexString:@"#e4504b"] forState:UIControlStateNormal];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        self.leftView.frame = CGRectMake(0, self.bottom + 1, MainScreen_width / 2, 42.5 * self.middleData.count);
-        self.rightView.frame = CGRectMake(MainScreen_width / 2, self.bottom + 1, MainScreen_width / 2, 42.5 * self.middleData.count);
-        self.leftView.backgroundColor = [UIColor colorWithHexString:@"f7f7f7"];
-        self.rightView.backgroundColor = [UIColor colorWithHexString:@"eeeeee"];
+        self.rightView.frame = CGRectMake(0, self.bottom + 1, MainScreen_width, 42.5 * self.middleData.count);
+        
+        self.rightView.backgroundColor = [UIColor colorWithHexString:@"f7f7f7"];
         [UIView animateWithDuration:0.2 animations:^{
-            [window addSubview:self.leftView];
             [window addSubview:self.rightView];
-            [self.leftView reloadData];
-            [self.leftView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
-            [self.tempData removeAllObjects];
-            BHJDropModel *model = self.middleData[0];
-            self.tempData = [NSMutableArray arrayWithArray:model.items];
             [self.rightView reloadData];
         }];
     }else{
@@ -217,10 +216,11 @@
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    
-    //    if (self.headerViewStatue == couponHeaderViewStyleWithMiddle && tableView == self.rightView) {
-    //        return self.tempData.count;
-    //    }
+    /*
+     if (self.headerViewStatue == couponHeaderViewStyleWithLeft && tableView == self.rightView) {
+     return self.tempData.count;
+     }
+     */
     return 1;
 }
 
@@ -233,7 +233,7 @@
     }else if (self.headerViewStatue == couponHeaderViewStyleWithMiddle && tableView == self.leftView){
         return self.middleData.count;
     }else if (self.headerViewStatue == couponHeaderViewStyleWithMiddle && tableView == self.rightView){
-        return self.tempData.count;
+        return self.middleData.count;
     }else if(self.headerViewStatue == couponHeaderViewStyleWithRight && tableView == self.rightView){
         return self.rightData.count;
     }
@@ -252,12 +252,12 @@
         cell.model = self.tempData[indexPath.row];
         return cell;
     }else if (self.headerViewStatue == couponHeaderViewStyleWithMiddle && tableView == self.leftView){
-        couponClassCell *cell = [tableView dequeueReusableCellWithIdentifier:@"couponClassCell" forIndexPath:indexPath];
+        couponDropViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"couponDropViewCell" forIndexPath:indexPath];
         cell.model = self.middleData[indexPath.row];
         return cell;
     }else if (self.headerViewStatue == couponHeaderViewStyleWithMiddle && tableView == self.rightView){
         couponDropViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"couponDropViewCell" forIndexPath:indexPath];
-        cell.model = self.tempData[indexPath.row];
+        cell.model = self.middleData[indexPath.row];
         return cell;
     }else if(self.headerViewStatue == couponHeaderViewStyleWithRight && tableView == self.rightView) {
         couponDropViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"couponDropViewCell" forIndexPath:indexPath];
@@ -275,16 +275,15 @@
         if (self.delegate && [self.delegate respondsToSelector:@selector(couponHeadViewMethodWith:selectRow:selectedItem:)]) {
             [self.delegate couponHeadViewMethodWith:self.headerViewStatue selectRow:indexPath.row selectedItem:kDefault];
         }
-        if (self.headerViewStatue == couponHeaderViewStyleWithLeft) {
-            BHJDropModel *model = self.leftData[indexPath.row];
-            [self.tempData removeAllObjects];
-            self.tempData = [NSMutableArray arrayWithArray:model.items];
-            [self.rightView reloadData];
-        }else if (self.headerViewStatue == couponHeaderViewStyleWithMiddle){
-            BHJDropModel *model = self.middleData[indexPath.row];
-            [self.tempData removeAllObjects];
-            self.tempData = [NSMutableArray arrayWithArray:model.items];
-            [self.rightView reloadData];
+        if (self.isCoupon) {
+            if (self.headerViewStatue == couponHeaderViewStyleWithLeft) {
+                BHJDropModel *model = self.leftData[indexPath.row];
+                [self.tempData removeAllObjects];
+                self.tempData = [NSMutableArray arrayWithArray:model.items];
+                [self.rightView reloadData];
+            }
+        }else{
+            [self coverClick];
         }
     }
     if (tableView == self.rightView) {

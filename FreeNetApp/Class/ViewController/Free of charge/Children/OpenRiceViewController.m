@@ -12,10 +12,14 @@
 #import "screenModel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "BHJScreenView.h"
+#import "OpenModel.h"
+#import "OpenGoods.h"
+
+#define kOpenUrl @"http://192.168.0.254:4004/publics/firstshow"
+#define kGoodsUrl @"http://192.168.0.254:4004/publics/food_detail"
 @interface OpenRiceViewController ()<BHJCustomViewDelegate>
 
 @property (nonatomic,strong)NSMutableArray *screenData;
-@property (nonatomic,strong)MBProgressHUD *progreeHUD;
 @property (weak, nonatomic) IBOutlet UIButton *historyBtn;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
 @property (weak, nonatomic) IBOutlet UIView *centerView;
@@ -25,7 +29,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *subTitle;
 @property (weak, nonatomic) IBOutlet UIButton *bottomBtn;
 @property (weak, nonatomic) IBOutlet UILabel *themeLabel;
-
+@property (nonatomic, strong) OpenModel *model;
+@property (nonatomic, strong) OpenGoods *product;
+@property (nonatomic,strong)OpenRiceHistoryViewController *historyVC;
+@property (nonatomic,strong)sharePlatformView *productView;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
 
 @end
 
@@ -52,10 +60,27 @@
     return _screenData;
 }
 
+-(sharePlatformView *)productView{
+    
+    if (!_productView) {
+        _productView = [sharePlatformView shareSharePlatformView];
+        _productView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    }
+    return _productView;
+}
+
+-(NSMutableDictionary *)paramater{
+
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id",@"1",@"userId", nil];
+    }
+    return _paramater;
+}
 #pragma mark >>>>>> 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self requestDataWithUrl:kOpenUrl paramater:self.paramater];
     [self setView];
 }
 
@@ -67,11 +92,6 @@
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     
     if (motion == UIEventSubtypeMotionShake) {
-        NSLog(@"开始摇了");
-        self.progreeHUD = [[MBProgressHUD alloc]initWithView:self.view];
-        self.progreeHUD.label.text = @"美食来了！";
-        [self.progreeHUD showAnimated:YES];
-        [self.view addSubview:self.progreeHUD];
         
         SystemSoundID soundId;
         
@@ -95,7 +115,7 @@
         
         self.handleView.alpha = 1.0;
         
-        //        [UIView animateWithDuration:2.0 delay:2.0 options:UIViewAnimationOptionCurveEaseIn animations:nil completion:nil];
+        [self shareAction:self.shareBtn];
     }
 }
 
@@ -105,9 +125,8 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-    
-    [self.progreeHUD hideAnimated:YES];
-    NSLog(@"摇动结束");
+    [self.paramater setValue:@"1" forKey:@"cid"];
+    [self requestGoodsDataWithUrl:kGoodsUrl paramater:self.paramater];
 }
 
 /**
@@ -142,24 +161,67 @@
 // 分享
 - (IBAction)shareAction:(UIButton *)sender {
     
-    sharePlatformView *shareView = [sharePlatformView shareSharePlatformView];
-    shareView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        [shareView setView];
-    } completion:^(BOOL finished) {
-        
-    }];
-    [shareView returnButtonTag:^(NSInteger btnTag){
-        NSLog(@"%ld",(long)btnTag);
-    }];
+    
 }
 
 - (IBAction)historyAction:(UIButton *)sender {
     
-    OpenRiceHistoryViewController *historyVC = [[OpenRiceHistoryViewController alloc]init];
-    [self.navigationController pushViewController:historyVC animated:YES];
+    [self.navigationController pushViewController:self.historyVC animated:YES];
 }
 
+/**
+ 获取开饭啦数据
+ 
+ @param url 数据网址
+ @param paramater 参数
+ */
+-(void)requestDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        weak.model = [OpenModel mj_objectWithKeyValues:responseObject[@"data"]];
+        weak.themeLabel.text = weak.model.shop[@"title"];
+        weak.subTitle.text = [NSString stringWithFormat:@"%@邀请全市人民吃饭",weak.model.shop[@"title"]];
+        NSString *title = [NSString stringWithFormat:@"仅有%@份哦，先到先得",weak.model.counts[@"counts"]];
+        [weak.bottomBtn setTitle:title forState:UIControlStateNormal];
+        
+      //  [weak.paramater setValue:weak.model.shop[@"id"] forKey:@"cid"];
+        
+        weak.historyVC = [[OpenRiceHistoryViewController alloc]initWithLid:weak.model.counts[@"id"]];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+
+/**
+ 摇一摇商品信息
+ 
+ @param url 摇一摇URL
+ @param paramater 参数
+ */
+-(void)requestGoodsDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        if ([responseObject[@"status"] integerValue] == 200) {
+            weak.product = [OpenGoods mj_objectWithKeyValues:responseObject[@"data"]];
+            weak.productView.product = weak.product;
+            [_productView returnButtonTag:^(NSInteger btnTag){
+                NSLog(@"%ld",(long)btnTag);
+            }];
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                [weak.productView setView];
+            } completion:^(BOOL finished) {
+                [weak.productView returnButtonTag:^(NSInteger btnTag) {
+                    NSLog(@"%ld",btnTag);
+                }];
+            }];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark >>>>>> BHJCustomViewDelegate
 -(void)BHJCustomViewMethodWithButton:(UIButton *)sender{
     

@@ -30,15 +30,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"充值记录" style:UIBarButtonItemStylePlain target:self action:@selector(exchangeRecord:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"兑换记录" style:UIBarButtonItemStylePlain target:self action:@selector(exchangeRecord:)];
     [self.navigationItem.rightBarButtonItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} forState:UIControlStateNormal];
+    
     self.navigationItem.title = @"兑换";
     
     
-    [self setViewWithTextField:self.numberSelected imageName:nil anotherImage:nil];
+    [self setViewWithTextField:self.numberSelected imageName:@"icon_subtraction" anotherImage:@"icon_add"];
     
     [self setViewFiled:self.styleSelected image:@"drop"];
-    
     
     
     //账户余额
@@ -71,30 +71,30 @@
 -(void)setViewWithTextField:(UITextField *)textField imageName:(NSString *)imageName anotherImage:(NSString *)image{
     
     UIView *rightView = [[UIView alloc]init];
-    rightView.size = CGSizeMake(20, 40);
+    rightView.size = CGSizeMake(26, 26);
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [rightBtn setBackgroundImage:[[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
-    [rightBtn setFrame:CGRectMake(0, 10, 20, 20)];
+    [rightBtn setBackgroundImage:[[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
+    [rightBtn setFrame:CGRectMake(0, 0, 26, 26)];
     [rightView addSubview:rightBtn];
-    [rightBtn setTitle:@"+" forState:UIControlStateNormal];
-    [rightBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    //    [rightBtn setTitle:@"+" forState:UIControlStateNormal];
+    //    [rightBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
     [rightBtn addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
-    [rightBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-
+    //    [rightBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
     rightView.contentMode = UIViewContentModeRedraw;
     textField.rightView = rightView;
     textField.rightViewMode = UITextFieldViewModeAlways;
     
     UIView *leftView = [[UIView alloc]init];
-    leftView.size = CGSizeMake(20, 40);
+    leftView.size = CGSizeMake(26, 26);
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [leftBtn setBackgroundImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
-    [leftBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
-    [leftBtn setFrame:CGRectMake(0, 10, 20, 20)];
+    [leftBtn setBackgroundImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
+    //    [leftBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
+    [leftBtn setFrame:CGRectMake(0, 0, 26, 26)];
     [leftView addSubview:leftBtn];
-    [leftBtn setTitle:@"-" forState:UIControlStateNormal];
-    [leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    //    [leftBtn setTitle:@"-" forState:UIControlStateNormal];
+    //    [leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(subtractionAction:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.contentMode = UIViewContentModeRedraw;
     textField.leftView = leftView;

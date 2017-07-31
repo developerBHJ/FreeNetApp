@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,66 +17,22 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="store_image" translatesAutoresizingMaskIntoConstraints="NO" id="TDo-cs-QDW">
                     <rect key="frame" x="0.0" y="0.0" width="221" height="139"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="TDo-cs-QDW" secondAttribute="height" multiplier="1.59" id="Yxh-PK-58u"/>
-                    </constraints>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="store_logo" translatesAutoresizingMaskIntoConstraints="NO" id="5HC-nW-mvy">
-                    <rect key="frame" x="246" y="10" width="99" height="55"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="5HC-nW-mvy" secondAttribute="height" multiplier="1.8" id="m7Y-Gd-CYB"/>
-                    </constraints>
-                </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="半岛酒店现金券" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UeN-FX-FvM">
-                    <rect key="frame" x="221" y="65" width="149" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="6sO-PA-qLR"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.41176470590000003" green="0.41176470590000003" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="couponMark" translatesAutoresizingMaskIntoConstraints="NO" id="NvW-xU-AzA">
-                    <rect key="frame" x="236" y="91" width="119" height="38"/>
-                </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="面值¥ 100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvz-ZU-nDx">
-                    <rect key="frame" x="261" y="99" width="69.5" height="18"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="TDo-cs-QDW" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" id="7Cc-tw-sdT"/>
-                <constraint firstItem="NvW-xU-AzA" firstAttribute="top" secondItem="UeN-FX-FvM" secondAttribute="bottom" constant="5" id="Em9-e1-QNL"/>
-                <constraint firstAttribute="trailing" secondItem="NvW-xU-AzA" secondAttribute="trailing" constant="15" id="GM8-pB-ULG"/>
-                <constraint firstItem="NvW-xU-AzA" firstAttribute="leading" secondItem="TDo-cs-QDW" secondAttribute="trailing" constant="15" id="Kxh-qM-0VM"/>
-                <constraint firstItem="5HC-nW-mvy" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="10" id="MoY-iZ-aVO"/>
-                <constraint firstItem="Tvz-ZU-nDx" firstAttribute="centerY" secondItem="NvW-xU-AzA" secondAttribute="centerY" constant="-2" id="Xih-CD-4tC"/>
-                <constraint firstItem="UeN-FX-FvM" firstAttribute="top" secondItem="5HC-nW-mvy" secondAttribute="bottom" id="YQQ-eh-seD"/>
-                <constraint firstAttribute="bottom" secondItem="NvW-xU-AzA" secondAttribute="bottom" constant="10" id="a2G-m1-po9"/>
-                <constraint firstItem="UeN-FX-FvM" firstAttribute="leading" secondItem="TDo-cs-QDW" secondAttribute="trailing" id="aJN-4F-n0p"/>
+                <constraint firstAttribute="trailing" secondItem="TDo-cs-QDW" secondAttribute="trailing" id="BLJ-pY-qdD"/>
                 <constraint firstItem="TDo-cs-QDW" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="ck5-il-LZH"/>
                 <constraint firstAttribute="bottom" secondItem="TDo-cs-QDW" secondAttribute="bottom" id="dTh-0A-Ude"/>
-                <constraint firstItem="5HC-nW-mvy" firstAttribute="leading" secondItem="TDo-cs-QDW" secondAttribute="trailing" constant="25" id="fBE-Rk-XIP"/>
-                <constraint firstAttribute="trailing" secondItem="5HC-nW-mvy" secondAttribute="trailing" constant="25" id="flM-PQ-Pak"/>
-                <constraint firstItem="Tvz-ZU-nDx" firstAttribute="centerX" secondItem="NvW-xU-AzA" secondAttribute="centerX" id="q6M-Q4-htM"/>
-                <constraint firstAttribute="trailing" secondItem="UeN-FX-FvM" secondAttribute="trailing" id="yG6-Ms-DAK"/>
             </constraints>
             <connections>
-                <outlet property="contentLabel" destination="Tvz-ZU-nDx" id="bNm-VY-NDa"/>
-                <outlet property="markView" destination="NvW-xU-AzA" id="gWI-qK-eLl"/>
                 <outlet property="store_image" destination="TDo-cs-QDW" id="Xas-ZD-gfc"/>
-                <outlet property="store_logo" destination="5HC-nW-mvy" id="vcJ-gd-5cQ"/>
-                <outlet property="titleLabel" destination="UeN-FX-FvM" id="Sd5-Vy-6hr"/>
             </connections>
             <point key="canvasLocation" x="48" y="63.5"/>
         </collectionReusableView>
     </objects>
     <resources>
-        <image name="couponMark" width="99" height="18"/>
         <image name="store_image" width="185" height="115"/>
-        <image name="store_logo" width="62" height="49"/>
     </resources>
 </document>

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SpecialModel.h"
 @interface SpecialDetailViewController : BHJViewController
 
-@property (nonatomic,strong)SpecialModel *model;
+@property (nonatomic,strong)NSNumber *lid;
+
 
 @end

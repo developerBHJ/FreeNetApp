@@ -14,4 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *rightImage;
 @property (weak, nonatomic) IBOutlet UIView *backView;
 
+@property (nonatomic,strong)NSDictionary *answer;
+
+
 @end

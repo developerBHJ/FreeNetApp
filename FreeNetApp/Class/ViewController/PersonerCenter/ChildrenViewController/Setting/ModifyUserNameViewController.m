@@ -7,7 +7,7 @@
 //
 
 #import "ModifyUserNameViewController.h"
-
+#import "PersonerViewController.h"
 @interface ModifyUserNameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
@@ -24,6 +24,7 @@
     [super viewDidLoad];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(sureAction:)];
+    self.modifyUserName.placeholder = user_nickname;
     [self setRightViewWithTextField:self.modifyUserName imageName:@"close_red"];
 }
 
@@ -37,7 +38,7 @@
     
     UIView *rightView = [[UIView alloc]init];
     rightView.size = CGSizeMake(25, 20);
-
+    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setBackgroundImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
     [rightBtn setFrame:CGRectMake(5, 2.5, 15, 15)];
@@ -52,45 +53,45 @@
 
 #pragma mark - 确定
 -(void)sureAction:(UIBarButtonItem *)sender{
-
+    
     if (self.modifyUserName.text.length == 0) {
         [ShowMessage showMessage:@"用户账户昵称不能为空" duration:3];
         return;
     }
-    
-    [self changeUserNameWithURL:@"http://192.168.0.254:1000/center/username"];
+    [self changeUserNameWithURL:@"http://192.168.0.254:4004/users/profile"];
+    [self.view endEditing:YES];
 }
 
 
 
 #pragma mark - 清除输入框
 -(void)deleteAction:(UIButton *)sender{
-
+    
     self.modifyUserName.text = nil;
 }
-
-
 
 #pragma mark - 修改用户账户用户名
 -(void)changeUserNameWithURL:(NSString *)url{
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:self.modifyUserName.text forKey:@"username"];
+    [parameter setValue:user_sex forKey:@"sex"];
+    [parameter setValue:user_age forKey:@"age"];
+    [parameter setValue:self.modifyUserName.text forKey:@"nickname"];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
+    WeakSelf(weak);
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
+        NSLog(@"parameter=%@",parameter);
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        
-        if ([result[@"status"] intValue] == 0) {
-            [ShowMessage showMessage:result[@"message"] duration:3];
-        }else{
-            [ShowMessage showMessage:result[@"message"] duration:3];
+        [ShowMessage showMessage:result[@"message"] duration:3];
+        if ([result[@"status"] intValue] == 200) {
+            [[NSUserDefaults standardUserDefaults]setObject:weak.modifyUserName.text forKey:@"user_nickname"];
+            PersonerViewController *personalVC = [[PersonerViewController alloc]init];
+            [self.navigationController pushViewController:personalVC animated:YES];
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         [ShowMessage showMessage:@"网络异常" duration:3];

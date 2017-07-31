@@ -12,25 +12,27 @@
 #import "HairDiscountViewController.h"
 #import "couponHeadView.h"
 #import "BHJDropModel.h"
-
+#import "CashCouponModel.h"
+#import "ClassModel.h"
+#define kCouponUrl @"http://192.168.0.254:4004/coupons/lists"
+#define kMoreUrl @"http://192.168.0.254:4004/publics/industries"
+#define kSubClassUrl @"http://192.168.0.254:4004/publics/cates"
 @interface CouponViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,couponHeadViewDelegate>
 
 @property (nonatomic,strong)UICollectionView *couponView;
 @property (nonatomic,strong)NSMutableArray *couponData;
-@property (nonatomic,strong)NSMutableArray *leftArr;
 @property (nonatomic,strong)NSMutableArray *midlleArr;
 @property (nonatomic,strong)NSMutableArray *rightArr;
+@property (nonatomic,strong)NSMutableArray *leftArr;
 @property (nonatomic,strong)UILabel *titleLabel;
 @property (nonatomic,strong)UIButton *refreshBtn;
 @property (nonatomic,strong)NSMutableDictionary *parameter;
 @property (nonatomic,strong)NSString *user_address;
+@property (nonatomic,strong)NSMutableDictionary *classDic;
 
 @end
 
 @implementation CouponViewController
-
-
-
 #pragma mark - Init
 -(UICollectionView *)couponView{
     
@@ -52,34 +54,18 @@
     return _couponData;
 }
 
+-(NSMutableDictionary *)classDic{
+    
+    if (!_classDic) {
+        _classDic = [NSMutableDictionary new];
+    }
+    return _classDic;
+}
+
 -(NSMutableArray *)leftArr{
     
     if (!_leftArr) {
         _leftArr = [NSMutableArray new];
-        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"全部分类",@"开饭了",@"乐翻天",@"早知道",@"签到有礼",@"餐饮",@"娱乐",@"生活", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
-        for (int i = 0; i < titleArr.count; i ++) {
-            BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
-            model.imageName = [NSString stringWithFormat:@"coupon_%d",i];
-            [_leftArr addObject:model];
-        }
     }
     return _leftArr;
 }
@@ -89,26 +75,9 @@
     if (!_midlleArr) {
         _midlleArr = [NSMutableArray new];
         NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"附近",@"高新区",@"未央区",@"莲湖区",@"雁塔区",@"长安区", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
         for (int i = 0; i < titleArr.count; i ++) {
             BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
+            model.name = titleArr[i];
             [_midlleArr addObject:model];
         }
     }
@@ -119,16 +88,23 @@
     
     if (!_rightArr) {
         _rightArr = [NSMutableArray new];
-        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"智能排序",@"好评优先",@"离我最近",@"人均最低",@"价格最低",@"价格最高",@"最新发布", nil];
+        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"智能排序",@"价格最低",@"价格最高",@"最新发布", nil];
         for (int i = 0; i < titleArr.count; i ++) {
             BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
+            model.name = titleArr[i];
             [_rightArr addObject:model];
         }
     }
     return _rightArr;
 }
 
+-(NSMutableDictionary *)parameter{
+    
+    if (!_parameter) {
+        _parameter = [NSMutableDictionary dictionaryWithDictionary:@{@"lng":@"100",@"lat":@"34",@"industry_id":@(1),@"region_id":@(2),@"page":@(1),@"types":@(1)}];
+    }
+    return _parameter;
+}
 
 
 #pragma mark - ViewDidLoad
@@ -140,25 +116,23 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getLocationAddress:) name:GETLOCATIONNOTIFICATION object:nil];
     
-    
     [self setNavgationBarView];
-    
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"search"] style:UIBarButtonItemStylePlain target:self action:@selector(searchAction:)];
     
+    [self getMoreClassData];
     //构造UI
     [self setView];
     
-    
     //请求现金券
-    [self fetchCashCouponWithURL:API_URL(@"/coupons/lists")];
+    [self fetchCashCouponWithURL:kCouponUrl paramater:self.parameter];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     
     self.tabBarController.tabBar.hidden = NO;
 }
-
+#pragma mark - NSNotification
 -(void)getLocationAddress:(NSNotification *)sender{
     
     NSString *address = sender.userInfo[@"user_address"];
@@ -166,13 +140,10 @@
     if (city_id.length > 0) {
         [self.parameter setValue:city_id forKey:@"region_id"];
     }
-    if (address.length > 0) {
-        self.titleLabel.text = [NSString stringWithFormat:@"当前位置：%@",address];
-        self.user_address = address;
-    }else{
-        self.titleLabel.text = @"当前位置：正在定位中...";
-    }
+    self.titleLabel.text = address.length > 0 ? [NSString stringWithFormat:@"当前位置：%@",address] : @"正在定位中...";
+    [self.couponView reloadData];
 }
+
 #pragma mark - 自定义
 // 搜索
 -(void)searchAction:(UIBarButtonItem *)sender{
@@ -190,6 +161,7 @@
     [self.couponView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView"];
     
     couponHeadView *headView = [couponHeadView shareCouponHeadView];
+    headView.isCoupon = YES;
     headView.leftData = self.leftArr;
     headView.middleData = self.midlleArr;
     headView.rightData = self.rightArr;
@@ -210,23 +182,77 @@
     }];
 }
 
+/**
+ 获取一级分类信息
+ */
+-(void)getMoreClassData{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:kMoreUrl parameters:nil success:^(id  _Nullable responseObject) {
+        NSArray *arr = responseObject[@"data"];
+        if (arr.count > 0) {
+            NSArray *data = [NSArray new];
+            data = [ClassModel mj_objectArrayWithKeyValuesArray:arr];
+            for (ClassModel *model in data) {
+                NSDictionary *paramater = [NSDictionary dictionaryWithObjectsAndKeys:model.id,@"lid",model,@"model",nil];
+                [self getSubClassDataWith:paramater];
+            }
+            [weak.classDic setObject:data forKey:@"class"];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 
+/**
+ 获取二级分类信息
+ */
+-(void)getSubClassDataWith:(NSDictionary *)paramater{
+    
+    __block NSArray *data = [NSArray new];
+    ClassModel *classModel = [paramater objectForKey:@"model"];
+    BHJDropModel *dropM = [[BHJDropModel alloc]init];
+    dropM.name = classModel.title;
+    dropM.headImage = classModel.cover_url;
+    dropM.id = classModel.id;
+    NSMutableArray *subDrop = [NSMutableArray new];
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:kSubClassUrl parameters:paramater success:^(id  _Nullable responseObject) {
+        NSArray *arr = responseObject[@"data"];
+        if (arr.count > 0) {
+            data = [ClassModel mj_objectArrayWithKeyValuesArray:arr];
+            for (ClassModel *model1 in data) {
+                BHJDropModel *dropM1 = [[BHJDropModel alloc]init];
+                dropM1.name = model1.title;
+                dropM1.headImage = model1.cover_url;
+                dropM1.id = model1.id;
+                [subDrop addObject:dropM1];
+            }
+        }
+        dropM.items = [NSArray arrayWithArray:subDrop];
+        [weak.leftArr addObject:dropM];
+      //  NSLog(@"%@    %@",weak.leftArr,dropM.items);
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 
 #pragma mark - Collection Delegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
-    return 5;
+    return self.couponData.count;
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4);
+    return CGSizeMake(kScreenWidth, 142);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     cashCouponCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cashCouponCell" forIndexPath:indexPath];
     UIImageView *cornerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth / 10, kScreenWidth / 10)];
+    cell.model = self.couponData[indexPath.row];
     if (indexPath.row == 0 || indexPath.row == 2) {
         cornerView.image = [[UIImage imageNamed:@"yuyue"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }else{
@@ -245,7 +271,6 @@
         self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, kScreenWidth - 50, 20)];
         self.titleLabel.textColor = [UIColor colorWithHexString:@"#666666"];
         [self.titleLabel setFont:[UIFont systemFontOfSize:13]];
-        self.titleLabel.text = [NSString stringWithFormat:@"当前位置：%@",self.user_address];
         [headView addSubview:self.titleLabel];
         
         self.refreshBtn = [[BHJTools sharedTools]creatSystomButtonWithTitle:nil image:@"refresh" selector:@selector(refresh:) Frame:CGRectMake(kScreenWidth - 30, 5, 25, 25) viewController:self selectedImage:nil tag:2000];
@@ -263,24 +288,40 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     CashDetailViewController *detailVC = [[CashDetailViewController alloc]init];
+    detailVC.model = self.couponData[indexPath.row];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
 
+    return 5;
+}
 
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
+
+    return 5;
+}
 #pragma mark - couponHeadViewDelegate
 -(void)couponHeadViewMethodWith:(couponHeaderViewStyle)viewStyle selectRow:(NSInteger)row selectedItem:(NSInteger)item{
     
+    [self.couponData removeAllObjects];
     if (viewStyle == couponHeaderViewStyleWithLeft) {
-        if (row == 3 && item == 0) {
-            // HairDiscountViewController *discountVC = [[HairDiscountViewController alloc]init];
-            //  [self.navigationController pushViewController:discountVC animated:YES];
+        BHJDropModel *model = self.leftArr[row];
+        BHJDropModel *subModel = nil;
+        if (item >= 0) {
+            subModel = model.items[item];
+        }else{
+            subModel = model.items[item + 1];
         }
-        NSLog(@"分类%ld    -- %ld",(long)row,item);
+        [self.parameter setValue:subModel.id forKey:@"industry_id"];
+        [self fetchCashCouponWithURL:kCouponUrl paramater:self.parameter];
     }else if (viewStyle == couponHeaderViewStyleWithMiddle){
-        NSLog(@"全城%ld    -- %ld",(long)row,item);
+        [self.parameter setValue:@(2) forKey:@"region_id"];
+        [self fetchCashCouponWithURL:kCouponUrl paramater:self.parameter];
     }else if (viewStyle == couponHeaderViewStyleWithRight){
-        NSLog(@"排序%ld    -- %ld",(long)row,item);
+        
+        [self.parameter setValue:@(row + 1) forKey:@"types"];
+        [self fetchCashCouponWithURL:kCouponUrl paramater:self.parameter];
     }
 }
 
@@ -289,43 +330,21 @@
     [self refresh:self.refreshBtn];
 }
 
-
-
 #pragma mark - 数据请求
--(void)fetchCashCouponWithURL:(NSString *)url{
-
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:@"" forKey:@"lng"]; //经度
-    [parameter setValue:@"" forKey:@"lat"]; //维度
-    [parameter setValue:@"" forKey:@"industry_id"]; //分区ID
-    [parameter setValue:@"2" forKey:@"region_id"]; //地区ID
-    [parameter setValue:@"" forKey:@"page"];
+-(void)fetchCashCouponWithURL:(NSString *)url paramater:(NSDictionary *)paramater{
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    WeakSelf(weak);
+    NSLog(@"paramater=%@",paramater);
+    [[BHJNetWorkTools sharedNetworkTool] loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
         
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
-        
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.couponView reloadData];
-        });
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
+        NSArray *arr = responseObject[@"data"];
+        if (arr.count > 0) {
+            weak.couponData = [CashCouponModel mj_objectArrayWithKeyValuesArray:arr];
+        }
+        [weak.couponView reloadData];
+    } failure:^(NSError * _Nullable error) {
         
     }];
 }
-
-
-
-
-
-
-
 
 @end

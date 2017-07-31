@@ -29,6 +29,16 @@ typedef NS_ENUM(NSInteger,rightViewState){
 @end
 
 @implementation IndianaIslandViewController
+
+-(instancetype)initWithID:(IndianaDetailModel *)model{
+
+    self = [super init];
+    if (self) {
+        self.detailModel = model;
+    }
+    return self;
+}
+
 #pragma mark - 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -60,6 +70,7 @@ typedef NS_ENUM(NSInteger,rightViewState){
         _leftView.dataSource = self;
         _leftView.backgroundColor = [UIColor colorWithHexString:@"#f1f1f1"];
         _leftView.separatorColor = [UIColor colorWithHexString:@"#cdcdcd"];
+        _leftView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _leftView;
 }
@@ -214,6 +225,7 @@ typedef NS_ENUM(NSInteger,rightViewState){
             break;
         case 202:{
             AnswerViewController *answerVC = [[AnswerViewController alloc]init];
+            answerVC.model = self.detailModel;
             [self.navigationController pushViewController:answerVC animated:YES];
         }
             break;

@@ -16,6 +16,9 @@
 #import "answerHeadView_1.h"
 #import "answerHeadView_2.h"
 
+#define kAnswerUrl @"http://192.168.0.254:4004/indiana/questions"
+#define CommitAnswerUrl @"http://192.168.0.254:4004/indiana/useranswer"
+
 
 typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
     
@@ -27,11 +30,13 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
 @interface AnswerViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *answerView;
-@property (nonatomic,strong)NSMutableArray *answerData;
+@property (nonatomic,strong)NSArray *answerData;
 @property (strong, nonatomic)FYCountDownView *countDownView;
 @property (nonatomic,strong)NSString *theme;
 @property (nonatomic,strong)NSString *subTitle;
 @property (nonatomic,assign)EnterSuccessfullyOrFailed answerViewState;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
+@property (nonatomic,assign)NSInteger currentQuestion;
 
 @end
 
@@ -44,7 +49,8 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
     self.theme = @"第一关";
     self.subTitle = @"1/10关";
     [self setUpView];
-    
+    self.currentQuestion = 0;
+    [self requestAnswerDataWithUrl:kAnswerUrl paramater:self.paramater];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -67,30 +73,13 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
     return _answerView;
 }
 
-
--(NSMutableArray *)answerData{
+-(NSMutableDictionary *)paramater{
     
-    if (!_answerData) {
-        AnswerModel *model = [[AnswerModel alloc]init];
-        model.content = @"下图中的产品由哪个企业生产制造并隶属于什么系列？";
-        model.imageName = @"topFun_goods";
-        AnswerModel *model_1 = [[AnswerModel alloc]init];
-        model_1.content = @"河套王典雅系列";
-        AnswerModel *model_2 = [[AnswerModel alloc]init];
-        model_2.content = @"泸州老窖窖藏精品";
-        AnswerModel *model_3 = [[AnswerModel alloc]init];
-        model_3.content = @"太白和雅系列";
-        AnswerModel *model_4 = [[AnswerModel alloc]init];
-        model_4.content = @"西凤酒国藏系列";
-        AnswerModel *model_5 = [[AnswerModel alloc]init];
-        model_5.content = @"去掉一个错误答案消耗10欢乐豆";
-        AnswerModel *model_6 = [[AnswerModel alloc]init];
-        model_6.content = @"每过一关商品降价0.01元 每次通关商品降价0.2元";
-        _answerData = [NSMutableArray arrayWithArray:@[model,model_1,model_2,model_3,model_4,model_5,model_6]];
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.model.id,@"cid", nil];
     }
-    return _answerData;
+    return _paramater;
 }
-
 #pragma mark - 自定义
 -(void)setUpView{
     
@@ -111,11 +100,89 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
     
     [[BHJTools sharedTools]showShareView];
 }
+
+/**
+ 获取题目列表
+ 
+ @param url 题目列表URL
+ @param paramater 参数
+ */
+-(void)requestAnswerDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        weak.answerData = [AnswerModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"]];
+        [weak.answerView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+/**
+ 答案提交
+ 
+ @param url 答题URL
+ @param paramater 参数
+ */
+-(void)commitAnswerWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        [weak loadMoreAnswerData];
+        [weak.answerView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+/**
+ 下一题
+ */
+-(void)loadMoreAnswerData{
+    
+    if (self.currentQuestion >= 9) {
+        
+        // [self.countDownView stopCountDown];
+        return;
+    }else{
+        self.currentQuestion ++;
+        NSArray *titles = [NSArray arrayWithObjects:@"第一关",@"第二关",@"第三关",@"第四关",@"第五关",@"第六关",@"第七关",@"第八关",@"第九关", @"第十关",nil];
+        self.theme = titles[self.currentQuestion];
+        self.subTitle = [NSString stringWithFormat: @"%ld/10关",self.currentQuestion + 1];
+        [self.answerView reloadData];
+    }
+}
+
+
+/**
+ cell点击事件
+ 
+ @param cell cell
+ */
+-(void)cellClickEvent:(answerCell_1 *)cell{
+    
+    // NSIndexPath *index = [self.answerView indexPathForCell:cell];
+    cell.rightImage.hidden = NO;
+    BOOL status = cell.answer[@"status"];
+    
+    [self.paramater setObject:cell.answer[@"id"] forKey:@"aid"];
+    [self.paramater setObject:@(1) forKey:@"userId"];
+    [self.paramater setObject:self.model.treasure[@"price"] forKey:@"price"];
+    [self commitAnswerWithUrl:CommitAnswerUrl paramater:self.paramater];
+    if (status) {
+        cell.contentLabel.textColor = [UIColor colorWithHexString:@"e4504b"];
+        cell.rightImage.image = [UIImage imageNamed:@"answer_right"];
+    }else{
+        cell.contentLabel.textColor = [UIColor colorWithHexString:@"#06c1ae"];
+        cell.rightImage.image = [UIImage imageNamed:@"answer_wrong"];
+    }
+}
 #pragma mark - 协议
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
     if (self.answerViewState == AnswerViewSateNomal) {
-        return self.answerData.count;
+        return 7;
     }else{
         return 3;
     }
@@ -136,27 +203,29 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
     if (self.answerViewState == AnswerViewSateNomal) {
         if (indexPath.section == 0) {
             answerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"answerCell" forIndexPath:indexPath];
-            cell.model = self.answerData[indexPath.section];
-            cell.backgroundColor = [UIColor clearColor];
-            cell.cornerRadius = 4;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.model = self.answerData[self.currentQuestion];
             cell.themeLabel.text = self.theme;
             cell.subTitle.text = self.subTitle;
             return cell;
+        }else if (indexPath.section == 1 || indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4){
+            answerCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"answerCell_1" forIndexPath:indexPath];
+            AnswerModel *model = self.answerData[self.currentQuestion];
+            NSArray *arr = model.answers;
+            NSDictionary *dic = arr[indexPath.section - 1];
+            cell_1.answer = dic;
+            return cell_1;
         }else{
             answerCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"answerCell_1" forIndexPath:indexPath];
-            cell_1.backgroundColor = [UIColor clearColor];
-            AnswerModel *model = self.answerData[indexPath.section];
-            cell_1.contentLabel.text = model.content;
-            cell_1.selectionStyle = UITableViewCellSelectionStyleNone;
-            if (indexPath.section == (self.answerData.count - 2)) {
+            if (indexPath.section == 5) {
                 [cell_1.rightImage removeFromSuperview];
                 cell_1.contentLabel.textColor = [UIColor colorWithHexString:@"#ffffff"];
                 cell_1.backView.backgroundColor = [UIColor colorWithHexString:@"#06c1ae"];
-            }else if (indexPath.section == (self.answerData.count - 1)){
+                cell_1.contentLabel.text = @"去掉一个错误答案消耗10欢乐豆";
+            }else if (indexPath.section == 6){
                 [cell_1.rightImage removeFromSuperview];
                 cell_1.contentLabel.textColor = [UIColor colorWithHexString:@"#ffffff"];
                 cell_1.backView.backgroundColor = [UIColor colorWithHexString:@"#9c333a"];
+                cell_1.contentLabel.text = @"每过一关商品降价0.01元 每次通关商品降价0.2元";
             }
             return cell_1;
         }
@@ -174,21 +243,17 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
             return cell_2;
         }else if(indexPath.section == 1){
             answerCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"answerCell_1" forIndexPath:indexPath];
-            cell_1.backgroundColor = [UIColor clearColor];
             cell_1.contentLabel.text = @"去掉一个错误答案消耗10欢乐豆";
             [cell_1.rightImage removeFromSuperview];
             cell_1.contentLabel.textColor = [UIColor colorWithHexString:@"#ffffff"];
             cell_1.backView.backgroundColor = [UIColor colorWithHexString:@"#06c1ae"];
-            cell_1.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell_1;
         }else{
             answerCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"answerCell_1" forIndexPath:indexPath];
-            cell_1.backgroundColor = [UIColor clearColor];
             cell_1.contentLabel.text = @"每过一关商品降价0.01元 每次通关商品降价0.2元";
             [cell_1.rightImage removeFromSuperview];
             cell_1.contentLabel.textColor = [UIColor colorWithHexString:@"#ffffff"];
             cell_1.backView.backgroundColor = [UIColor colorWithHexString:@"#9c333a"];
-            cell_1.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell_1;
         }
     }
@@ -240,20 +305,13 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.answerViewState == AnswerViewSateNomal) {
-        if (indexPath.section == 1 || indexPath.section == 2 || indexPath.section == 4) {
+        if (indexPath.section == 1 || indexPath.section == 2 || indexPath.section == 4 || indexPath.section == 3) {
             answerCell_1 *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.rightImage.hidden = NO;
-            cell.contentLabel.textColor = [UIColor colorWithHexString:@"#06c1ae"];
-        }
-        if (indexPath.section == 3) {
-            answerCell_1 *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.rightImage.hidden = NO;
-            cell.contentLabel.textColor = [UIColor colorWithHexString:@"e4504b"];
-            cell.rightImage.image = [UIImage imageNamed:@"answer_right"];
+            //  [self cellClickEvent:cell];
         }
         if (indexPath.section == self
             .answerData.count - 2) {
-            [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+            //  [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
         }
     }
 }
@@ -265,25 +323,8 @@ typedef NS_ENUM(NSInteger,EnterSuccessfullyOrFailed){
             answerHeadView *headView = [answerHeadView shareanswerHeadView];
             self.countDownView = [[FYCountDownView alloc]initWithFrame:CGRectMake(5, 5, CGRectGetWidth(headView.timerView.frame) - 20, CGRectGetHeight(headView.timerView.frame) - 20) totalTime:10 lineWidth:2 lineColor:HWColor(114, 32, 105, 1.0) startBlock:^{
             } completeBlock:^{
-                [self.answerData removeAllObjects];
-                AnswerModel *model = [[AnswerModel alloc]init];
-                model.content = @"秦始皇灭六国后，统一全国文字，这种汉字称作？";
-                AnswerModel *model_1 = [[AnswerModel alloc]init];
-                model_1.content = @"行书";
-                AnswerModel *model_2 = [[AnswerModel alloc]init];
-                model_2.content = @"小篆";
-                AnswerModel *model_3 = [[AnswerModel alloc]init];
-                model_3.content = @"隶书";
-                AnswerModel *model_4 = [[AnswerModel alloc]init];
-                model_4.content = @"楷书";
-                AnswerModel *model_5 = [[AnswerModel alloc]init];
-                model_5.content = @"去掉一个错误答案消耗10欢乐豆";
-                AnswerModel *model_6 = [[AnswerModel alloc]init];
-                model_6.content = @"每过一关商品降价0.01元 每次通关商品降价0.2元";
-                _answerData = [NSMutableArray arrayWithArray:@[model,model_1,model_2,model_3,model_4,model_5,model_6]];
-                self.theme = @"第二关";
-                self.subTitle = @"2/10关";
-                [self.answerView reloadData];
+                // 下一题
+                [self loadMoreAnswerData];
                 [self.countDownView startCountDown];
             }];
             [self.countDownView startCountDown];

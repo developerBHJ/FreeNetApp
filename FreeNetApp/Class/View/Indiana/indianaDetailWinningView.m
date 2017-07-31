@@ -35,11 +35,9 @@
     return self;
 }
 
-
-
 -(void)setModel:(IndianaDetailModel *)model{
     
     _model = model;
-    self.priceLabel.text = model.snatch_price;
+    self.priceLabel.text = model.treasure[@"price"];
 }
 @end

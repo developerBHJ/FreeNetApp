@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CashCouponModel.h"
 
 @interface CashDetailViewController : BHJViewController
 
-@property (nonatomic,strong)NSNumber *coucponsId;
-
+@property (nonatomic,strong)NSNumber *searchId;
+@property (nonatomic,strong)CashCouponModel *model;
 
 @end

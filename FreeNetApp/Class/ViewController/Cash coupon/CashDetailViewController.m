@@ -16,18 +16,22 @@
 #import "couponDetailHeadView_1.h"
 #import "specialFlagCell.h"
 #import "FlagshipViewController.h"
+#import "OtherCouponModel.h"
 
+#import "BHJPropertyView.h"
+#define kDetailUrl @"http://192.168.0.254:4004/coupons/details"
+#define kOtherStore @"http://192.168.0.254:4004/coupons/otherlists"
 @interface CashDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
 @property (nonatomic,strong)UICollectionView *cashDetailView;
 @property (nonatomic,strong)NSMutableArray *cashDetailData;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
+@property (nonatomic,strong)CashCouponModel *detailModel;
+@property (nonatomic,strong)BHJPropertyView *propertyView;
 
 @end
 
 @implementation CashDetailViewController
-
-
-
 #pragma mark - Init
 -(UICollectionView *)cashDetailView{
     
@@ -45,23 +49,28 @@
     
     if (!_cashDetailData) {
         _cashDetailData = [NSMutableArray new];
-        couponModel *model_1 = [[couponModel alloc]init];
-        model_1.markData = @[@"不支持随时退",@"不支持过期退"];
-        [_cashDetailData addObject:model_1];
     }
     return _cashDetailData;
 }
 
+-(NSMutableDictionary *)paramater{
+    
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.model.shop[@"id"],@"lid", nil];
+    }
+    return _paramater;
+}
 
 
 #pragma mark - 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // 获取详情数据
+    [self requestDataWithUrl:kDetailUrl paramater:self.paramater];
+    [self requestOtherDataWithUrl:kOtherStore paramater:self.paramater];
     [self setView];
 }
-
-
 
 #pragma mark - 自定义
 -(void)setView{
@@ -79,7 +88,6 @@
     [self.cashDetailView registerNib:[UINib nibWithNibName:@"couponDetailCell_2" bundle:nil] forCellWithReuseIdentifier:@"couponDetailCell_2"];
     [self.cashDetailView registerNib:[UINib nibWithNibName:@"couponDetailHeadView_1" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"couponDetailHeadView_1"];
     [self.cashDetailView registerNib:[UINib nibWithNibName:@"specialFlagCell" bundle:nil] forCellWithReuseIdentifier:@"specialFlagCell"];
-    
 }
 
 // 分享
@@ -89,7 +97,45 @@
 }
 
 
+/**
+ 获取详情信息
+ 
+ @param url 详情URL
+ @param paramater 参数
+ */
+-(void)requestDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        weak.detailModel = [CashCouponModel mj_objectWithKeyValues:responseObject[@"data"]];
+        [weak.cashDetailView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 
+
+/**
+ 获取附近其他店铺的现金券
+ 
+ @param url 数据源
+ @param paramater 参数
+ */
+-(void)requestOtherDataWithUrl:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        NSArray *data = responseObject[@"data"];
+        if (data.count > 0) {
+            weak.cashDetailData = [OtherCouponModel mj_objectArrayWithKeyValuesArray:data];
+            [weak.cashDetailView reloadData];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark - Collection Delegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
@@ -98,14 +144,10 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
-    if (section == 0) {
-        return 1;
-    }else if (section == 2){
-        return 5;
-    }else if(section == 1){
-        return 5;
+    if (section == 2){
+        return self.cashDetailData.count;
     }
-    return 4;
+    return 1;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -113,25 +155,26 @@
     if (indexPath.section == 0) {
         specialFlagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"specialFlagCell" forIndexPath:indexPath];
         cell.delegate = self;
+        cell.titleLabel.text = self.model.shop[@"title"];
         cell.flagButton.tag = 203;
         return cell;
     }
     if (indexPath.section == 2) {
         cashCouponCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cashCouponCell" forIndexPath:indexPath];
         cell.saleNum.hidden = YES;
-        cell.validityLabel.hidden = YES;
+        cell.otherModel = self.cashDetailData[indexPath.row];
         return cell;
     }else{
         if (indexPath.row == 0) {
             couponDetailCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"couponDetailCell" forIndexPath:indexPath];
-            couponModel *model = self.cashDetailData[indexPath.row];
-            cell.model = model;
+            cell.model = self.detailModel;
             cell.delegate = self;
             cell.index = indexPath;
             cell.exChangeBtn.tag = 202;
             return cell;
         }else if (indexPath.row == 1){
             couponDetailCell_1 *cell_1 = [collectionView dequeueReusableCellWithReuseIdentifier:@"couponDetailCell_1" forIndexPath:indexPath];
+            cell_1.pepoleNum.text = [NSString stringWithFormat:@"%@ 人领过",self.detailModel.selltotal];
             return cell_1;
         }else{
             couponDetailCell_2 *cell_2 = [collectionView dequeueReusableCellWithReuseIdentifier:@"couponDetailCell_2" forIndexPath:indexPath];
@@ -164,19 +207,18 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+        return CGSizeMake(kScreenWidth,38);
     }
     if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            couponModel *model = self.cashDetailData[indexPath.row];
-            return CGSizeMake(kScreenWidth, model.cellHeight);
+            return CGSizeMake(kScreenWidth, self.detailModel.cellHeight);
         }else if (indexPath.row == 1){
-            return CGSizeMake(kScreenWidth, kScreenHeight / 5);
+            return CGSizeMake(kScreenWidth, 114);
         }else{
-            return CGSizeMake(kScreenWidth, kScreenHeight / 4.8);
+            return CGSizeMake(kScreenWidth, 118);
         }
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4);
+    return CGSizeMake(kScreenWidth, 142);
 }
 
 
@@ -191,13 +233,14 @@
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     
     couponDetailHeadView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"couponDetailHeadView" forIndexPath:indexPath];
+    [headView.store_image sd_setImageWithURL:[NSURL URLWithString:self.detailModel.cover]];
     return headView;
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
     if (section == 1) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.89);
+        return CGSizeMake(kScreenWidth, 116);
     }else {
         return CGSizeMake(kScreenWidth, 0);
     }
@@ -221,11 +264,14 @@
         }
             break;
         case 202:{
-            NSLog(@"立即购买");
+            self.propertyView = [[BHJPropertyView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            self.propertyView.model = self.model;
+            [self.propertyView showPropertyView];
         }
             break;
         case 203:{
             FlagshipViewController *flagVC = [[FlagshipViewController alloc]init];
+            flagVC.cid = self.detailModel.shop[@"id"];
             [self.navigationController pushViewController:flagVC animated:YES];
         }
             break;
@@ -233,31 +279,5 @@
             break;
     }
 }
-
-
-
-#pragma mark - 现金劵详情
--(void)fetchCouponsDetailWithURL:(NSString *)url{
-
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:self.coucponsId forKey:@"lid"];
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
-        
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
-    }];
-}
-
-
-
 
 @end

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -266,6 +266,7 @@
                 <outlet property="cicrleBtn" destination="nyB-Ef-TZT" id="ilP-y5-K6n"/>
                 <outlet property="cicrleLabel" destination="Cph-QL-flP" id="Tcw-B8-Sw3"/>
                 <outlet property="closeBtn" destination="sLT-z8-qK7" id="C5S-9E-Doz"/>
+                <outlet property="goodsImage" destination="472-lL-V0M" id="7o9-Qa-2XF"/>
                 <outlet property="goods_image" destination="PWA-F6-YLo" id="3fI-zy-4CJ"/>
                 <outlet property="goods_name" destination="GZk-qy-5Uo" id="LMz-n2-doi"/>
                 <outlet property="goods_subTitle" destination="O7s-cJ-1gb" id="8OY-AF-K4t"/>
@@ -273,6 +274,7 @@
                 <outlet property="qqBtn" destination="qZI-1g-Y5h" id="GrT-XM-Ftu"/>
                 <outlet property="sinaBtn" destination="qZv-tg-yKO" id="2Cd-C7-7jn"/>
                 <outlet property="sinaLabel" destination="qSp-5D-IDl" id="INk-Yl-ph8"/>
+                <outlet property="storeAddress" destination="1DF-8p-jCE" id="1nf-rg-BEQ"/>
                 <outlet property="store_name" destination="deF-Kn-yMV" id="uzX-H4-8wA"/>
                 <outlet property="titleView" destination="iz0-RJ-UB3" id="zZa-1h-8ux"/>
                 <outlet property="webCahrtLabel" destination="OHZ-j9-ot8" id="4Lg-Cd-4Eo"/>

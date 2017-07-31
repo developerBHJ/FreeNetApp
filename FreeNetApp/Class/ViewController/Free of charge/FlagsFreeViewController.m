@@ -46,7 +46,7 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page", nil];
     }
     return _paramater;
 }
@@ -108,7 +108,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4.5);
+    return CGSizeMake(kScreenWidth, 126);
 }
 
 

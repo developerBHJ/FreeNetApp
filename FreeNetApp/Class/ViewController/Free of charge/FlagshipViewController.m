@@ -16,10 +16,10 @@
 #import "specialHeadView_1.h"
 #import "flagCell_4.h"
 #import "flagCell_5.h"
-#import "specialDetailCell_5.h"
 #import "flagShipHeadView_1.h"
 #import "specialDetailCell_6.h"
 #import "specialiDetailCell_7.h"
+#import "RecommendCell.h"
 
 #import "MoreCouponViewController.h"
 #import "SearchRouteViewController.h"
@@ -30,6 +30,7 @@
 #import "FlagsCoupunViewController.h"
 #import "FlagsFreeViewController.h"
 #import "MemberViewController.h"
+#import "SpecialDetailViewController.h"
 
 #import "FlagStoreModel.h"
 
@@ -37,11 +38,11 @@
 #define kFocuseUrl @"http://192.168.0.254:4004/special/shopfocuse"
 #define kStoreListUrl @"http://192.168.0.254:4004/special/shopbranch"
 #define kEvaluateUrl @"http://192.168.0.254:4004/special/productComments"
+#define kOthers @"http://192.168.0.254:4004/special/others"
 
 @interface FlagshipViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate,BHJReusableViewDelegate>
 
 @property (nonatomic,strong)UICollectionView *flagshipView;
-@property (nonatomic,strong)NSMutableArray *flagData;
 @property (nonatomic,strong)NSMutableArray *imageArr;
 @property (nonatomic,strong)NSMutableArray *dataBase;
 @property (nonatomic,strong)NSMutableArray *viewControllers;
@@ -49,6 +50,7 @@
 @property (nonatomic,strong)NSMutableDictionary *paramater;
 @property (nonatomic,strong)NSMutableArray *storeArray;
 @property (nonatomic,strong)NSMutableArray *evaluateArr;
+@property (nonatomic,strong)NSArray *otherSpecial;
 
 @end
 
@@ -64,22 +66,6 @@
         _flagshipView.backgroundColor = [UIColor clearColor];
     }
     return _flagshipView;
-}
-
--(NSMutableArray *)flagData{
-    
-    if (!_flagData) {
-        _flagData = [NSMutableArray new];
-        for (int i = 0; i < 4; i ++) {
-            BaseModel *model = [[BaseModel alloc]init];
-            model.content = @"每次去都很满意，味道好，服务周到，菜好吃又有特色,物美价廉真不错，物美价廉真不错，物美价廉真不错，物美价廉真不错，物美价廉真不错";
-            if (i == 0 || i == 2) {
-                model.imageAr = @[@"图层-1",@"图层-3",@"图层-4"];
-            }
-            [_flagData addObject:model];
-        }
-    }
-    return _flagData;
 }
 
 -(NSMutableArray *)imageArr{
@@ -119,7 +105,7 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid", nil];
     }
     return _paramater;
 }
@@ -149,6 +135,8 @@
     // 评论数据
     // [self.paramater setValue:@(self.cid) forKey:@"cid"];
     // [self requrestEvaluateDataWithUrl:kEvaluateUrl paramater:self.paramater];
+    // 本店其他特价
+    [self requestOtherSpecialDataWith:kOthers paramater:self.paramater];
     
     [self setUpViews];
     
@@ -171,10 +159,10 @@
     [self.flagshipView registerNib:[UINib nibWithNibName:@"specialHeadView_1" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"specialHeadView_1"];
     [self.flagshipView registerNib:[UINib nibWithNibName:@"flagCell_4" bundle:nil] forCellWithReuseIdentifier:@"flagCell_4"];
     [self.flagshipView registerNib:[UINib nibWithNibName:@"flagCell_5" bundle:nil] forCellWithReuseIdentifier:@"flagCell_5"];
-    [self.flagshipView registerNib:[UINib nibWithNibName:@"specialDetailCell_5" bundle:nil] forCellWithReuseIdentifier:@"specialDetailCell_5"];
     [self.flagshipView registerNib:[UINib nibWithNibName:@"flagShipHeadView_1" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"flagShipHeadView_1"];
     [self.flagshipView registerNib:[UINib nibWithNibName:@"specialiDetailCell_7" bundle:nil] forCellWithReuseIdentifier:@"specialiDetailCell_7"];
     [self.flagshipView registerNib:[UINib nibWithNibName:@"specialDetailCell_6" bundle:nil] forCellWithReuseIdentifier:@"specialDetailCell_6"];
+    [self.flagshipView registerNib:[UINib nibWithNibName:@"RecommendCell" bundle:nil] forCellWithReuseIdentifier:@"RecommendCell"];
     
     
 }
@@ -249,10 +237,22 @@
         
     }];
 }
+//本店其他特价
+-(void)requestOtherSpecialDataWith:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weakself);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        weakself.otherSpecial = [SpecialModel mj_objectArrayWithKeyValuesArray:responseObject];
+        [weakself.flagshipView reloadData];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark - UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
-    return 6;
+    return 5;
 }
 
 
@@ -264,10 +264,8 @@
         return 4;
     }else if (section == 3){
         return 2;
-    }else if (section == 5){
-        return self.flagData.count;
     }else if (section == 4){
-        return 1;
+        return self.otherSpecial.count;
     }
     return 3;
 }
@@ -308,12 +306,20 @@
         }
         return cell;
     }else if (indexPath.section == 4){
+        RecommendCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCell" forIndexPath:indexPath];
+        cell.markLabel.text = @"已售 1022";
+        cell.model = self.otherSpecial[indexPath.row];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, kScreenHeight / 15, 38)];
+        if (indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 0) {
+            imageView.image = [[UIImage imageNamed:@"taocan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        }else{
+            imageView.image = [[UIImage imageNamed:@"yuyue"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        }
+        [cell addSubview:imageView];
+        return cell;
+    }else {
         flagCell_5 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"flagCell_5" forIndexPath:indexPath];
         return cell;
-    }else{
-        specialDetailCell_5 *cell_5 = [collectionView dequeueReusableCellWithReuseIdentifier:@"specialDetailCell_5" forIndexPath:indexPath];
-        cell_5.model = self.flagData[indexPath.row];
-        return cell_5;
     }
 }
 
@@ -335,14 +341,13 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 1) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+        return CGSizeMake(kScreenWidth, 38);
     }else if (indexPath.section == 2){
-        return CGSizeMake((kScreenWidth - 36.5) / 4, kScreenHeight / 7);
-    }else if (indexPath.section == 5){
-        BaseModel *model = self.flagData[indexPath.row];
-        return CGSizeMake(kScreenWidth, model.cellHeight);
+        return CGSizeMake((kScreenWidth - 36.5) / 4, 81);
+    }else if (indexPath.section == 4){
+        return CGSizeMake(kScreenWidth, 95);
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+    return CGSizeMake(kScreenWidth, 38);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -358,26 +363,25 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
-    if (section == 2 || section == 3 || section == 4) {
+    if (section == 2 || section == 3) {
         return CGSizeMake(0, 0);
     }else if (section == 0){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 3.78);
+        return CGSizeMake(kScreenWidth, 150);
     }else if (section == 1){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.83);
+        return CGSizeMake(kScreenWidth, 120);
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+    return CGSizeMake(kScreenWidth, 38);
 }
 
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-    
     
     if (indexPath.section == 0) {
         UICollectionReusableView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView" forIndexPath:indexPath];
         for (UIView *view in headView.subviews) {
             [view removeFromSuperview];
         }
-        SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 3.78)];
+        SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
         scrollView.imageURLStringsGroup = self.imageArr;
         [headView addSubview:scrollView];
         return headView;
@@ -389,12 +393,14 @@
         headView_1.followBtn.tag = 1000;
         headView_1.model = self.model;
         return headView_1;
-    }else if (indexPath.section == 5){
+    }else if (indexPath.section == 4){
         flagShipHeadView_1 *headView_1 = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"flagShipHeadView_1" forIndexPath:indexPath];
         headView_1.delegate = self;
         headView_1.viewController = self;
         headView_1.indexPath = indexPath;
         headView_1.rightBtn.tag = 1005;
+        headView_1.rightBtn.hidden = YES;
+        headView_1.themeLabel.text = @"本店其他特价";
         return headView_1;
     }else{
         specialHeadView_1 *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"specialHeadView_1" forIndexPath:indexPath];
@@ -431,8 +437,10 @@
     }else if (indexPath.section == 2){
         [self.navigationController pushViewController:self.viewControllers[indexPath.row] animated:YES];
     }else if (indexPath.section == 4){
-        MemberViewController *memberVC = [[MemberViewController alloc]init];
-        [self.navigationController pushViewController:memberVC animated:YES];
+        SpecialDetailViewController *detailVC = [[SpecialDetailViewController alloc]init];
+        SpecialModel *model = self.otherSpecial[indexPath.row];
+        detailVC.lid = model.id;
+        [self.navigationController pushViewController:detailVC animated:YES];
     }
 }
 
@@ -460,9 +468,7 @@
         }
             break;
         case 1005:{
-            EvaluateViewController *evaluateVC = [[EvaluateViewController alloc]init];
-            evaluateVC.markData = [NSMutableArray arrayWithArray:@[@"味道很好 19",@"环境不错 19",@"服务态度很好 19",@"性价比高 19",@"交通方便 19",@"没有额外收费 18",@"就那样 19",@"交通方便 19",@"额外收费 19"]];
-            [self.navigationController pushViewController:evaluateVC animated:YES];
+            
         }
             break;
             

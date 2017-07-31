@@ -10,9 +10,7 @@
 #import "BHJRatingBar.h"
 @interface specialHeadView : UICollectionReusableView<BHJRatingBarDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet BHJRatingBar *ratingView;
-@property (weak, nonatomic) IBOutlet UILabel *buyNumber;
-
+@property (weak, nonatomic) IBOutlet UIButton *evaluateBtn;
 
 @end

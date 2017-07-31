@@ -9,6 +9,7 @@
 #import "MyOrderViewController.h"
 #import "MyCollectionCell.h"
 #import "AttentionModel.h"
+#import "FlagshipViewController.h"
 @interface MyOrderViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong)UITableView *myOrderView;
@@ -56,7 +57,7 @@
     //默认请求全部订单数据
     [self myAttentionWithURL:API_URL(@"/my/focuses")];
     
-
+    
 }
 
 
@@ -82,30 +83,30 @@
     
     return cell;
 }
-    //删除
+//删除
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    
     return   UITableViewCellEditingStyleDelete;
 }
 
-    //先要设Cell可编辑
+//先要设Cell可编辑
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return YES;
 }
 
-    //修改编辑按钮文字
+//修改编辑按钮文字
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return @"删除";
 }
-    //设置进入编辑状态时，Cell不会缩进
+//设置进入编辑状态时，Cell不会缩进
 - (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return NO;
 }
 
-    //进入编辑模式，按下出现的编辑按钮后
+//进入编辑模式，按下出现的编辑按钮后
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -113,7 +114,7 @@
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除？" preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-
+            
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
             //删除关注
@@ -126,7 +127,13 @@
     }
 }
 
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    FlagshipViewController *flagVC = [[FlagshipViewController alloc]init];
+    AttentionModel *model = self.dataArray[indexPath.row];
+    flagVC.cid = model.shopId;
+    [self.navigationController pushViewController:flagVC animated:YES];
+}
 
 #pragma mark - BaseTableViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)index{
@@ -172,7 +179,7 @@
 
 //关注删除
 -(void)myAttentionDeleteWithURL:(NSString *)url Lid:(NSNumber *)lib{
-
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:lib forKey:@"lid"];
     NSLog(@"%@",parameter);

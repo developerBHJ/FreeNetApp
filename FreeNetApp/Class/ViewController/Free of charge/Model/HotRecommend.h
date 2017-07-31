@@ -12,6 +12,7 @@
 
 @property (nonatomic,assign)int total;//多少人在抢
 @property (nonatomic,strong)NSDictionary *shop_free;// 商品信息
+@property (nonatomic,assign)NSInteger status;
 
 /*
  {

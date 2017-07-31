@@ -32,7 +32,7 @@
     self.time_s2.borderColor = [UIColor colorWithHexString:@"#bebebe"];
     self.time_s2.borderWidth = 1.0;
     self.striveBtn.backgroundColor = HWColor(249, 76, 79, 1.0);
-
+    
     self.timerNow = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerFunc) userInfo:nil repeats:YES];
 }
 
@@ -61,8 +61,9 @@
 -(void)setModel:(HotRecommend *)model{
     
     _model = model;
-  //  self.subTitle.text = model.name;
-  //  self.price.text = model.sell_price;
-  //  [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    self.subTitle.text = model.shop_free[@"title"];
+    self.price.text = model.shop_free[@"price"];
+    [self.goods_image sd_setImageWithURL:[NSURL URLWithString:model.shop_free[@"cover_url"]]];
+    self.pepoleNum.text = [NSString stringWithFormat:@"%d人在抢",model.total];
 }
 @end

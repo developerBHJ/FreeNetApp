@@ -26,4 +26,5 @@ typedef void (^CountDownCompleteBlock)();
 
 -(void)startCountDown;
 
+-(void)stopCountDown;
 @end

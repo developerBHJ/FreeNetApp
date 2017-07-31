@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger,couponHeaderViewStyle){
 @property (nonatomic,strong)NSMutableArray *middleData;
 @property (nonatomic,strong)NSMutableArray *rightData;
 @property (nonatomic,strong)NSMutableArray *tempData;
-    
+@property (nonatomic,assign)BOOL isCoupon;
 @property (nonatomic,assign)couponHeaderViewStyle headerViewStatue;
 @property (nonatomic,assign)id <couponHeadViewDelegate> delegate;
 /**左边菜单内cell的高度*/

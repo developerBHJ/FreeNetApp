@@ -46,7 +46,7 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page", nil];
     }
     return _paramater;
 }
@@ -101,7 +101,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(kScreenWidth, kScreenHeight / 6);
+    return CGSizeMake(kScreenWidth, 95);
 }
 
 
@@ -123,6 +123,8 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     SpecialDetailViewController *detailVC = [[SpecialDetailViewController alloc]init];
+    SpecialModel *model = self.specialData[indexPath.row];
+    detailVC.lid = model.id;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

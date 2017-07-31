@@ -58,6 +58,8 @@
     [self.view addSubview:self.personerSettingTableView];
     [self.personerSettingTableView registerNib:[UINib nibWithNibName:@"PersonerCell" bundle:nil] forCellReuseIdentifier:@"PersonerCell"];
     
+    [self setViewWithData];
+
     UIButton *signOutBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [signOutBtn setFrame:CGRectMake(10, kScreenHeight - kScreenHeight / 3, kScreenWidth - 20, kScreenHeight / 12)];
     signOutBtn.tag = 10086;
@@ -66,23 +68,11 @@
     [signOutBtn setBackgroundColor:[UIColor colorWithHexString:@"#e4504b"]];
     signOutBtn.layer.cornerRadius = 5;
     signOutBtn.layer.masksToBounds = YES;
-    [self.view addSubview:signOutBtn];
-    [signOutBtn addTarget:self action:@selector(signOut:) forControlEvents:UIControlEventTouchUpInside];
-    [self setViewWithData];
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-
-    NSString *loginStyle = [[NSUserDefaults standardUserDefaults]valueForKey:@"login"];
-    if (![loginStyle isEqualToString:@"succeed"]) {
-            //未登录
-        UIButton *button = [self.view viewWithTag:10086];
-        button.hidden = YES;
+    if (user_login) {
+        [self.view addSubview:signOutBtn];
     }
+    [signOutBtn addTarget:self action:@selector(signOut:) forControlEvents:UIControlEventTouchUpInside];
 }
-
-
 
 -(void)setViewWithData{
 
@@ -95,7 +85,7 @@
     //绑定手机
     VerificationViewController *verifyVC = [[VerificationViewController alloc]init];
     //收货地址
-    AddressViewController *addressVC = [[AddressViewController alloc]init];
+  //  AddressViewController *addressVC = [[AddressViewController alloc]init];
     //更多
     MoreContentViewController *moreVC = [[MoreContentViewController alloc]init];
    
@@ -106,13 +96,13 @@
     PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"登陆密码" image:@"pwd" subTitle:@"修改" toViewController:modifyVC];
     PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"已绑定手机" image:@"myPhone" subTitle:@"更换" toViewController:verifyVC];
     model_3.content = [[NSUserDefaults standardUserDefaults]valueForKey:@"user_phone"];
-    PersonerGroup *model_4 = [[PersonerGroup alloc]initWithTitle:@"收货地址" image:@"address" subTitle:@"修改/添加" toViewController:addressVC];
+    //PersonerGroup *model_4 = [[PersonerGroup alloc]initWithTitle:@"收货地址" image:@"address" subTitle:@"修改/添加" toViewController:addressVC];
     PersonerGroup *model_5 = [[PersonerGroup alloc]initWithTitle:@"更多" image:@"more" subTitle:nil toViewController:moreVC];
     [self.Elements addObject:model_0];
     [self.Elements addObject:model_1];
     [self.Elements addObject:model_2];
     [self.Elements addObject:model_3];
-    [self.Elements addObject:model_4];
+   // [self.Elements addObject:model_4];
     [self.Elements addObject:model_5];
 }
 
@@ -157,7 +147,6 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     
     if (user_id) {
             //登录状态下
@@ -218,8 +207,6 @@
     [self logOutWithURL:API_URL(@"/sso/users/logout")];
 }
 
-
-
 #pragma mark - 退出账户响应
 -(void)logOutWithURL:(NSString *)url{
 
@@ -232,16 +219,17 @@
         if ([result[@"status"] intValue] == 200) {
             NSLog(@"退出成功");
             [ShowMessage showMessage:@"退出成功" duration:3];
+            NSNotification *singOut = [[NSNotification alloc]initWithName:@"singOut" object:nil userInfo:@{@"isSuccess":@(1)}];
+            [[NSNotificationCenter defaultCenter]postNotification:singOut];
             
             [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"user_login"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_id"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_token"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_mobile"];
-            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_avatar_name"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_avatar_url"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_sex"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_nickname"];
-
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"user_age"];
             LoginViewController *loginVC = [[LoginViewController alloc]init];
             [self.navigationController pushViewController:loginVC animated:YES];
         }else{

@@ -11,5 +11,6 @@
 @interface EvaluateViewController : BHJViewController
 
 @property (nonatomic,strong)NSMutableArray *markData;
+@property (nonatomic,strong)NSNumber *lid;
 
 @end

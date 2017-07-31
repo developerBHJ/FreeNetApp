@@ -14,9 +14,9 @@
 #import "HotRecommend.h"
 #import "Banner.h"
 #import "ClassModel.h"
+
 #define HotUrl @"http://192.168.0.254:4004/free/sfplans"
 #define TimeUrl @"http://192.168.0.254:4004/free/timecation"
-#define ClassUrl @""
 
 @interface FreeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
@@ -239,7 +239,7 @@
         for (NSDictionary *dic in array) {
             ClassModel *model = [ClassModel mj_objectWithKeyValues:dic];
             [data addObject:model];
-            NSLog(@"%d===%@",model.id,model.name);
+            NSLog(@"%@===%@",model.id,model.title);
         }
         [[NSNotificationCenter defaultCenter]postNotificationName:GETCLASSLIST object:nil userInfo:@{@"class":data}];
         [weakself.homeViewData setObject:data forKey:@"class"];
@@ -259,11 +259,13 @@
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 HotRecommend *hot = [HotRecommend mj_objectWithKeyValues:dic];
+                NSLog(@"time = %@",dic[@"start_time"]);
+                NSLog(@"class = %@",[dic[@"start_time"] class]);
                 [data addObject:hot];
             }
         }
         [weakself.homeViewData setObject:data forKey:@"hot"];
-        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -295,7 +297,7 @@
 #pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
-    return 5;
+    return 4;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -303,11 +305,9 @@
     if (section == 0){
         return 8;
     }else if (section == 1){
-        return 2;
-    }else if (section == 2){
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
         return dataArr.count;
-    }else if (section == 4){
+    }else if (section == 3){
         // NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         return 5;
     }
@@ -328,13 +328,6 @@
         cell.markImage.clipsToBounds  = YES;
         return cell;
     }else if (indexPath.section == 1){
-        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-        NSMutableArray *arr = [self.homeViewData objectForKey:@"section_2"];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, cell.width, cell.height)];
-        imageView.image = [[UIImage imageNamed:arr[indexPath.row]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [cell addSubview:imageView];
-        return cell;
-    }else if (indexPath.section == 2){
         homeCell_1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"homeCell_1" forIndexPath:indexPath];
         cell.delegate = self;
         cell.striveBtn.tag = 200;
@@ -343,7 +336,7 @@
         HotRecommend *model = dataArr[indexPath.row];
         cell.model = model;
         return cell;
-    }else if(indexPath.section == 4){
+    }else if(indexPath.section == 3){
         homeCell_2 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"homeCell_2" forIndexPath:indexPath];
         cell.delegate = self;
         cell.index = indexPath;
@@ -360,7 +353,7 @@
         cell.time_s2.text = [hourMinuteSecond substringWithRange:NSMakeRange(7, 1)];
         NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         HotRecommend *model = dataArr[indexPath.row];
-        cell.model = model;
+        // cell.model = model;
         return cell;
     }
     return nil;
@@ -370,30 +363,26 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0){
-        return CGSizeMake((kScreenWidth - 35) / 4, kScreenHeight / 7);
-    }else if (indexPath.section == 1){
-        return CGSizeMake((kScreenWidth - 25) / 2, kScreenHeight / 7);
-    }else if (indexPath.section == 4){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 5);
+        return CGSizeMake((kScreenWidth - 35) / 4, 82);
     }else if (indexPath.section == 3){
+        return CGSizeMake(kScreenWidth, 114);
+    }else if (indexPath.section == 2){
         return CGSizeMake(kScreenWidth, 0);
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4.5);
+    return CGSizeMake(kScreenWidth, 126);
 }
 
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     
-    if (section == 1) {
-        return UIEdgeInsetsMake(5, 10, 10, 10);
-    }else if (section == 2){
-        return UIEdgeInsetsMake(5, 0, 5, 0);
-    }else if (section == 4){
+    if (section == 1){
         return UIEdgeInsetsMake(5, 0, 5, 0);
     }else if (section == 3){
+        return UIEdgeInsetsMake(5, 0, 5, 0);
+    }else if (section == 2){
         return UIEdgeInsetsMake(0, 0, 0, 0);
     }else{
-        return UIEdgeInsetsMake(10, 10, 0, 10);
+        return UIEdgeInsetsMake(10, 10, 5, 10);
     }
 }
 
@@ -406,7 +395,7 @@
             [view removeFromSuperview];
         }
         if (indexPath.section == 0) {
-            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 4.73)];
+            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
             NSArray *banner = [self.homeViewData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
@@ -414,14 +403,14 @@
             }
             scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
-        }else if (indexPath.section == 2){
+        }else if (indexPath.section == 1){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];
             titleLabel.text = @"热门推荐";
             headView.backgroundColor = [UIColor whiteColor];
             [titleLabel setFont:[UIFont fontWithName:@"PingFang-SC-Medium" size:18]];
             titleLabel.textColor = [UIColor colorWithHexString:@"#333333"];
             [headView addSubview:titleLabel];
-        }else if (indexPath.section == 3){
+        }else if (indexPath.section == 2){
             NSArray *timeArr = [self.homeViewData objectForKey:@"time"];
             UIView *markView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 1)];
             markView.backgroundColor = [UIColor colorWithHexString:@"#bebebe"];
@@ -433,7 +422,7 @@
                 UIButton *timeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
                 [timeBtn setTitle:timeArr[i] forState:UIControlStateNormal];
                 CGFloat btnWidth = kScreenWidth / 5;
-                [timeBtn setFrame:CGRectMake(btnWidth * i, 10, btnWidth, kScreenHeight / 14.2 - 1)];
+                [timeBtn setFrame:CGRectMake(btnWidth * i, 10, btnWidth, 39)];
                 [timeBtn setTitleColor:[UIColor colorWithHexString:@"#666666"] forState:UIControlStateNormal];
                 [timeBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
                 [timeBtn addTarget:self action:@selector(striveTime:) forControlEvents:UIControlEventTouchUpInside];
@@ -453,7 +442,7 @@
         footerView.delegate = self;
         footerView.viewController = self;
         footerView.indexPath = indexPath;
-        if (indexPath.section == 4) {
+        if (indexPath.section == 3) {
             return footerView;
         }
     }
@@ -464,21 +453,20 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
     if (section == 0) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.73);
+        return CGSizeMake(kScreenWidth, 120);
+    }else if (section == 1){
+        return CGSizeMake(kScreenWidth - 20, 40);
     }else if (section == 2){
-        return CGSizeMake(kScreenWidth - 20, kScreenHeight / 14.2);
-    }else if (section == 3){
-        return CGSizeMake(kScreenWidth - 20, kScreenHeight / 11.2);
-    }
-    else{
+        return CGSizeMake(kScreenWidth - 20, 50);
+    }else{
         return CGSizeMake(0, 0);
     }
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
     
-    if (section == 4) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+    if (section == 3) {
+        return CGSizeMake(kScreenWidth, 38);
     }else{
         return CGSizeMake(0, 0);
     }
@@ -487,26 +475,12 @@
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     
-    if (section == 2 || section == 4) {
-        return 2;
-    }else if (section == 1){
-        return 10;
-    }
-    else{
-        return 5;
-    }
+    return 5;
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     
-    if (section == 2) {
-        return 2;
-    }else if (section == 1){
-        return 5;
-    }
-    else{
-        return 5;
-    }
+    return 5;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -525,35 +499,35 @@
             [self.navigationController pushViewController:openVC animated:YES];
         }else if (indexPath.row == 4){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 8;
+            restaurantVC.type = @(1);
             restaurantVC.viewStyle = ViewStleWithFreeData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else if (indexPath.row == 5){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 9;
+            restaurantVC.type = @(2);
             restaurantVC.viewStyle = ViewStleWithFreeData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else if (indexPath.row == 6){
             RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.class_id = 10;
+            restaurantVC.type = @(3);
             restaurantVC.viewStyle = ViewStleWithFreeData;
             [self.navigationController pushViewController:restaurantVC animated:YES];
         }else{
             MoreClassViewController *moreVC = [[MoreClassViewController alloc]init];
             [self.navigationController pushViewController:moreVC animated:YES];
         }
-    }else if (indexPath.section == 2){
+    }else if (indexPath.section == 1){
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
         berserkVC.model = model;
         [self.navigationController pushViewController:berserkVC animated:YES];
-    }else if (indexPath.section == 4){
+    }else if (indexPath.section == 3){
         NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
         berserkVC.model = model;
-        //  [self.navigationController pushViewController:berserkVC animated:YES];
+        // [self.navigationController pushViewController:berserkVC animated:YES];
     }
     
 }
@@ -561,12 +535,13 @@
 #pragma mark >>> BaseCollectionViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button indexPath:(NSIndexPath *)index{
     
-    //    if (button.tag == 200) {
-    //        NSLog(@"cellRow:%ld tag:%ld",cellRow,button.tag);
-    //    }else{
-    //  BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-    // [self.navigationController pushViewController:berserkVC animated:YES];
-    //    }
+    if (button.tag == 200) {
+        NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
+        HotRecommend *model = dataArr[index.row];
+        BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
+        berserkVC.model = model;
+        [self.navigationController pushViewController:berserkVC animated:YES];
+    }
 }
 
 #pragma mark >>> BHJReusableViewDelegate

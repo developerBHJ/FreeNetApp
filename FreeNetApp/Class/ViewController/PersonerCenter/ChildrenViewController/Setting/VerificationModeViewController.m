@@ -70,9 +70,9 @@
 }
 - (IBAction)phoneVerify:(UIButton *)sender {
     
-
     NSLog(@"手机验证");
 }
+
 - (IBAction)customerService:(UIButton *)sender {
     
 

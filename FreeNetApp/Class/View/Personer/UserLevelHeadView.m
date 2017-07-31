@@ -16,7 +16,6 @@
     
 }
 
-
 +(UserLevelHeadView *)shareCouponHeadView{
     
     NSArray *nibView = [[NSBundle mainBundle]loadNibNamed:@"UserLevelHeadView" owner:nil options:nil];

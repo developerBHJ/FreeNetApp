@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    self.rightBtn.hidden = YES;
 
 }
 
@@ -27,20 +29,15 @@
 -(void)setModel:(BHJDropModel *)model{
 
     _model = model;
-    self.titleLabel.text = model.title;
-    [self.rightBtn setTitle:model.subTitle forState:UIControlStateNormal];
+    self.titleLabel.text = model.name;
+  //  [self.rightBtn setTitle:model.subTitle forState:UIControlStateNormal];
     //计算大小
     self.rightBtn.titleLabel.font = [UIFont systemFontOfSize:12];
     CGSize buttonSize = [model.subTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12]}];
     self.buttonWidth.constant = buttonSize.width + 10;
     self.rightBtn.cornerRadius = self.rightBtn.height / 2.5;
     //给imageView赋值
-    if (model.imageName.length) {
-        self.leftView.hidden = NO;
-        self.leftView.image = [UIImage imageNamed:model.imageName];
-    } else {
-        self.leftView.hidden = YES;
-    }
+    [self.leftView sd_setImageWithURL:[NSURL URLWithString:model.headImage]];
 }
 
 

@@ -15,17 +15,16 @@
 #import "indianaDetailHeaderView.h"
 #import "indianaDetailWinningView.h"
 #import "IndianaDetailModel.h"
+#import "BHJIndianaBottomView.h"
 #define DURATION 0.3f
 
-#define DetailUrl @"http://192.168.0.254:1000/ingots/ingot_details"
+#define DetailUrl @"http://192.168.0.254:4004/indiana/list_detail"
 
-@interface IndianaDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
+@interface IndianaDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,BHJIndianaBottomViewDelegate>
 
 @property (nonatomic,strong)UITableView *BerserkView;
 @property (nonatomic,strong)NSMutableArray *imageArr;
-@property (nonatomic,strong)UIView *bottomView;
-@property (nonatomic,strong)JXButton *selectBtn;
-@property (nonatomic,assign)BOOL isClick;
+@property (nonatomic,strong)BHJIndianaBottomView *bottomView;
 @property (nonatomic,assign)BOOL isShow;
 
 @property (nonatomic, strong) UIView *cycleScrollView;
@@ -37,7 +36,6 @@
 @property (nonatomic,strong)BerserkHistoryViewController *historyVC;
 @property (nonatomic,strong)IndianaIslandViewController *isLandVC;
 @property (nonatomic,strong)NSMutableDictionary *parameter;
-
 @property (nonatomic,strong)IndianaDetailModel *detailModel;
 
 @end
@@ -48,10 +46,9 @@
 -(UITableView *)BerserkView{
     
     if (!_BerserkView) {
-        _BerserkView = [[UITableView alloc]initWithFrame:CGRectMake(10, 64, kScreenWidth - 20, kScreenHeight - 50) style:UITableViewStyleGrouped];
+        _BerserkView = [[UITableView alloc]initWithFrame:CGRectMake(10, 64, kScreenWidth - 20, kScreenHeight - 113) style:UITableViewStyleGrouped];
         _BerserkView.delegate = self;
         _BerserkView.dataSource = self;
-        // _BerserkView.tableHeaderView = self.cycleScrollView;
     }
     return _BerserkView;
 }
@@ -75,39 +72,6 @@
     return _popView;
 }
 
-- (UIView *)cycleScrollView {
-    
-    if (!_cycleScrollView) {
-        SDCycleScrollView *scrollview = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth - 20, kScreenHeight / 2 - 50) imageURLStringsGroup:self.imageArr];
-        _cycleScrollView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight / 2)];
-        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, scrollview.bottom + 7, _cycleScrollView.width - 40, 15)];
-        //titleLabel.text = self.model.name;
-        [titleLabel setFont:[UIFont systemFontOfSize:15]];
-        titleLabel.textColor = [UIColor colorWithHexString:@"#696969"];
-        UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, titleLabel.bottom + 5, _cycleScrollView.width, 15)];
-        priceLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
-        [priceLabel setFont:[UIFont systemFontOfSize:15]];
-        NSString *str = [NSString stringWithFormat:@"¥%@",@"12"];
-        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:str];
-        [attStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, 1)];
-        priceLabel.attributedText = attStr;
-        UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [nextBtn setFrame:CGRectMake(_cycleScrollView.right - 30, titleLabel.centerY - 5, 10, 12)];
-        [nextBtn setBackgroundImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
-        [nextBtn addTarget:self action:@selector(rightBtn:) forControlEvents:UIControlEventTouchUpInside];
-        UIView *divisionLine = [[UIView alloc]initWithFrame:CGRectMake(0, _cycleScrollView.height - 5, _cycleScrollView.width, 5)];
-        divisionLine.backgroundColor = [UIColor colorWithHexString:@"#f0f0f0"];
-        //        [_cycleScrollView addSubview:divisionLine];
-        [_cycleScrollView addSubview:nextBtn];
-        [_cycleScrollView addSubview:priceLabel];
-        [_cycleScrollView addSubview:titleLabel];
-        [_cycleScrollView addSubview:scrollview];
-        _cycleScrollView.backgroundColor = [UIColor whiteColor];
-        _cycleScrollView.cornerRadius = 5;
-    }
-    return _cycleScrollView;
-}
-
 - (UIScrollView *)bottomScrollView {
     
     if (!_bottomScrollView) {
@@ -116,8 +80,8 @@
         _bottomScrollView.pagingEnabled = YES;
         [self.bottomScrollView addSubview:self.BerserkView];
         
-        NSKeyValueObservingOptions options = NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld;
-        [self.BerserkView addObserver:self forKeyPath:@"contentOffset" options:options context:nil];
+        //  NSKeyValueObservingOptions options = NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld;
+        //  [self.BerserkView addObserver:self forKeyPath:@"contentOffset" options:options context:nil];
     }
     return _bottomScrollView;
 }
@@ -125,9 +89,19 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.model.id),@"id",nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.lid,@"lid",nil];
     }
     return _parameter;
+}
+
+
+-(BHJIndianaBottomView *)bottomView{
+    
+    if (!_bottomView) {
+        _bottomView = [[BHJIndianaBottomView alloc]initWithFrame:CGRectMake(0, kScreenHeight - 44, kScreenWidth, 44)];
+        _bottomView.delegate = self;
+    }
+    return _bottomView;
 }
 #pragma mark - 生命周期
 - (void)viewDidLoad {
@@ -135,7 +109,6 @@
     
     [self getIndianaDetailDataWithUrl:DetailUrl parameter:self.parameter];
     
-    [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:0];
     [self setUpView];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.detailState = DetailViewStatusWithNomal;
@@ -143,7 +116,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     
-    [[[self.navigationController.navigationBar subviews] objectAtIndex:0] setAlpha:1.0];
     [self.bottomView removeFromSuperview];
 }
 
@@ -151,9 +123,38 @@
 -(void)dealloc{
     
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"timeOut" object:nil];
-    [self.BerserkView removeObserver:self forKeyPath:@"contentOffset"];
+    // [self.BerserkView removeObserver:self forKeyPath:@"contentOffset"];
 }
 
+-(void)setHeadView{
+    
+    SDCycleScrollView *scrollview = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth - 20, kScreenHeight / 2 - 50) imageURLStringsGroup:self.imageArr];
+    _cycleScrollView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight / 2)];
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, scrollview.bottom + 7, _cycleScrollView.width - 40, 15)];
+    titleLabel.text = self.detailModel.treasure[@"title"];
+    [titleLabel setFont:[UIFont systemFontOfSize:15]];
+    titleLabel.textColor = [UIColor colorWithHexString:@"#696969"];
+    UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, titleLabel.bottom + 5, _cycleScrollView.width, 15)];
+    priceLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
+    [priceLabel setFont:[UIFont systemFontOfSize:15]];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:self.detailModel.treasure[@"price"]];
+    [attStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, 1)];
+    priceLabel.attributedText = attStr;
+    UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [nextBtn setFrame:CGRectMake(_cycleScrollView.right - 30, titleLabel.centerY - 5, 10, 12)];
+    [nextBtn setBackgroundImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
+    [nextBtn addTarget:self action:@selector(rightBtn:) forControlEvents:UIControlEventTouchUpInside];
+    UIView *divisionLine = [[UIView alloc]initWithFrame:CGRectMake(0, _cycleScrollView.height - 5, _cycleScrollView.width, 5)];
+    divisionLine.backgroundColor = [UIColor colorWithHexString:@"#f0f0f0"];
+    //        [_cycleScrollView addSubview:divisionLine];
+    [_cycleScrollView addSubview:nextBtn];
+    [_cycleScrollView addSubview:priceLabel];
+    [_cycleScrollView addSubview:titleLabel];
+    [_cycleScrollView addSubview:scrollview];
+    _cycleScrollView.backgroundColor = [UIColor whiteColor];
+    _cycleScrollView.cornerRadius = 5;
+    _BerserkView.tableHeaderView = self.cycleScrollView;
+}
 #pragma observe
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
@@ -211,161 +212,10 @@
     self.navigationItem.rightBarButtonItems = @[right,right1];
     [self.BerserkView registerNib:[UINib nibWithNibName:@"indianaDetailCell_1" bundle:nil] forCellReuseIdentifier:@"indianaDetailCell_1"];
     
-    [self setBottomView];
     [self.view addSubview:self.bottomScrollView];
-    [self.view addSubview:self.cycleScrollView];
-    
-    
-    self.historyVC = [[BerserkHistoryViewController alloc]init];
-    self.historyVC.historyState = HistoryViewStatusWithIndiana;
-    [self addChildViewController:self.historyVC];
-    self.historyVC.view.hidden = YES;
-    [self.view addSubview:self.historyVC.view];
-    
-    self.isLandVC = [[IndianaIslandViewController alloc]init];
-    [self addChildViewController:self.isLandVC];
-    self.isLandVC.view.hidden = YES;
-    [self.view addSubview:self.isLandVC.view];
-}
-
--(void)setBottomView{
-    
-    self.bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, kScreenHeight - 44, kScreenWidth, 44)];
-    self.bottomView.backgroundColor = [UIColor colorWithHexString:@"#efefef"];
-    
-    UIView *centerView = [[UIView alloc]initWithFrame:CGRectMake(kScreenWidth / 2 - 30, - 20, 60, 60)];
-    centerView.backgroundColor = [UIColor colorWithHexString:@"#efefef"];
-    centerView.cornerRadius = 30;
-    [self.bottomView addSubview:centerView];
-    
-    CALayer *testLayer = [CALayer layer];
-    testLayer.backgroundColor = [UIColor clearColor].CGColor;
-    testLayer.frame = CGRectMake(kScreenWidth / 2 - 30, -20, 60, 60);
-    [self.bottomView.layer addSublayer:testLayer];
-    
-    CAShapeLayer *solidLine =  [CAShapeLayer layer];
-    solidLine.fillColor = [UIColor clearColor].CGColor;
-    solidLine.strokeColor = [UIColor colorWithHexString:@"cdcdcd"].CGColor;
-    solidLine.lineCap = kCALineCapRound;
-    solidLine.lineWidth = 1;
-    
-    UIBezierPath *thePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(30, 30) radius:29 startAngle:M_PI * 1.11 endAngle:M_PI * 1.89 clockwise:YES];
-    solidLine.path = thePath.CGPath;
-    [testLayer addSublayer:solidLine];
-    
-    CAShapeLayer *solidShapeLayer = [CAShapeLayer layer];
-    CGMutablePathRef solidShapePath =  CGPathCreateMutable();
-    [solidShapeLayer setFillColor:[[UIColor clearColor] CGColor]];
-    [solidShapeLayer setStrokeColor:[[UIColor colorWithHexString:@"cdcdcd"] CGColor]];
-    solidShapeLayer.lineWidth = 1.0f ;
-    CGPathMoveToPoint(solidShapePath, NULL, 0, 0);
-    CGPathAddLineToPoint(solidShapePath, NULL, centerView.left + 2,0);
-    [solidShapeLayer setPath:solidShapePath];
-    CGPathRelease(solidShapePath);
-    [self.bottomView.layer addSublayer:solidShapeLayer];
-    
-    CAShapeLayer *solidShapeLayer_1 = [CAShapeLayer layer];
-    CGMutablePathRef solidShapePath_1 =  CGPathCreateMutable();
-    [solidShapeLayer_1 setFillColor:[[UIColor clearColor] CGColor]];
-    [solidShapeLayer_1 setStrokeColor:[[UIColor colorWithHexString:@"cdcdcd"] CGColor]];
-    solidShapeLayer_1.lineWidth = 1.0f ;
-    CGPathMoveToPoint(solidShapePath_1, NULL, centerView.right - 2, 0);
-    CGPathAddLineToPoint(solidShapePath_1, NULL, MainScreen_width,0);
-    [solidShapeLayer_1 setPath:solidShapePath_1];
-    CGPathRelease(solidShapePath_1);
-    [self.bottomView.layer addSublayer:solidShapeLayer_1];
-    
-    UIButton *centerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [centerBtn setFrame:CGRectMake(5, 5, 50, 50)];
-    centerBtn.cornerRadius = centerBtn.width / 2;
-    [centerBtn setTitle:@"一键 \n 购买" forState:UIControlStateNormal];
-    centerBtn.titleLabel.numberOfLines = 0;
-    [centerBtn.titleLabel setFont:[UIFont systemFontOfSize:12]];
-    centerBtn.borderColor = [UIColor colorWithHexString:@"#e4504b"];
-    centerBtn.borderWidth = 5;
-    centerBtn.backgroundColor = [UIColor colorWithHexString:@"#e4504b"];
-    [centerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [centerBtn addTarget:self action:@selector(centerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [centerView addSubview:centerBtn];
-    
-    CGFloat btnWidth = (kScreenWidth - CGRectGetWidth(centerView.frame)) / 5;
-    CGFloat btnHeight = CGRectGetHeight(self.bottomView.frame);
-    JXButton *historyButton = [[BHJTools sharedTools]creatButtonWithTitle:@"出价记录" image:@"berserk_1_nomal" selector:@selector(bottomEvent:) Frame:CGRectMake(10, 5, btnWidth, btnHeight - 8) viewController:self selectedImage:@"berserk_1_selected" tag:500];
-    [self.bottomView addSubview:historyButton];
-    JXButton *secondButton = [[BHJTools sharedTools]creatButtonWithTitle:@"砸价" image:@"fire_gray" selector:@selector(bottomEvent:) Frame:CGRectMake(CGRectGetMaxX(centerView.frame) + 10, 5, btnWidth, btnHeight - 8) viewController:self selectedImage:@"fire_red" tag:501];
-    [self.bottomView addSubview:secondButton];
-    JXButton *thirdButton = [[BHJTools sharedTools]creatButtonWithTitle:@"出价" image:@"charge_gray" selector:@selector(bottomEvent:) Frame:CGRectMake(kScreenWidth - btnWidth - 10, 5, btnWidth, btnHeight - 8) viewController:self selectedImage:@"charge_red" tag:502];
-    [self.bottomView addSubview:thirdButton];
-    
     
     [[UIApplication sharedApplication].keyWindow addSubview:self.bottomView];
 }
-
-//  底部按钮回调方法
--(void)bottomEvent:(JXButton *)sender{
-    
-    [self setSelectedButton:sender];
-    switch (sender.tag) {
-        case 500:{
-            if (!self.isClick) {
-                if (self.isShow) {
-                    [self hiddenView:self.isLandVC.view];
-                    self.isShow = NO;
-                }
-                [self showView:self.historyVC.view];
-                self.navigationItem.title = @"出价记录";
-                self.isClick = YES;
-            }else{
-                [self hiddenView:self.historyVC.view];
-                self.navigationItem.title = @"夺宝岛";
-                self.isClick = NO;
-            }
-        }
-            break;
-        case 501:{
-            if (!self.isShow) {
-                if (self.isClick) {
-                    [self hiddenView:self.historyVC.view];
-                    self.isClick = NO;
-                }
-                [self showView:self.isLandVC.view];
-                self.isShow = YES;
-            }else{
-                [self hiddenView:self.isLandVC.view];
-                self.isShow = NO;
-            }
-        }
-            break;
-        case 502:{
-            [self hiddenView:self.isLandVC.view];
-            [self hiddenView:self.historyVC.view];
-            [[UIApplication sharedApplication].keyWindow addSubview:self.popView];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
--(void)centerBtnClick:(UIButton *)sender{
-    
-    self.detailState = DetailViewStatusWithWinning;
-    [self.BerserkView reloadData];
-}
-
--(void)setSelectedButton:(JXButton *)sender{
-    
-    if (sender.selected) {
-        sender.selected = NO;
-        self.selectBtn.selected = YES;
-    }else{
-        self.selectBtn.selected = NO;
-        sender.selected = YES;
-    }
-    self.selectBtn = sender;
-}
-
 
 -(void)rightBtn:(UIButton *)sender{
     
@@ -455,14 +305,27 @@
 #pragma mark - 请求网络数据
 -(void)getIndianaDetailDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weak);
     [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        self.detailModel = [IndianaDetailModel mj_objectWithKeyValues:responseObject];
-        NSArray *arr = responseObject[@"images"];
+        weak.detailModel = [IndianaDetailModel mj_objectWithKeyValues:responseObject[@"data"]];
+        NSArray *arr = self.detailModel.treasure[@"treasure_images"];
         for (NSDictionary *dic in arr) {
-            [self.imageArr addObject:dic[@"image_path"]];
+            [weak.imageArr addObject:dic[@"image_url"]];
         }
-        [self.BerserkView reloadData];
+        [self setHeadView];
+        [weak.BerserkView reloadData];
+        
+        self.historyVC = [[BerserkHistoryViewController alloc]initWithID:self.detailModel.id];
+        self.historyVC.historyState = HistoryViewStatusWithIndiana;
+        [self addChildViewController:self.historyVC];
+        self.historyVC.view.hidden = YES;
+        [self.view addSubview:self.historyVC.view];
+        
+        self.isLandVC = [[IndianaIslandViewController alloc]initWithID:self.detailModel];
+        [self addChildViewController:self.isLandVC];
+        self.isLandVC.view.hidden = YES;
+        [self.view addSubview:self.isLandVC.view];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -563,5 +426,46 @@
     }
 }
 
+#pragma mark - BHJIndianaBottomViewDelegate
+//  底部按钮回调方法
+-(void)indianaBottomViewClick:(UIButton *)sender{
+    
+    switch (sender.tag) {
+        case 500:{
+            self.isShow = !self.isShow;
+            if (self.isShow) {
+                [self showView:self.historyVC.view];
+                self.navigationItem.title = @"出价记录";
+            }else{
+                [self hiddenView:self.historyVC.view];
+                self.navigationItem.title = @"夺宝岛";
+            }
+        }
+            break;
+        case 501:{
+            self.isShow = !self.isShow;
+            if (self.isShow) {
+                [self showView:self.isLandVC.view];
+            }else{
+                [self hiddenView:self.isLandVC.view];
+            }
+        }
+            break;
+        case 502:{
+            [self hiddenView:self.historyVC.view];
+            [self hiddenView:self.isLandVC.view];
+            [[UIApplication sharedApplication].keyWindow addSubview:self.popView];
+        }
+            break;
+        case 503:{
+            self.detailState = DetailViewStatusWithWinning;
+            [self.BerserkView reloadData];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 @end

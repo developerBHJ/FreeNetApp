@@ -25,7 +25,6 @@
 
 - (void)timerFunc
 {
-    
     NSDate *date = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mm:ss"];

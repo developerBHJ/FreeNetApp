@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IndianaDetailModel.h"
 @interface AnswerViewController : BHJViewController
 
-
-
+@property (nonatomic,strong)IndianaDetailModel *model;
 
 
 @end

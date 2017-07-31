@@ -11,5 +11,6 @@
 @interface BHJDropModel : BaseModel
 
 @property (nonatomic,strong)NSArray *items;
+@property (nonatomic,strong)NSNumber *id;
 
 @end

@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ClassModel : NSObject
+@interface ClassModel : GoodsModel
 
-@property (nonatomic,assign)int id;
-@property (nonatomic,strong)NSString *name;
+@property (nonatomic,strong)NSString *title;
+@property (nonatomic,strong)NSString *cover_url;
 
 @end

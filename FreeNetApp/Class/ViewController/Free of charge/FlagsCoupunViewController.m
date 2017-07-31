@@ -7,10 +7,9 @@
 //
 
 #import "FlagsCoupunViewController.h"
-#import "cashCouponCell.h"
 #import "CashDetailViewController.h"
 #import "CashCouponModel.h"
-
+#import "FlagsMemeberCell.h"
 #define kCouponUrl @"http://192.168.0.254:4004/special/shopcoupons"
 
 @interface FlagsCoupunViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
@@ -46,7 +45,7 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page", nil];
     }
     return _paramater;
 }
@@ -56,7 +55,7 @@
     
     self.navigationItem.title = @"现金券";
     [self.view addSubview:self.couponView];
-    [self.couponView registerNib:[UINib nibWithNibName:@"cashCouponCell" bundle:nil] forCellWithReuseIdentifier:@"cashCouponCell"];
+    [self.couponView registerNib:[UINib nibWithNibName:@"FlagsMemeberCell" bundle:nil] forCellWithReuseIdentifier:@"FlagsMemeberCell"];
     
     [self requestDataWith:kCouponUrl paramater:self.paramater];
     
@@ -84,22 +83,13 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4);
+    return CGSizeMake(kScreenWidth, 95);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    cashCouponCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cashCouponCell" forIndexPath:indexPath];
+    FlagsMemeberCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FlagsMemeberCell" forIndexPath:indexPath];
     cell.model = self.couponData[indexPath.row];
-    
-    UIImageView *cornerView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth / 10, kScreenWidth / 10)];
-    if (indexPath.row == 0 || indexPath.row == 2) {
-        cornerView.image = [[UIImage imageNamed:@"yuyue"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }else{
-        cornerView.image = [[UIImage imageNamed:@"taocan"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
-    [cell.goods_image addSubview:cornerView];
-    
     return cell;
 }
 

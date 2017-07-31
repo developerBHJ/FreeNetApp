@@ -15,7 +15,6 @@
 //textFiled中的星号显示
 #define kDotTag 3000
 
-
 @interface BHJPwdView ()<UITextFieldDelegate>
 
 @property(nonatomic, weak) UITextField *textField;

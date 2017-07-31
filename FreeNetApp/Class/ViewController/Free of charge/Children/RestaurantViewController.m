@@ -16,9 +16,14 @@
 #import "IndianaDetailViewController.h"
 #import "BerserkViewController.h"
 #import "SpecialDetailViewController.h"
+#import "ClassModel.h"
 
-#define CalssFreeDetailUrl @"http://192.168.0.254:1000/free/cate_details"
-#define CalssSpecialDetailUrl @"http://192.168.0.254:1000/special/special_cates"
+#define kSubClassUrl @"http://192.168.0.254:4004/publics/cates"
+
+#define CalssFreeDetailUrl @"http://192.168.0.254:4004/free/cate_detail"
+#define CalssSpecialDetailUrl @"http://192.168.0.254:4004/special/cate_detail"
+#define CalssIndianaDetailUrl @"http://192.168.0.254:4004/indiana/cate_detail"
+
 
 @interface RestaurantViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,couponHeadViewDelegate,BaseCollectionViewCellDelegate>
 
@@ -27,7 +32,6 @@
 @property (nonatomic,strong)couponHeadView *headView;
 @property (nonatomic,assign)BOOL isOpen;
 @property (nonatomic,strong)UIButton *selectedBtn;
-
 @property (nonatomic,strong)NSMutableArray *leftArr;
 @property (nonatomic,strong)NSMutableArray *midlleArr;
 @property (nonatomic,strong)NSMutableArray *rightArr;
@@ -36,7 +40,6 @@
 @property (nonatomic,strong)UILabel *titleLabel;
 @property (nonatomic,strong)NSString *user_address;
 @property (nonatomic,strong)NSMutableDictionary *parameter;
-
 
 @end
 
@@ -47,27 +50,12 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getLocationAddress:) name:GETLOCATIONNOTIFICATION object:nil];
+    
+    [self getSubClassDataWith:self.parameter];
+
+    [self getData];
+    
     [self setView];
-    switch (self.viewStyle) {
-        case 0:
-        {
-            [self getDataWithUrl:CalssFreeDetailUrl parameter:self.parameter];
-        }
-            break;
-        case 1:
-        {
-            [self getDataWithUrl:CalssSpecialDetailUrl parameter:self.parameter];
-        }
-            break;
-        case 2:
-        {
-            [self getDataWithUrl:CalssFreeDetailUrl parameter:self.parameter];
-        }
-            break;
-            
-        default:
-            break;
-    }
 }
 
 -(void)getLocationAddress:(NSNotification *)sender{
@@ -77,12 +65,8 @@
     if (city_id.length > 0) {
         [self.parameter setValue:city_id forKey:@"region_id"];
     }
-    if (address.length > 0) {
-        self.titleLabel.text = [NSString stringWithFormat:@"当前位置：%@",address];
-        self.user_address = address;
-    }else{
-        self.titleLabel.text = @"当前位置：正在定位中...";
-    }
+    self.titleLabel.text = address.length > 0 ? [NSString stringWithFormat:@"当前位置：%@",address] : @"正在定位中...";
+    [self.restaurantView reloadData];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -110,13 +94,12 @@
     return _restautantData;
 }
 
-
 -(couponHeadView *)headView{
     
     if (!_headView) {
         _headView = [couponHeadView shareCouponHeadView];
         _headView.frame = CGRectMake(0, 64, kScreenWidth, 44);
-        _headView.leftData = self.leftArr;
+        _headView.isCoupon = NO;
         _headView.middleData = self.midlleArr;
         _headView.rightData = self.rightArr;
         [_headView.allBtn layoutButtonWithEdgeInsetsStyle:BHJButtonEdgeInsetsStyleLeft imageTitleSpace:10];
@@ -132,30 +115,6 @@
     
     if (!_leftArr) {
         _leftArr = [NSMutableArray new];
-        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"全部分类",@"开饭了",@"乐翻天",@"早知道",@"签到有礼",@"餐饮",@"娱乐",@"生活", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
-        for (int i = 0; i < titleArr.count; i ++) {
-            BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
-            model.imageName = [NSString stringWithFormat:@"coupon_%d",i];
-            [_leftArr addObject:model];
-        }
     }
     return _leftArr;
 }
@@ -165,26 +124,9 @@
     if (!_midlleArr) {
         _midlleArr = [NSMutableArray new];
         NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"附近",@"高新区",@"未央区",@"莲湖区",@"雁塔区",@"长安区", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
         for (int i = 0; i < titleArr.count; i ++) {
             BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
+            model.name = titleArr[i];
             [_midlleArr addObject:model];
         }
     }
@@ -195,10 +137,10 @@
     
     if (!_rightArr) {
         _rightArr = [NSMutableArray new];
-        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"智能排序",@"好评优先",@"离我最近",@"人均最低",@"价格最低",@"价格最高",@"最新发布", nil];
+        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"智能排序",@"价格最低",@"价格最高",@"最新发布", nil];
         for (int i = 0; i < titleArr.count; i ++) {
             BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
+            model.name = titleArr[i];
             [_rightArr addObject:model];
         }
     }
@@ -209,25 +151,50 @@
 -(NSMutableDictionary *)parameter{
     
     if (!_parameter) {
-        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2822",@"region_id",@(self.class_id),@"cid", nil];
+        _parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"2",@"region_id",@"1",@"types",@"1",@"industry_id",self.type,@"lid", nil];
     }
     return _parameter;
 }
 #pragma mark >>>> 自定义
+-(void)getData{
+
+    [self.restautantData removeObjectForKey:@"data"];
+    switch (self.viewStyle) {
+        case 0:
+        {
+            [self getDataWithUrl:CalssFreeDetailUrl parameter:self.parameter];
+        }
+            break;
+        case 1:
+        {
+            [self getDataWithUrl:CalssSpecialDetailUrl parameter:self.parameter];
+        }
+            break;
+        case 2:
+        {
+            [self getDataWithUrl:CalssFreeDetailUrl parameter:self.parameter];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
 -(void)setView{
     
-    switch (self.class_id) {
-        case 8:
+    switch ([self.type intValue]) {
+        case 1:
         {
             self.navigationItem.title = @"餐饮";
         }
             break;
-        case 9:
+        case 2:
         {
             self.navigationItem.title = @"娱乐";
         }
             break;
-        case 10:
+        case 3:
         {
             self.navigationItem.title = @"生活";
         }
@@ -331,48 +298,65 @@
     }];
 }
 
+/**
+ 获取二级分类信息
+ */
+-(void)getSubClassDataWith:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:kSubClassUrl parameters:paramater success:^(id  _Nullable responseObject) {
+        NSArray *arr = responseObject[@"data"];
+        if (arr.count > 0) {
+            NSArray *data = [NSArray new];
+            data = [ClassModel mj_objectArrayWithKeyValuesArray:arr];
+            for (ClassModel *model in data) {
+                BHJDropModel *dropM = [[BHJDropModel alloc]init];
+                dropM.name = model.title;
+                dropM.headImage = model.cover_url;
+                dropM.id = model.id;
+                [weak.leftArr addObject:dropM];
+            }
+            _headView.leftData = self.leftArr;
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
 // 网络数据
 -(void)getDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
-    NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if (array.count > 0) {
-            for (NSDictionary *dic in array) {
-                switch (self.viewStyle) {
-                    case 0:
-                    {
-                        HotRecommend *hot = [HotRecommend mj_objectWithKeyValues:dic];
-                        [data addObject:hot];
-                    }
-                        break;
-                    case 1:
-                    {
-                        SpecialModel *model = [SpecialModel mj_objectWithKeyValues:dic];
-                        [data addObject:model];
-                    }
-                        break;
-                    case 2:
-                    {
-                        IndianaModel *model = [IndianaModel mj_objectWithKeyValues:dic];
-                        [data addObject:model];
-                    }
-                        break;
-                        
-                    default:
-                        break;
+    NSLog(@"%@",parameter);
+    WeakSelf(weak);
+    __block NSMutableArray *weakData = [NSMutableArray new];
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
+        NSArray *arr = responseObject[@"message"];
+        if (arr.count > 0) {
+            switch (self.viewStyle) {
+                case 0:
+                {
+                    weakData = [HotRecommend mj_objectArrayWithKeyValuesArray:arr];
                 }
+                    break;
+                case 1:
+                {
+                    weakData = [SpecialModel mj_objectArrayWithKeyValuesArray:arr];
+                }
+                    break;
+                case 2:
+                {
+                    weakData = [IndianaModel mj_objectArrayWithKeyValuesArray:arr];
+                }
+                    break;
+                    
+                default:
+                    break;
             }
+            [weak.restautantData setObject:weakData forKey:@"data"];
+            [weak.restaurantView reloadSections:[NSIndexSet indexSetWithIndex:1]];
         }
-        NSLog(@"----------------%@",array);
-        [self.restautantData setObject:data forKey:@"data"];
-        [self.restaurantView reloadSections:[NSIndexSet indexSetWithIndex:1]];
-        NSLog(@"请求数据成功");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
@@ -398,7 +382,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *data = [self.restautantData objectForKey:@"data"];
-    
     if (self.viewStyle == ViewStleWithFreeData) {
         homeCell_2 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"homeCell_2" forIndexPath:indexPath];
         cell.delegate = self;
@@ -429,7 +412,6 @@
         }
         self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, 5, kScreenWidth - 50, 20)];
         self.titleLabel.textColor = [UIColor colorWithHexString:@"#666666"];
-        self.titleLabel.text = [NSString stringWithFormat:@"当前位置：%@",self.user_address];
         [self.titleLabel setFont:[UIFont systemFontOfSize:13]];
         [headView addSubview:self.titleLabel];
         
@@ -480,11 +462,14 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
+    NSArray *data = [self.restautantData objectForKey:@"data"];
+    
     if (self.viewStyle == ViewStleWithIndianaData) {
         IndianaDetailViewController *detaileVC = [[IndianaDetailViewController alloc]init];
         [self.navigationController pushViewController:detaileVC animated:YES];
     }else if (self.viewStyle == ViewStleWithFreeData){
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
+        berserkVC.model = data[indexPath.row];
         [self.navigationController pushViewController:berserkVC animated:YES];
     }else{
         SpecialDetailViewController *specialDetailVC = [[SpecialDetailViewController alloc]init];
@@ -496,15 +481,17 @@
 -(void)couponHeadViewMethodWith:(couponHeaderViewStyle)viewStyle selectRow:(NSInteger)row selectedItem:(NSInteger)item{
     
     if (viewStyle == couponHeaderViewStyleWithLeft) {
-        if (row == 3 && item == 0) {
-            HairDiscountViewController *discountVC = [[HairDiscountViewController alloc]init];
-            [self.navigationController pushViewController:discountVC animated:YES];
-        }
-        NSLog(@"分类%ld    -- %ld",(long)row,item);
+        [self.restautantData removeAllObjects];
+        BHJDropModel *model = self.leftArr[row];
+        [self.parameter setValue:model.id forKey:@"industry_id"];
+        [self getData];
     }else if (viewStyle == couponHeaderViewStyleWithMiddle){
-        NSLog(@"全城%ld    -- %ld",(long)row,item);
+        [self.parameter setValue:@"2" forKey:@"region_id"];
+        [self.headView removeMenu];
+        [self getData];
     }else if (viewStyle == couponHeaderViewStyleWithRight){
-        NSLog(@"排序%ld    -- %ld",(long)row,item);
+        [self.parameter setValue:@(item + 1) forKey:@"types"];
+        [self getData];
     }
 }
 

@@ -10,6 +10,6 @@
 
 @interface MemberViewController : BHJViewController
 
-@property (nonatomic,assign)NSInteger cid;//店铺id
+@property (nonatomic,strong)NSNumber *cid;//店铺id
 
 @end

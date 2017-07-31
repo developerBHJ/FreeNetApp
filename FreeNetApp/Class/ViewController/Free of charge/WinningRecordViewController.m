@@ -14,9 +14,6 @@
 @property (nonatomic,strong)UICollectionView *recordView;
 @property (nonatomic,strong)NSMutableArray *recordData;
 
-
-
-
 @end
 
 @implementation WinningRecordViewController

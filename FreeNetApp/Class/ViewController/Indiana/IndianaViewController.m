@@ -17,6 +17,7 @@
 #import "UINavigationBar+NavigationBarBackground.h"
 #import "Banner.h"
 #import "IndianaModel.h"
+#import "MoreIndianaViewController.h"
 
 #define IndianaUrl @"http://192.168.0.254:4004/indiana/lists"
 #define kIndianaHot @"http://192.168.0.254:4004/indiana/hot_lists"
@@ -103,6 +104,7 @@
     [self.indianaCollectionView registerNib:[UINib nibWithNibName:@"homeCell" bundle:nil] forCellWithReuseIdentifier:@"homeCell"];
     [self.indianaCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView"];
     [self.indianaCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.indianaCollectionView registerNib:[UINib nibWithNibName:@"homeFooterView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"homeFooterView"];
     
     [self.indianaCollectionView registerNib:[UINib nibWithNibName:@"indianaCell" bundle:nil] forCellWithReuseIdentifier:@"indianaCell"];
     [self.indianaCollectionView registerNib:[UINib nibWithNibName:@"indianaCell_1" bundle:nil] forCellWithReuseIdentifier:@"indianaCell_1"];
@@ -138,6 +140,7 @@
 #pragma mark >>>> 网络获取数据
 -(void)getIndianaBannerWith:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weak);
     NSMutableArray *data = [NSMutableArray new];
     [[BHJNetWorkTools sharedNetworkTool]loadDataInfo:url parameters:parameter success:^(id  _Nullable responseObject) {
         NSArray *array = responseObject[@"data"];
@@ -147,8 +150,8 @@
                 [data addObject:banner];
             }
         }
-        [self.indianaData setObject:data forKey:@"banner"];
-        [self.indianaCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+        [weak.indianaData setObject:data forKey:@"banner"];
+        [weak.indianaCollectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -157,6 +160,7 @@
 // 夺宝数据
 -(void)getIndianaDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weak);
     NSMutableArray *dataSource = [NSMutableArray new];
     [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
@@ -167,8 +171,8 @@
                 [dataSource addObject:model];
             }
         }
-        [self.indianaData setObject:dataSource forKey:@"indiana"];
-        [self.indianaCollectionView reloadData];
+        [weak.indianaData setObject:dataSource forKey:@"indiana"];
+        [weak.indianaCollectionView reloadData];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -177,6 +181,7 @@
 // 夺宝热门推荐数据
 -(void)getIndianaHotDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
+    WeakSelf(weak);
     NSMutableArray *dataSource = [NSMutableArray new];
     [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
@@ -187,8 +192,8 @@
                 [dataSource addObject:model];
             }
         }
-        [self.indianaData setObject:dataSource forKey:@"Hot"];
-        [self.indianaCollectionView reloadData];
+        [weak.indianaData setObject:dataSource forKey:@"Hot"];
+        [weak.indianaCollectionView reloadData];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -197,16 +202,14 @@
 #pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
-    return 4;
+    return 3;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
     if (section == 0){
-        return 8;
+        return 4;
     }else if (section == 1){
-        return 2;
-    }else if (section == 2){
         NSArray *data = [self.indianaData objectForKey:@"Hot"];
         return data.count;
     }else{
@@ -229,19 +232,12 @@
         cell.markImage.clipsToBounds  = YES;
         return cell;
     }else if (indexPath.section == 1){
-        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-        NSMutableArray *arr = [self.indianaData objectForKey:@"section_2"];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, cell.width, cell.height)];
-        imageView.image = [[UIImage imageNamed:arr[indexPath.row]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        [cell addSubview:imageView];
-        return cell;
-    }else if (indexPath.section == 2){
         indianaCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"indianaCell" forIndexPath:indexPath];
         NSArray *data = [self.indianaData objectForKey:@"Hot"];
         cell.model = data[indexPath.row];
         cell.delegate = self;
-        //        cell.tryBtn.tag = 200;
-        //        cell.buyBtn.tag = 201;
+        cell.tryBtn.tag = 200;
+        cell.buyBtn.tag = 201;
         cell.index = indexPath;
         if (indexPath.row == 0) {
             cell.title.text = @"这么精彩 超值实惠";
@@ -264,26 +260,23 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0){
-        return CGSizeMake((kScreenWidth - 35) / 4, kScreenHeight / 7);
+        return CGSizeMake((kScreenWidth - 35) / 4, 81);
     }else if (indexPath.section == 1){
-        return CGSizeMake((kScreenWidth - 25) / 2, kScreenHeight / 7);
-    }else if (indexPath.section == 3){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 5);
+        return CGSizeMake(kScreenWidth, 142);
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4);
+    return CGSizeMake(kScreenWidth, 120);
 }
 
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     
-    if (section == 1) {
+    if (section == 0) {
         return UIEdgeInsetsMake(5, 10, 10, 10);
-    }else if (section == 2){
+    }else if (section == 1){
         return UIEdgeInsetsMake(0, 0, 5, 0);
-    }else if (section == 3){
+    }else if (section == 2){
         return UIEdgeInsetsMake(2, 0, 5, 0);
-    }
-    else{
+    }else{
         return UIEdgeInsetsMake(10, 10, 0, 10);
     }
 }
@@ -297,7 +290,7 @@
             [view removeFromSuperview];
         }
         if (indexPath.section == 0) {
-            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 4.73)];
+            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
             NSArray *banner = [self.indianaData objectForKey:@"banner"];
             NSMutableArray *images = [NSMutableArray new];
             for (Banner *model in banner) {
@@ -305,7 +298,7 @@
             }
             scrollView.imageURLStringsGroup = images;
             [headView addSubview:scrollView];
-        }else if (indexPath.section == 2){
+        }else if (indexPath.section == 1){
             UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, CGRectGetWidth(headView.frame) - 20, CGRectGetHeight(headView.frame) - 20)];
             titleLabel.text = @"热门推荐";
             [titleLabel setFont:[UIFont fontWithName:@"PingFang-SC-Medium" size:18]];
@@ -318,6 +311,17 @@
         }
         return headView;
     }
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        homeFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"homeFooterView" forIndexPath:indexPath];
+        footerView.allBtn.tag = 500;
+        footerView.delegate = self;
+        footerView.viewController = self;
+        footerView.indexPath = indexPath;
+        if (indexPath.section == 2) {
+            return footerView;
+        }
+    }
     return nil;
 }
 
@@ -325,26 +329,29 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
     if (section == 0) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.73);
-    }else if (section == 2){
-        return CGSizeMake(kScreenWidth - 20, kScreenHeight / 14.2);
+        return CGSizeMake(kScreenWidth, 120);
+    }else if (section == 1){
+        return CGSizeMake(kScreenWidth - 20, 40);
     }else{
         return CGSizeMake(0, 0);
     }
 }
 
-
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+    
+    if (section == 2) {
+        return CGSizeMake(kScreenWidth, 38);
+    }
+    return CGSizeZero;
+}
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     
-    if (section == 2) {
-        return 10;
-    }else if (section == 1){
-        return 10;
-    }else if (section == 3){
+    if (section == 1) {
+        return 5;
+    }else if (section == 2){
         return 2;
-    }
-    else{
+    }else{
         return 5;
     }
 }
@@ -353,10 +360,7 @@
     
     if (section == 2) {
         return 2;
-    }else if (section == 1){
-        return 5;
-    }
-    else{
+    }else{
         return 5;
     }
 }
@@ -375,34 +379,18 @@
         }else if (indexPath.row == 0){
             OpenRiceViewController *openVC = [[OpenRiceViewController alloc]init];
             [self.navigationController pushViewController:openVC animated:YES];
-        }else if (indexPath.row == 4){
-            RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.viewStyle = ViewStleWithIndianaData;
-            restaurantVC.class_id = 8;
-            [self.navigationController pushViewController:restaurantVC animated:YES];
-        }else if (indexPath.row == 5){
-            RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.viewStyle = ViewStleWithIndianaData;
-            restaurantVC.class_id = 9;
-            [self.navigationController pushViewController:restaurantVC animated:YES];
-        }else if (indexPath.row == 6){
-            RestaurantViewController *restaurantVC = [[RestaurantViewController alloc]init];
-            restaurantVC.viewStyle = ViewStleWithIndianaData;
-            restaurantVC.class_id = 10;
-            [self.navigationController pushViewController:restaurantVC animated:YES];
-        }else{
-            MoreClassViewController *moreVC = [[MoreClassViewController alloc]init];
-            [self.navigationController pushViewController:moreVC animated:YES];
         }
-    }else if (indexPath.section == 2){
+    }else if (indexPath.section == 1){
         NSArray *data = [self.indianaData objectForKey:@"Hot"];
+        IndianaModel *model = data[indexPath.row];
         IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
-        detailVC.model = data[indexPath.row];
+        detailVC.lid = model.id;
         [self.navigationController pushViewController:detailVC animated:YES];
-    }else if (indexPath.section == 3){
+    }else if (indexPath.section == 2){
         IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
         NSArray *data = [self.indianaData objectForKey:@"indiana"];
-        detailVC.model = data[indexPath.row];
+        IndianaModel *model = data[indexPath.row];
+        detailVC.lid = model.id;
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }
@@ -410,32 +398,55 @@
 #pragma mark >>> BaseCollectionViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button indexPath:(NSIndexPath *)index{
     
-    //    switch (button.tag) {
-    //        case 200:{
-    //            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
-    //            [[BHJTools sharedTools]pushWithNavigationController:self.navigationController ViewController:detailVC];
-    //        }
-    //            break;
-    //        case 201:{
-    //            IndianaIslandViewController *isLandVC = [[IndianaIslandViewController alloc]init];
-    //            [[BHJTools sharedTools]pushWithNavigationController:self.navigationController ViewController:isLandVC];
-    //        }
-    //            break;
-    //        case 300:{
-    //            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
-    //            [[BHJTools sharedTools]pushWithNavigationController:self.navigationController ViewController:detailVC];
-    //            }
-    //            break;
-    //        case 301:{
-    //            IndianaIslandViewController *isLandVC = [[IndianaIslandViewController alloc]init];
-    //            [[BHJTools sharedTools]pushWithNavigationController:self.navigationController ViewController:isLandVC];
-    //        }
-    //            break;
-    //
-    //        default:
-    //            break;
-    //    }
+    switch (button.tag) {
+        case 200:{
+            NSArray *data = [self.indianaData objectForKey:@"Hot"];
+            IndianaModel *model = data[index.row];
+            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
+            detailVC.lid = model.id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }
+            break;
+        case 201:{
+            NSArray *data = [self.indianaData objectForKey:@"Hot"];
+            IndianaModel *model = data[index.row];
+            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
+            detailVC.lid = model.id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }
+            break;
+        case 300:{
+            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
+            NSArray *data = [self.indianaData objectForKey:@"indiana"];
+            IndianaModel *model = data[index.row];
+            detailVC.lid = model.id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }
+            break;
+        case 301:{
+            IndianaDetailViewController *detailVC = [[IndianaDetailViewController alloc]init];
+            NSArray *data = [self.indianaData objectForKey:@"indiana"];
+            IndianaModel *model = data[index.row];
+            detailVC.lid = model.id;
+            [self.navigationController pushViewController:detailVC animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
-
+#pragma mark >>> BHJReusableViewDelegate
+-(void)BHJReusableViewDelegateMethodWithIndexPath:(NSIndexPath *)indexPath button:(UIButton *)button{
+    
+    switch (button.tag) {
+        case 500:{
+            MoreIndianaViewController *moreVC = [[MoreIndianaViewController alloc]init];
+            [self.navigationController pushViewController:moreVC animated:YES];
+        }
+        default:
+            break;
+    }
+}
 @end

@@ -110,11 +110,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.hidesBackButton = YES;
     [self.personTableView registerNib:[UINib nibWithNibName:@"PersonerCell_0" bundle:nil] forCellReuseIdentifier:@"PersonerCell_0"];
     [self.personTableView registerNib:[UINib nibWithNibName:@"PersonerCell" bundle:nil] forCellReuseIdentifier:@"PersonerCell"];
     [self.personTableView registerClass:[BaseTableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.personTableView];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -123,24 +123,26 @@
     [self setView];
 }
 
+-(void)dealloc{
+
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+#pragma mark - NSNotification
+
 #pragma mark - 自定义
 -(void)setView{
     
-
     UIBarButtonItem *item1 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"set"] style:UIBarButtonItemStylePlain target:self action:@selector(personerSetting:)];
-    UIBarButtonItem *item2 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStylePlain target:self action:@selector(scanAction:)];
+    //  UIBarButtonItem *item2 = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStylePlain target:self action:@selector(scanAction:)];
     
     //把右侧的两个按钮添加到rightBarButtonItem
     BOOL loginStatus = [[NSUserDefaults standardUserDefaults]boolForKey:@"user_login"];
     if (loginStatus == YES) {
-
         [self setGroupData];
-        self.navigationItem.rightBarButtonItems = @[item1,item2];
     }else{
-
         [self setGroupDataWithSignOut];
-        self.navigationItem.rightBarButtonItems = @[item1];
     }
+    self.navigationItem.rightBarButtonItems = @[item1];
 }
 
 -(void)setGroupData{
@@ -190,12 +192,12 @@
     
     
     MessageCenterViewController *messageVC = [[MessageCenterViewController alloc]init];
-    DailyRecommendationViewController *recommendationVC = [[DailyRecommendationViewController alloc]init];
+    // DailyRecommendationViewController *recommendationVC = [[DailyRecommendationViewController alloc]init];
     PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"消息中心" image:@"myMessage" subTitle:nil toViewController:messageVC];
-    PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"每日推荐" image:@"recommend" subTitle:nil toViewController:recommendationVC];
+    //PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"每日推荐" image:@"recommend" subTitle:nil toViewController:recommendationVC];
     [self.personerData removeAllObjects];
     [self.personerData addObject:model_0];
-    [self.personerData addObject:model_1];
+    //   [self.personerData addObject:model_1];
     
     
     CustomerServiceViewController *customerVC = [[CustomerServiceViewController alloc]init];
@@ -292,9 +294,9 @@
     if (indexPath.section == 0) {
         return 110;
     }else if (indexPath.section == 1){
-        return kScreenHeight / 9.3;
+        return 61;
     }else{
-        return kScreenHeight / 14.6;
+        return 39;
     }
 }
 
@@ -338,7 +340,7 @@
         if (user_login == YES) {
             return self.personerData.count;
         }else{
-            return 2;
+            return 1;
         }
     }else if (section == 3){
         if (user_login == YES) {
@@ -354,20 +356,12 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (indexPath.section == 0) {
-        PersonerCell_0 *firstCell = [PersonerCell_0 initWithTableView:tableView];
+        PersonerCell_0 *firstCell = [tableView dequeueReusableCellWithIdentifier:@"PersonerCell_0" forIndexPath:indexPath];
         firstCell.delegate = self;
         firstCell.user_headImage.tag = 1001;
         firstCell.lev_butn.tag = 1002;
         firstCell.edtiBtn.tag = 1003;
         firstCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if (user_login == YES) {
-
-            firstCell.user_name.text = user_nickname;
-            [firstCell.user_headImage sd_setBackgroundImageWithURL:[NSURL URLWithString:user_avatar_url] forState:(UIControlStateNormal)];
-        }else{
-            firstCell.user_name.text = @"点击头像登陆";
-            [firstCell.user_headImage setBackgroundImage:[[[UIImage imageNamed:@"signOut"] clipImageWithRadius:firstCell.user_headImage.width] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-        }
         return firstCell;
     }else if (indexPath.section == 1){
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
@@ -446,7 +440,7 @@
     [self.personTableView reloadData];
     
     NSData *imageData = UIImageJPEGRepresentation(selectImage, 0.3);
-
+    
     //上传图片到阿里云
     [self changeHeadImageWithURL:API_URL(@"/uploader/avatar") Data:imageData];
     
@@ -459,24 +453,22 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-
 #pragma mark - 上传头像到阿里云
 -(void)changeHeadImageWithURL:(NSString *)url Data:(NSData *)data{
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     NSString *base64Str = [data base64EncodedStringWithOptions:0];
     [parameter setValue:base64Str forKey:@"data"];
-
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-
+        
         if ([result[@"status"] intValue] == 200) {
-
-                //删除旧的阿里云图片
+            
+            //删除旧的阿里云图片
             [self deletePictureWithURL:API_URL(@"/uploader/erase") ImageName:result[@"data"][@"name"] ImageURL:[self InterceptionOfString:result[@"data"][@"url"] Interception:@"?"]];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -485,23 +477,21 @@
     }];
 }
 
-
-
 #pragma mark - 删除图片接口
 -(void)deletePictureWithURL:(NSString *)url ImageName:(NSString *)imageName ImageURL:(NSString *)imageUrl{
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_avatar_name forKey:@"name"];
-
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-
+        
         if ([result[@"status"] intValue] == 200) {
             
-                //更新新的图片
+            //更新新的图片
             [self updatePictureWithURL:API_URL(@"/users/avatar") ImageName:imageName ImageURL:imageUrl];
         }else{
             [ShowMessage showMessage:@"失败" duration:3];
@@ -512,8 +502,6 @@
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
-
-
 
 #pragma mark - 更新头像接口
 -(void)updatePictureWithURL:(NSString *)url ImageName:(NSString *)imageName ImageURL:(NSString *)imageUrl{
@@ -528,12 +516,8 @@
     [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-
         if ([result[@"status"] intValue] == 200) {
-            
-            [[NSUserDefaults standardUserDefaults]setValue:imageName forKey:@"user_avatar_name"];
             [[NSUserDefaults standardUserDefaults] setValue:imageUrl forKey:@"user_avatar_url"];
-
         }else{
             
             [ShowMessage showMessage:result[@"message"] duration:3];
@@ -544,9 +528,6 @@
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
-
-
-
 
 #pragma mark - 截取指定字符串
 -(NSString *)InterceptionOfString:(NSString *)str Interception:(NSString *)interception{

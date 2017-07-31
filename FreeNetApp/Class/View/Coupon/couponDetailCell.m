@@ -27,9 +27,14 @@
     
 }
 
--(void)setModel:(couponModel *)model{
+-(void)setModel:(CashCouponModel *)model{
 
     _model = model;
+    self.titleLabel.text = model.title;
+    self.discountLabel.text = [NSString stringWithFormat:@"%@折",model.discount];
+    self.discountPrice.text = model.price;
+    self.prePrice.text = model.price;
+    /*
     CGFloat btnWitdth = self.width / 3;
     if (model.markData.count > 0) {
         self.markView.hidden = NO;
@@ -47,6 +52,7 @@
     }else{
         self.markView.hidden = YES;
     }
+     */
 }
 
 

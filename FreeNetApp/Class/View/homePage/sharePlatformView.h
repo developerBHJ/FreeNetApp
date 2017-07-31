@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "OpenGoods.h"
 typedef void(^platformViewBlock)(NSInteger btnTag);
 
 @interface sharePlatformView : UIView
@@ -34,6 +34,8 @@ typedef void(^platformViewBlock)(NSInteger btnTag);
 @property (weak, nonatomic) IBOutlet UILabel *goods_subTitle;
 @property (weak, nonatomic) IBOutlet UILabel *store_name;
 @property (weak, nonatomic) IBOutlet UIButton *locationBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *goodsImage;
+@property (weak, nonatomic) IBOutlet UILabel *storeAddress;
 
 @property (nonatomic,copy)platformViewBlock block;
 
@@ -41,5 +43,7 @@ typedef void(^platformViewBlock)(NSInteger btnTag);
 
 -(void)setView;
 - (void)returnButtonTag:(platformViewBlock)block;
+
+@property (nonatomic,strong)OpenGoods *product;
 
 @end

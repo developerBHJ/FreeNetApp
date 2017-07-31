@@ -42,11 +42,8 @@
 -(void)getLocationAddress:(NSNotification *)sender{
     
     NSString *address = sender.userInfo[@"user_address"];
-    if (address.length > 0) {
-        self.titleLabel.text = [NSString stringWithFormat:@"当前位置：%@",address];
-    }else{
-        self.titleLabel.text = @"当前位置：";
-    }
+    self.titleLabel.text = address.length > 0 ? [NSString stringWithFormat:@"当前位置：%@",address] : @"正在定位中...";
+    [self.discountView reloadData];
 }
 
 #pragma mark >>>> 懒加载
@@ -74,30 +71,6 @@
     
     if (!_leftArr) {
         _leftArr = [NSMutableArray new];
-        NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"全部分类",@"开饭了",@"乐翻天",@"早知道",@"签到有礼",@"餐饮",@"娱乐",@"生活", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
-        for (int i = 0; i < titleArr.count; i ++) {
-            BHJDropModel *model = [[BHJDropModel alloc]init];
-            model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
-            model.imageName = [NSString stringWithFormat:@"coupon_%d",i];
-            [_leftArr addObject:model];
-        }
     }
     return _leftArr;
 }
@@ -107,26 +80,9 @@
     if (!_midlleArr) {
         _midlleArr = [NSMutableArray new];
         NSMutableArray *titleArr = [NSMutableArray arrayWithObjects:@"附近",@"高新区",@"未央区",@"莲湖区",@"雁塔区",@"长安区", nil];
-        NSArray *subTitles = @[@"35151",@"123",@"12345",@"111",@"87",@"24",@"24569",@"10"];
-        NSMutableArray *items = [NSMutableArray arrayWithObjects:@"全部",@"火锅",@"自助餐",@"日韩料理",@"蛋糕甜点",@"烧烤烤鱼",@"粤菜",@"川江菜", nil];
-        NSMutableArray *subArr = [NSMutableArray new];
-        
-        for (int i = 0; i < items.count; i ++) {
-            NSArray *arr = [items subarrayWithRange:NSMakeRange(0, i + 1)];
-            NSMutableArray *tempArr = [NSMutableArray new];
-            for (int i = 0; i < arr.count; i ++) {
-                BHJDropModel *model = [[BHJDropModel alloc]init];
-                model.title = arr[i];
-                model.subTitle = subTitles[i];
-                [tempArr addObject:model];
-            }
-            [subArr addObject:tempArr];
-        }
         for (int i = 0; i < titleArr.count; i ++) {
             BHJDropModel *model = [[BHJDropModel alloc]init];
             model.title = titleArr[i];
-            model.items = subArr[i];
-            model.subTitle = subTitles[i];
             [_midlleArr addObject:model];
         }
     }

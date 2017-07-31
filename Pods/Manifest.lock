@@ -24,6 +24,7 @@ PODS:
   - Bugtags (2.1.1):
     - Bugtags/Core (= 2.1.1)
   - Bugtags/Core (2.1.1)
+  - CocoaAsyncSocket (7.6.1)
   - DACircularProgress (2.3.1)
   - LBXAlertAction (1.0.3)
   - LBXScan (1.1.1):
@@ -72,6 +73,7 @@ DEPENDENCIES:
   - AMapLocation
   - AMapSearch
   - Bugtags
+  - CocoaAsyncSocket (~> 7.6.1)
   - LBXAlertAction (~> 1.0.3)
   - LBXScan (~> 1.1.1)
   - Masonry (~> 1.0.1)
@@ -100,6 +102,7 @@ SPEC CHECKSUMS:
   AMapLocation: 6016f0e09c127461c9c8e36945f34c0f037ad962
   AMapSearch: cf7fd100d533995822d92c22586abfaf7cdf6eef
   Bugtags: ce0a5e858e23d5058d6576601a51ef64fa06951b
+  CocoaAsyncSocket: 7eadd3f59e1a6c84e2aefc93e9ff7b55156fe174
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   LBXAlertAction: e904f511f0e44fde323e056691d7a8a99d71faba
   LBXScan: dfb4d8ae8e4cff2aa0c9e1771e43954dce1469a9
@@ -117,6 +120,6 @@ SPEC CHECKSUMS:
   UMengUShare: fc0a98b8d5297632e82874318fd72a10d17da228
   ZXingObjC: bbf7b8f0cf8933fdd33eb4f9f46e22308552869b
 
-PODFILE CHECKSUM: 4aa88c40b5cc2e0977439a4f3831740ff567ca60
+PODFILE CHECKSUM: 9e0b679bac8fca2e74eca2115cf37ee74ed0c5b2
 
 COCOAPODS: 1.3.0.beta.1

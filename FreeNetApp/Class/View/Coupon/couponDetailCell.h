@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "couponModel.h"
+#import "CashCouponModel.h"
 
 @interface couponDetailCell : BaseCollectionViewCell
 
@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *exChangeBtn;
 @property (weak, nonatomic) IBOutlet UILabel *lineLabel;
 
-@property (nonatomic,strong)couponModel *model;
+@property (nonatomic,strong)CashCouponModel *model;
 @property (nonatomic,strong)UIView *markView;
 
 @end

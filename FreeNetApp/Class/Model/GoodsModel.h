@@ -10,7 +10,7 @@
 
 @interface GoodsModel : NSObject
 
-@property (nonatomic,assign)int id;
+@property (nonatomic,strong)NSNumber *id;
 @property (nonatomic,strong)NSString *end_time;
 @property (nonatomic,strong)NSString *start_time;
 /*

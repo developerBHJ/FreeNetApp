@@ -7,7 +7,6 @@
 //
 
 #import "HotRecommend.h"
-
 @implementation HotRecommend
 
 @end

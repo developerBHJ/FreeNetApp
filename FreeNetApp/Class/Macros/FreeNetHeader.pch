@@ -101,12 +101,14 @@
 //本地个人信息
 #define user_login [[NSUserDefaults standardUserDefaults]boolForKey:@"user_login"]
 #define user_token [[NSUserDefaults standardUserDefaults]objectForKey:@"user_token"]
-#define user_id @"1"
+#define user_id [[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"]
 #define user_mobile [[NSUserDefaults standardUserDefaults]objectForKey:@"user_mobile"]
 #define user_avatar_name [[NSUserDefaults standardUserDefaults]objectForKey:@"user_avatar_name"]
 #define user_avatar_url [[NSUserDefaults standardUserDefaults]objectForKey:@"user_avatar_url"]
 #define user_nickname [[NSUserDefaults standardUserDefaults]objectForKey:@"user_nickname"]
 #define user_sex [[NSUserDefaults standardUserDefaults]objectForKey:@"user_sex"]
+#define user_age [[NSUserDefaults standardUserDefaults]objectForKey:@"user_age"]
+
 
 //接口地址
 #define API @"http://192.168.0.254:4004"

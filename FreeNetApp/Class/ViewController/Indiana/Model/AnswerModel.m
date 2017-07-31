@@ -2,8 +2,8 @@
 //  AnswerModel.m
 //  FreeNetApp
 //
-//  Created by 白华君 on 2016/12/16.
-//  Copyright © 2016年 BHJ. All rights reserved.
+//  Created by 白华君 on 2017/7/3.
+//  Copyright © 2017年 BHJ. All rights reserved.
 //
 
 #import "AnswerModel.h"
@@ -16,18 +16,10 @@ static CGFloat const contentLabelY = margin + margin + 30;
     CGFloat _cellHeight;
 }
 
-+ (instancetype)modelWithDic:(NSDictionary *)dic {
-    
-    AnswerModel *model = [[self alloc] init];
-    [model setValuesForKeysWithDictionary:dic];
-    return model;
-}
-
-
 - (CGFloat)cellHeight {
     if (!_cellHeight) {
         CGFloat contentW = [UIScreen mainScreen].bounds.size.width - 2 * margin; // 屏幕宽度减去左右间距
-        CGFloat contentH = [self.content boundingRectWithSize:CGSizeMake(contentW, MAXFLOAT)
+        CGFloat contentH = [self.title boundingRectWithSize:CGSizeMake(contentW, MAXFLOAT)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
                                                    attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:contentFont]}
                                                       context:nil].size.height;
@@ -42,5 +34,6 @@ static CGFloat const contentLabelY = margin + margin + 30;
     }
     return _cellHeight;
 }
+
 
 @end

@@ -43,7 +43,7 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(self.cid),@"cid",@"1",@"page", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page", nil];
     }
     return _paramater;
 }
@@ -156,15 +156,15 @@
     
     if (indexPath.section == 0) {
         if (self.isReceived) {
-            return CGSizeMake(kScreenWidth, kScreenHeight / 4);
+            return CGSizeMake(kScreenWidth, 142);
         }
-        return CGSizeMake(kScreenWidth, kScreenHeight / 4.5);
+        return CGSizeMake(kScreenWidth, 126);
     }else if (indexPath.section == 1){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 6);
+        return CGSizeMake(kScreenWidth, 95);
     }else if (indexPath.section == 3){
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+        return CGSizeMake(kScreenWidth, 38);
     }
-    return CGSizeMake(kScreenWidth, kScreenHeight / 4.5);
+    return CGSizeMake(kScreenWidth, 126);
 }
 
 
@@ -227,10 +227,10 @@
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
     if (section == 3) {
-        return CGSizeMake(kScreenWidth, kScreenHeight / 15);
+        return CGSizeMake(kScreenWidth, 38);
     }else if (section == 1){
         if (self.isReceived) {
-            return CGSizeMake(kScreenWidth, kScreenHeight / 20);
+            return CGSizeMake(kScreenWidth, 28);
         }
         return CGSizeMake(0, 0);
     }

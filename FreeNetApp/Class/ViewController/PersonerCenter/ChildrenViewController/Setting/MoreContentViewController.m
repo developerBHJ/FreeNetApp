@@ -57,9 +57,9 @@
 -(void)setViewWithData{
     
     PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"消息提醒" image:nil subTitle:nil toViewController:nil];
-    PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"分享设置" image:nil subTitle:nil toViewController:nil];
+   // PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"分享设置" image:nil subTitle:nil toViewController:nil];
     PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"清空缓存" image:nil subTitle:@"829.80k" toViewController:nil];
-    NSMutableArray *group1 = [NSMutableArray arrayWithObjects:model_0,model_1,model_2, nil];
+    NSMutableArray *group1 = [NSMutableArray arrayWithObjects:model_0,model_2, nil];
     PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"支付帮助" image:nil subTitle:nil toViewController:nil];
     PersonerGroup *model_5 = [[PersonerGroup alloc]initWithTitle:@"关于立免" image:nil subTitle:nil toViewController:nil];
     
@@ -75,13 +75,12 @@
     [self.alertView removeFromSuperview];
 }
 
-
-
 #pragma mark - Table 代理
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
     return self.moreData.count;
 }
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     NSArray *array = self.moreData[section];

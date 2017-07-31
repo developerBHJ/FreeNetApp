@@ -17,6 +17,6 @@ typedef NS_ENUM(NSInteger,HistoryViewStatus) {
 
 @property (nonatomic,assign)HistoryViewStatus historyState;
 
--(id)initWithID:(int)lid;
+-(id)initWithID:(NSNumber *)lid;
 
 @end

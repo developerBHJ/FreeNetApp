@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "ClassModel.h"
 @interface moreClassHeadView : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UIImageView *themeImage;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
-
+@property (nonatomic,strong)ClassModel *model;
 
 @end

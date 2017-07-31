@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "BHJRatingBar.h"
-
+#import "EvaluateModel.h"
 @interface specialDetailCell_5 : UICollectionViewCell
 
-@property (nonatomic, strong) BaseModel *model;
+@property (nonatomic, strong) EvaluateModel *model;
 
 @property (weak, nonatomic) IBOutlet UILabel *user_name;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;

@@ -19,6 +19,7 @@
 @property (nonatomic,strong)NSMutableDictionary *areaData;
 @property (nonatomic,strong)NSMutableDictionary *street;
 
+
 @end
 
 @implementation BHJViewController

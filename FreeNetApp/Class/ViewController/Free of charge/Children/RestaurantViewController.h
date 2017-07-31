@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger,ViewStleWithData){
 @interface RestaurantViewController : BHJViewController
 
 @property (nonatomic,assign)ViewStleWithData viewStyle;
-@property (nonatomic,assign)int class_id;
+@property (nonatomic,strong)NSNumber *type;
 
 
 @end

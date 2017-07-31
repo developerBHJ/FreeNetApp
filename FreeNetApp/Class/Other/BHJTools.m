@@ -220,7 +220,7 @@
     NSString *docPath = [home stringByAppendingPathComponent:@"Documents"];
     // 3.新建数据
     NSString *filepath = [docPath stringByAppendingPathComponent:name];
-    //NSLog(@"filepath:%@",filepath);
+    NSLog(@"filepath:%@",filepath);
     [data writeToFile:filepath atomically:YES];
 }
 
@@ -250,7 +250,32 @@
     return data;
 }
 
+//日期格式转字符串
+- (NSString *)dateToString:(NSDate *)date withDateFormat:(NSString *)format
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:format];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    return strDate;
+}
 
+//字符串转日期格式
+- (NSDate *)stringToDate:(NSString *)dateString withDateFormat:(NSString *)format
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:format];
+    NSDate *date = [dateFormatter dateFromString:dateString];
+    return [self worldTimeToChinaTime:date];
+}
+
+//将世界时间转化为中国区时间
+- (NSDate *)worldTimeToChinaTime:(NSDate *)date
+{
+    NSTimeZone *timeZone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [timeZone secondsFromGMTForDate:date];
+    NSDate *localeDate = [date  dateByAddingTimeInterval:interval];
+    return localeDate;
+}
 
 
 

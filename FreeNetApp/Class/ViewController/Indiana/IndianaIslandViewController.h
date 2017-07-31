@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "IndianaDetailModel.h"
 @interface IndianaIslandViewController : BHJViewController
 
+@property (nonatomic,strong)IndianaDetailModel *detailModel;
 
+-(instancetype)initWithID:(IndianaDetailModel *)model;
 
 @end

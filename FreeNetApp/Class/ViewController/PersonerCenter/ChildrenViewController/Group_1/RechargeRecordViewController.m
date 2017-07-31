@@ -86,11 +86,11 @@
 -(void)setViewWithTextField:(UITextField *)textField imageName:(NSString *)imageName anotherImage:(NSString *)image{
     
     UIView *rightView = [[UIView alloc]init];
-    rightView.size = CGSizeMake(20, 40);
+    rightView.size = CGSizeMake(26, 26);
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setBackgroundImage:[[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
-    [rightBtn setFrame:CGRectMake(0, 12.5, 15, 15)];
+    [rightBtn setFrame:CGRectMake(0, 0, 26, 26)];
     [rightView addSubview:rightBtn];
 //    [rightBtn setTitle:@"+" forState:UIControlStateNormal];
 //    [rightBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
@@ -102,16 +102,16 @@
     textField.rightViewMode = UITextFieldViewModeAlways;
     
     UIView *leftView = [[UIView alloc]init];
-    leftView.size = CGSizeMake(35, 40);
+    leftView.size = CGSizeMake(41, 26);
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setBackgroundImage:[[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]forState:UIControlStateNormal];
 //    [leftBtn.titleLabel setFont:[UIFont systemFontOfSize:22]];
-    [leftBtn setFrame:CGRectMake(5, 12.5, 15, 15)];
+    [leftBtn setFrame:CGRectMake(0, 0, 26, 26)];
     [leftView addSubview:leftBtn];
 //    [leftBtn setTitle:@"-" forState:UIControlStateNormal];
 //    [leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(subtractionAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *rightImage = [[UIImageView alloc]initWithFrame:CGRectMake(20, 12.5, 15, 15)];
+    UIImageView *rightImage = [[UIImageView alloc]initWithFrame:CGRectMake(26, 5.5, 15, 15)];
     rightImage.image = [UIImage imageNamed:@"icon_money"];
     [leftView addSubview:rightImage];
     leftBtn.contentMode = UIViewContentModeRedraw;
@@ -153,7 +153,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    return kScreenHeight / 11.59;
+    return 50;
 }
 
 

@@ -18,7 +18,6 @@ typedef NS_ENUM(NSInteger,DetailViewStatus) {
 
 @property (nonatomic,assign)PageStatus detailState;
 
-@property (nonatomic,strong)IndianaModel *model;
-
+@property (nonatomic,strong)NSNumber *lid;
 
 @end

@@ -7,19 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BHJRatingBar.h"
-@interface specialDetailCell_1 : BaseCollectionViewCell<BHJRatingBarDelegate>
+#import "SpecialDetailModel.h"
+@interface specialDetailCell_1 : BaseCollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *currentPrice;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *strveBtn;
-@property (weak, nonatomic) IBOutlet UILabel *prePrice;
+@property (weak, nonatomic) IBOutlet UICustomLineLabel *prePrice;
 @property (weak, nonatomic) IBOutlet UIButton *firstBtn;
 @property (weak, nonatomic) IBOutlet UIButton *secondBtn;
 @property (weak, nonatomic) IBOutlet UIButton *thirdBtn;
-@property (weak, nonatomic) IBOutlet UIButton *commentBtn;
-@property (weak, nonatomic) IBOutlet BHJRatingBar *ratingView;
-@property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lineLabel;
+
+@property (nonatomic,strong)SpecialDetailModel *model;
 
 @end

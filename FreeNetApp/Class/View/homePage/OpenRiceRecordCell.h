@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "OpenHistoryModel.h"
 @interface OpenRiceRecordCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *userName;
@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *subContent;
 
 
-
+@property (nonatomic,strong)OpenHistoryModel *model;
 
 
 @end

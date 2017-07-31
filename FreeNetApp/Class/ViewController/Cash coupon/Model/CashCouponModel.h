@@ -16,6 +16,12 @@
 @property (nonatomic,strong)NSString *selltotal;//已售数量
 @property (nonatomic,strong)NSString *invater;//距离
 @property (nonatomic,strong)NSDictionary *shop;
+@property (nonatomic,strong)NSString *created_at;
+@property (nonatomic,strong)NSString *cover;
+
+@property (nonatomic,strong)NSArray *markData;
+@property (nonatomic, assign, readonly) CGFloat cellHeight;
+@property (nonatomic, assign) CGRect contentImageFrame;
 /*
  {
  "id": 1,
@@ -38,4 +44,5 @@
  },
  
  */
+
 @end

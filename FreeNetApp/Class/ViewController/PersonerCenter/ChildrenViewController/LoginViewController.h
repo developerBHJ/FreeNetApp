@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : BHJViewController
+@interface LoginViewController : UIViewController
+
 
 @end

@@ -11,20 +11,22 @@
 #import "HistoryModel.h"
 
 #define kBerserkHistoryUrl @"http://192.168.0.254:4004/free/freelogs"
+#define kIndianaHistoryUrl @"http://192.168.0.254:4004/indiana/buylists"
+#define kHistoryUrl @"http://192.168.0.254:4004/free/records/"
 
 @interface BerserkHistoryViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *berserkHistoryView;
 @property (nonatomic,strong)NSString *startTime;
 @property (nonatomic,strong)NSMutableArray *historyData;
-@property (nonatomic,assign)int lid;//列表id
+@property (nonatomic,strong)NSNumber *lid;//列表id
 
 
 @end
 
 @implementation BerserkHistoryViewController
 
--(id)initWithID:(int)lid{
+-(id)initWithID:(NSNumber *)lid{
     
     self = [super init];
     if (self) {
@@ -33,7 +35,7 @@
     return self;
 }
 
-#pragma mark -- 生命周期
+#pragma mark - 生命周期
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -49,13 +51,27 @@
     [self.berserkHistoryView registerNib:[UINib nibWithNibName:@"BerserkHistoryCell" bundle:nil] forCellReuseIdentifier:@"BerserkHistoryCell"];
     [self getCurrentTime];
     self.view.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.35];
-    // 疯抢记录数据
-    [self getHistoryDataWithUrl:kBerserkHistoryUrl];
+    if (self.historyState == HistoryViewStatusWithBerserk) {
+        // 疯抢记录数据
+        [self getHistoryDataWithUrl:kBerserkHistoryUrl];
+    }else{
+        [self getHistoryDataWithUrl:kIndianaHistoryUrl];
+    }
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startPlan:) name:@"StartPlan" object:nil];
 }
-#pragma mark -- 自定义
+#pragma mark - 自定义
+-(void)startPlan:(NSNotification *)info{
+
+    int isStart = [info.userInfo[@"isStart"] intValue];
+    if (isStart == 1) {
+        [self.historyData removeAllObjects];
+      //  [self getHistoryDataWithUrl:kHistoryUrl];
+    }
+}
+
+
 -(NSString *)getCurrentTime
 {
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *dateTime = [formatter stringFromDate:[NSDate date]];
@@ -71,7 +87,7 @@
 
 -(void)getHistoryDataWithUrl:(NSString *)url{
     
-    NSDictionary *paramater = [NSDictionary dictionaryWithObjectsAndKeys:@(self.lid),@"lid", nil];
+    NSDictionary *paramater = [NSDictionary dictionaryWithObjectsAndKeys:self.lid,@"lid", nil];
     [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
         
         NSArray *history = responseObject[@"data"];
@@ -86,7 +102,7 @@
         
     }];
 }
-#pragma mark -- 懒加载
+#pragma mark - 懒加载
 -(UITableView *)berserkHistoryView{
     
     if (!_berserkHistoryView) {
@@ -107,7 +123,7 @@
     return _historyData;
 }
 
-#pragma mark -- UITableViewDelegate,UITableViewDataSource
+#pragma mark - UITableViewDelegate,UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     return self.historyData.count;
@@ -142,10 +158,9 @@
     return cell;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return kScreenHeight / 6;
+    return 95;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
