@@ -7,7 +7,6 @@
 //
 
 #import "BerserkViewController.h"
-#import "BerserkeCell_0.h"
 #import "BerserkCell.h"
 #import "BerserkCell_1.h"
 #import "BerserkCell_2.h"
@@ -18,6 +17,7 @@
 #import "BerserkHistoryViewController.h"
 #import "JXButton.h"
 #import "FlagshipViewController.h"
+#import "FlagshipStoreHeadView.h"
 
 #define DURATION 0.3f
 
@@ -26,17 +26,18 @@
 #define kPlanUrl @"http://192.168.0.254:4004/free/start/"
 #define kStatusUrl @"http://192.168.0.254:4004/free/status/"
 
-@interface BerserkViewController ()<UITableViewDelegate,UITableViewDataSource,BHJCustomBottomViewDelegate>
+@interface BerserkViewController ()<UITableViewDelegate,UITableViewDataSource,BHJCustomBottomViewDelegate,BHJCustomViewDelegate>
 
 @property (nonatomic,strong)HotRecommend *detailModel;
 @property (nonatomic,strong)UITableView *BerserkView;
 @property (nonatomic,strong)NSMutableArray *BerserkData;
 @property (nonatomic,strong)NSMutableArray *imageArr;
 @property (nonatomic,strong)BHJCustomBottomView *bottomView;
+@property (nonatomic,strong)FlagshipStoreHeadView *headVew;
 @property (nonatomic,assign)BOOL isShow;
 @property (nonatomic,strong)BerserkHistoryViewController *historyVC;
 @property (nonatomic,strong)NSMutableDictionary *parameter;
-@property (nonatomic,strong)NSTimer *timer;
+
 
 @end
 
@@ -97,27 +98,30 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(countDown:) name:@"COUNTDOWN" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(getTime:) name:@"TimeString" object:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [self.bottomView removeFromSuperview];
-    [self.timer invalidate];
-    self.timer = nil;
 }
 
 -(void)dealloc{
     
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"CountDown" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"TimeString" object:nil];
 }
 
 #pragma mark - 自定义
 -(void)setUpView{
     
-    self.timer = [NSTimer timerWithTimeInterval:0.0f target:self selector:@selector(timerFunc:) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
     // 获取详情数据
     [self getFreeDetailDataWithUrl:HotDetail parameter:self.parameter];
+    
+    self.headVew = [[FlagshipStoreHeadView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, 40)];
+    self.headVew.delegate = self;
+    self.BerserkView.tableHeaderView = self.headVew;
+    
     
     self.navigationItem.title = @"疯抢90秒";
     UIBarButtonItem *right = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(share:)];
@@ -126,7 +130,6 @@
     self.navigationItem.rightBarButtonItems = @[right,right1];
     
     [self.BerserkView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-    [self.BerserkView registerNib:[UINib nibWithNibName:@"BerserkeCell_0" bundle:nil] forCellReuseIdentifier:@"BerserkeCell_0"];
     [self.BerserkView registerNib:[UINib nibWithNibName:@"BerserkCell" bundle:nil] forCellReuseIdentifier:@"BerserkCell"];
     [self.BerserkView registerNib:[UINib nibWithNibName:@"BerserkCell_1" bundle:nil] forCellReuseIdentifier:@"BerserkCell_1"];
     [self.BerserkView registerNib:[UINib nibWithNibName:@"BerserkCell_2" bundle:nil] forCellReuseIdentifier:@"BerserkCell_2"];
@@ -178,48 +181,6 @@
     }];
 }
 
-- (void)timerFunc:(NSTimer *)sender
-{
-    NSString *startTime = [self.model.start_time replace:@"T" withString:@" "];
-    NSString *timeStr = [startTime substringToIndex:19];
-    
-    NSDateFormatter * formatter = [[NSDateFormatter alloc] init];//时间管理
-    [formatter setDateStyle:NSDateFormatterMediumStyle];//时间方式
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    NSDate *date = [formatter dateFromString:timeStr];
-    NSDate *nowDate = [NSDate date];
-    long d1 = [self getDateTimeTOMilliSeconds:date];
-    long d2 = [self getDateTimeTOMilliSeconds:nowDate];
-    // long d3 = [self getDateTimeTOMilliSeconds:endDate];
-    if ((d1 - d2) > 0) {
-        self.pageState = PageStatueWithNomal;
-        self.bottomView.allowClick = NO;
-    }else{
-        self.pageState = PageStatueWithLead;
-        self.bottomView.allowClick = YES;
-        NSNotification *notification = [[NSNotification alloc]initWithName:@"StartPlan" object:nil userInfo:@{@"isStart":@"1"}];
-        [[NSNotificationCenter defaultCenter]postNotification:notification];
-        NSString *planUrl = [kPlanUrl stringByAppendingFormat:@"%@",self.detailModel.id];
-        NSString *statusUrl = [kStatusUrl stringByAppendingFormat:@"%@",self.detailModel.id];
-        if (self.detailModel.status == 1) {
-            [self getPlanStatus:statusUrl paramater:self.parameter];
-        }else{
-            [self startPlan:planUrl paramater:self.parameter];
-        }
-    }
-    [self.BerserkView reloadData];
-}
-
-//将NSDate类型的时间转换为时间戳,从1970/1/1开始
--(long long)getDateTimeTOMilliSeconds:(NSDate *)datetime
-{
-    NSTimeInterval interval = [datetime timeIntervalSince1970];
-    long long totalMilliseconds = interval*1000 ;
-    return totalMilliseconds;
-}
-
 #pragma mark - NSNotification
 /**
  90秒倒计时通知回调
@@ -230,6 +191,7 @@
     
     NSInteger time = [info.userInfo[@"data"] integerValue];
     if (time > 0) {
+        self.bottomView.progressView.progressTotal = 90;
         self.bottomView.progressView.progressCounter = 90 - time;
         self.bottomView.progressView.label.text = [NSString stringWithFormat:@"%ld",time];
         [self.bottomView.progressView.label setFont:[UIFont systemFontOfSize:15]];
@@ -237,8 +199,8 @@
         self.bottomView.allowClick = YES;
     }else{
         [self.bottomView.progressView.label setFont:[UIFont systemFontOfSize:12]];
-        self.bottomView.progressView.progressTotal = 1;
-        self.bottomView.progressView.progressCounter = 1;
+        self.bottomView.progressView.progressTotal = 90;
+        self.bottomView.progressView.progressCounter = 0;
         self.bottomView.progressView.label.text = @"已结束";
         self.bottomView.progressView.label.textColor = [UIColor colorWithHexString:@"#bebebe"];
         self.bottomView.theme.completedColor = [UIColor colorWithHexString:@"#bebebe"];
@@ -247,6 +209,49 @@
         self.bottomView.progressView.userInteractionEnabled = NO;
     }
     [self.BerserkView reloadData];
+}
+
+
+/**
+ 活动倒计时回调
+ 
+ @param info 时间
+ */
+-(void)getTime:(NSNotification *)info{
+    
+    int isStart = [info.userInfo[@"isStart"] intValue];
+    int isEnd = [info.userInfo[@"isEnd"] intValue];
+    if (isStart == 1 && isEnd != 1) {
+        self.pageState = PageStatueWithLead;
+        self.bottomView.allowClick = YES;
+        
+        NSNotification *notification = [[NSNotification alloc]initWithName:@"StartPlan" object:nil userInfo:@{@"isStart":@"1"}];
+        [[NSNotificationCenter defaultCenter]postNotification:notification];
+        
+        NSString *planUrl = [kPlanUrl stringByAppendingFormat:@"%@",self.detailModel.id];
+        NSString *statusUrl = [kStatusUrl stringByAppendingFormat:@"%@",self.detailModel.id];
+        if (self.detailModel.status == 1) {
+            [self getPlanStatus:statusUrl paramater:nil];
+        }else{
+            [self startPlan:planUrl paramater:nil];
+        }
+    }else{
+        self.pageState = PageStatueWithNomal;
+        self.bottomView.allowClick = NO;
+        self.bottomView.theme.incompletedColor = [UIColor greenColor];
+    }
+    
+    if (isEnd == 1) {
+        [self.bottomView.progressView.label setFont:[UIFont systemFontOfSize:12]];
+        self.bottomView.progressView.progressTotal = 90;
+        self.bottomView.progressView.progressCounter = 0;
+        self.bottomView.progressView.label.text = @"已结束";
+        self.bottomView.progressView.label.textColor = [UIColor colorWithHexString:@"#bebebe"];
+        self.bottomView.theme.completedColor = [UIColor colorWithHexString:@"#bebebe"];
+        self.pageState = PageStatueWithWinning;
+        self.bottomView.allowClick = NO;
+        self.bottomView.progressView.userInteractionEnabled = NO;
+    }
 }
 
 #pragma mark - 请求网络数据
@@ -275,7 +280,9 @@
             [weak addChildViewController:weak.historyVC];
             weak.historyVC.view.hidden = YES;
             [weak.view addSubview:self.historyVC.view];
-            NSLog(@"image=%@",self.imageArr);
+            
+            weak.headVew.storeName.text = weak.detailModel.shop_free[@"shop"][@"title"];
+            
             [weak.BerserkView reloadData];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -298,9 +305,10 @@
     [mannager POST:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         NSInteger status = [dic[@"status"] integerValue];
+        NSLog(@"%@",dic);
         if (status == 200) {
             NSString *statusUrl = [kStatusUrl stringByAppendingFormat:@"%@",self.detailModel.id];
-            [weak getPlanStatus:statusUrl paramater:self.parameter];
+            [weak getPlanStatus:statusUrl paramater:nil];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -322,7 +330,7 @@
         NSInteger status = [dic[@"status"] integerValue];
         if (status == 200) {
             NSString *statusUrl = [kStatusUrl stringByAppendingFormat:@"%@",self.detailModel.id];
-            [self getPlanStatus:statusUrl paramater:self.parameter];
+            [self getPlanStatus:statusUrl paramater:nil];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -342,6 +350,7 @@
     [mannager GET:url parameters:paramater progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         NSInteger status = [dic[@"status"] integerValue];
+        NSLog(@"status=%@",dic);
         if (status == 200) {
             NSNotification *message = [[NSNotification alloc]initWithName:@"COUNTDOWN" object:nil userInfo:dic];
             [[NSNotificationCenter defaultCenter]postNotification:message];
@@ -384,17 +393,13 @@
 #pragma mark - 协议
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 4;
+    return 3;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    if (section == 0) {
+    if (section == 0 || section == 1) {
         return 1;
-    }else if (section == 1){
-        return 2;
-    }else if (section == 3){
-        return 0;
     }else{
         if (self.pageState == PageStatueWithLead) {
             return 2;
@@ -406,37 +411,26 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UITableViewCell *baseCell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
+        UITableViewCell *baseCell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        if (indexPath.row == 0) {
-            SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight / 2)];
-            scrollView.imageURLStringsGroup = self.imageArr;
-            [baseCell addSubview:scrollView];
-            baseCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            return baseCell;
-        }else{
-            BerserkCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell" forIndexPath:indexPath];
-            cell.goodsName.text = self.detailModel.shop_free[@"title"];
-            cell.priceLabel.text = self.detailModel.shop_free[@"price"];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            return cell;
-        }
-    }else if (indexPath.section == 0){
-        BerserkeCell_0 *cell_0 = [tableView dequeueReusableCellWithIdentifier:@"BerserkeCell_0" forIndexPath:indexPath];
-        cell_0.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell_0.cornerRadius = 5;
-        cell_0.delegate = self;
-        cell_0.titleLabel.text = self.detailModel.shop_free[@"shop"][@"title"];
-        cell_0.nextBtn.tag = 1000;
-        return cell_0;
-    }else if (indexPath.section == 2){
+        SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 284)];
+        scrollView.imageURLStringsGroup = self.imageArr;
+        [baseCell addSubview:scrollView];
+        baseCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return baseCell;
+    }else if (indexPath.section == 1){
+        BerserkCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell" forIndexPath:indexPath];
+        cell.goodsName.text = self.detailModel.shop_free[@"title"];
+        cell.priceLabel.text = self.detailModel.shop_free[@"price"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }else {
         if (self.pageState == PageStatueWithLead) {
             if (indexPath.row == 0) {
                 BerserkCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell_1" forIndexPath:indexPath];
                 cell_1.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell_1.model = (HotRecommend *)self.model;
-                cell_1.status = cellStatusWithLead;
                 return cell_1;
             }else{
                 BerserkCell_3 *cell_3 = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell_3" forIndexPath:indexPath];
@@ -447,7 +441,6 @@
             BerserkCell_1 *cell_1 = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell_1" forIndexPath:indexPath];
             cell_1.selectionStyle = UITableViewCellSelectionStyleNone;
             cell_1.model = (HotRecommend *)self.model;
-            cell_1.status = cellStatusWithNomal;
             return cell_1;
         }else{
             BerserkCell_4 *cell_4 = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell_4" forIndexPath:indexPath];
@@ -458,80 +451,50 @@
             cell_4.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell_4;
         }
-    }else{
-        BerserkCell_2 *cell_2 = [tableView dequeueReusableCellWithIdentifier:@"BerserkCell_2" forIndexPath:indexPath];
-        cell_2.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell_2;
     }
 }
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            return kScreenHeight / 2;
-        }else{
-            return kScreenHeight / 10;
-        }
-    }else if (indexPath.section == 0){
-        return kScreenHeight / 15;
-    }else if (indexPath.section == 2){
+    if (indexPath.section == 0) {
+        return 284;
+    }else if (indexPath.section == 1){
+        return 57;
+    }else {
         if (self.pageState == PageStatueWithNomal) {
-            return kScreenHeight / 12;
+            return 48;
         }else if (self.pageState == PageStatueWithLead){
             if (indexPath.row == 0) {
-                return kScreenHeight / 12;
+                return 48;
             }else{
-                return kScreenHeight / 4;
+                return 142;
             }
         }else{
-            return kScreenHeight / 1.4;
+            return 405;
         }
-    }else{
-        return kScreenHeight / 6;
     }
 }
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
     if (section == 0) {
-        return 5;
-    }else if (section == 2){
-        return 5;
-    }else if (section == 1){
         return 1;
     }
-    else{
-        return 5;
-    }
+    return 5;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     
-    if (section == 0) {
-        return 10;
-    }else if (section == 2){
-        return 1;
-    }else if (section == 3){
-        return kScreenHeight / 15;
+    if (section == 1) {
+        return 0.01;
     }
-    else{
-        return 0.1;
-    }
+    return 5;
 }
-
 #pragma mark - BaseTableViewcellDelegate
 -(void)MethodWithButton:(UIButton *)button index:(NSIndexPath *)cellRow{
     
     switch (button.tag) {
-        case 1000:{
-            FlagshipViewController *flagsVC = [[FlagshipViewController alloc]init];
-            flagsVC.cid = self.detailModel.shop_free[@"shop"][@"id"];
-            [self.navigationController pushViewController:flagsVC animated:YES];
-        }
-            break;
+            
         case 2000:{
             
             NSLog(@"开奖规则");
@@ -602,7 +565,15 @@
 -(void)customBottomCenterViewClick{
     
     [self.parameter setValue:@"1" forKey:@"user_id"];
+    [self.parameter setValue:self.detailModel.id forKey:@"plan_id"];
     [self takePartInPlan:kParticipationUrl paramater:self.parameter];
 }
 
+#pragma mark - BHJCustomViewDelegate
+-(void)BHJCustomViewMethodWithButton:(UIButton *)sender{
+    
+    FlagshipViewController *flagsVC = [[FlagshipViewController alloc]init];
+    flagsVC.cid = self.detailModel.shop_free[@"shop"][@"id"];
+    [self.navigationController pushViewController:flagsVC animated:YES];
+}
 @end

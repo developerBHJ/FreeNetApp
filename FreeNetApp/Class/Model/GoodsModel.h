@@ -13,6 +13,11 @@
 @property (nonatomic,strong)NSNumber *id;
 @property (nonatomic,strong)NSString *end_time;
 @property (nonatomic,strong)NSString *start_time;
+
+@property (nonatomic,strong)NSString *trade_no;//交易编号
+@property (nonatomic,strong)NSString *created_at;//创建时间
+@property (nonatomic,strong)NSNumber *status;//"订单状态 0为待领奖 1为已领奖 2为已弃奖 3为待收货 4为待评价 5为已完成"
+
 /*
  {
  "status": 200,

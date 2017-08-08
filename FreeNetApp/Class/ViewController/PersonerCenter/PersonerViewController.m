@@ -38,6 +38,7 @@
 @property (nonatomic,strong)NSMutableArray *personerData;
 @property (nonatomic,strong)NSMutableArray *groupData;
 @property (nonatomic,strong)NSMutableArray *segementArray;
+
 @end
 
 @implementation PersonerViewController
@@ -153,15 +154,15 @@
     // DailyRecommendationViewController *recommendationVC = [[DailyRecommendationViewController alloc]init];
     // PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"每日推荐" image:@"recommend" subTitle:nil toViewController:recommendationVC];
     
-    TopfunViewController *topFunVC = [[TopfunViewController alloc]init];
-    PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"乐翻天" image:@"topFun" subTitle:@"玩游戏，好礼天天送" toViewController:topFunVC];
+  //  TopfunViewController *topFunVC = [[TopfunViewController alloc]init];
+    //PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"乐翻天" image:@"topFun" subTitle:@"玩游戏，好礼天天送" toViewController:topFunVC];
     
     CustomerServiceViewController *customerVC = [[CustomerServiceViewController alloc]init];
     PersonerGroup *model_3 = [[PersonerGroup alloc]initWithTitle:@"客服中心" image:@"customer" subTitle:nil toViewController:customerVC];
     [self.groupData removeAllObjects];
     [self.groupData addObject:model_0];
     //  [self.groupData addObject:model_1];
-    [self.groupData addObject:model_2];
+  //  [self.groupData addObject:model_2];
     [self.groupData addObject:model_3];
     
     MyOrderViewController *orderVC = [[MyOrderViewController alloc]init];
@@ -285,8 +286,6 @@
     scanVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:scanVC animated:YES];
 }
-
-
 
 #pragma mark - TableView 代理
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

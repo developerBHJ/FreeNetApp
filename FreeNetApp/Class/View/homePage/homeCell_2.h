@@ -25,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *striveBtn;
 
 
-@property (nonatomic,strong)NSTimer *timerNow;
+@property (nonatomic,strong)CADisplayLink *displayLink;
 
 
 @property (nonatomic,strong)HotRecommend *model;

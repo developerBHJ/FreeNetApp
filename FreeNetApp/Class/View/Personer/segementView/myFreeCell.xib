@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -71,9 +70,10 @@
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BDz-IE-Lg6">
                         <rect key="frame" x="306" y="100.5" width="63" height="21"/>
-                        <color key="backgroundColor" red="0.98118990380000004" green="0.079815985510000007" blue="0.095318121450000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.89411764709999997" green="0.31372549020000001" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="BDz-IE-Lg6" secondAttribute="height" multiplier="3:1" id="qRN-VQ-yPy"/>
+                            <constraint firstAttribute="width" constant="60" id="j5M-Io-lof"/>
+                            <constraint firstAttribute="height" constant="25" id="oJL-f5-hYD"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <state key="normal" title="支付邮费">
@@ -144,7 +144,6 @@
                     <constraint firstItem="8VM-g2-OV0" firstAttribute="leading" secondItem="l6H-iC-FGs" secondAttribute="trailing" id="hM7-Ub-2Ly"/>
                     <constraint firstItem="3n5-Xd-lTQ" firstAttribute="bottom" secondItem="1CE-Md-Yq1" secondAttribute="bottom" id="j64-DV-dat"/>
                     <constraint firstItem="l6H-iC-FGs" firstAttribute="top" secondItem="P3k-1X-hCO" secondAttribute="bottom" constant="5" id="rs0-DN-9Sh"/>
-                    <constraint firstItem="BDz-IE-Lg6" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="1:6" id="sgr-jk-pGc"/>
                     <constraint firstItem="3n5-Xd-lTQ" firstAttribute="leading" secondItem="TUX-Hl-kv3" secondAttribute="leading" id="uiN-fO-vyR"/>
                     <constraint firstItem="795-ig-8jp" firstAttribute="centerY" secondItem="l6H-iC-FGs" secondAttribute="centerY" id="vkZ-nz-UNa"/>
                     <constraint firstItem="795-ig-8jp" firstAttribute="leading" secondItem="8VM-g2-OV0" secondAttribute="trailing" constant="25" id="x4V-mJ-qPs"/>

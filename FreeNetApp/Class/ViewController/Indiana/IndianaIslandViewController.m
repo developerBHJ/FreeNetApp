@@ -10,6 +10,9 @@
 #import "AnswerViewController.h"
 #import "isLandCell.h"
 
+#define kChangePriceUrl @"http://192.168.0.254:4004/indiana/hit_price"
+#define kUserInfo @"http://192.168.0.254:4004/users/profile"
+
 typedef NS_ENUM(NSInteger,rightViewState){
     
     rightViewStateWithJoyBeans,
@@ -25,13 +28,15 @@ typedef NS_ENUM(NSInteger,rightViewState){
 @property (nonatomic,strong)NSMutableDictionary *isLandData;
 @property (nonatomic,strong)UIView *backView;
 @property (nonatomic,assign)rightViewState viewState;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
+@property (nonatomic,strong)UILabel *balanceLabel;
 
 @end
 
 @implementation IndianaIslandViewController
 
 -(instancetype)initWithID:(IndianaDetailModel *)model{
-
+    
     self = [super init];
     if (self) {
         self.detailModel = model;
@@ -44,6 +49,7 @@ typedef NS_ENUM(NSInteger,rightViewState){
     [super viewDidLoad];
     
     [self getData];
+    
     [self.view addSubview:self.leftView];
     self.backView = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetWidth(self.leftView.frame), 0, kScreenWidth / 4 * 3, kScreenHeight)];
     self.backView.backgroundColor = [UIColor whiteColor];
@@ -82,8 +88,20 @@ typedef NS_ENUM(NSInteger,rightViewState){
     }
     return _isLandData;
 }
+
+-(NSMutableDictionary *)paramater{
+    
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.detailModel.id,@"lid", nil];
+    }
+    return _paramater;
+}
 #pragma mark - 自定义
 -(void)getData{
+    
+    //获取个人信息
+    [self.paramater setValue:@"1" forKey:@"userId"];
+    [self requestUserInfo:kUserInfo paramater:self.paramater];
     
     AnswerViewController *answerVC = [[AnswerViewController alloc]init];
     PersonerGroup *model = [[PersonerGroup alloc]initWithTitle:@"欢乐豆降价" image:@"beans_gray" subTitle:@"beans_red" toViewController:nil];
@@ -122,16 +140,19 @@ typedef NS_ENUM(NSInteger,rightViewState){
         [titleLabel setFont:[UIFont systemFontOfSize:12]];
         titleLabel.textColor = [UIColor colorWithHexString:@"#696969"];
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        UILabel *contentLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(titleLabel.frame) + 5, MainScreen_height / 10.7, kScreenWidth / 3, 20)];
-        NSString *content = @"3000欢乐豆";
-        contentLabel.textAlignment = NSTextAlignmentLeft;
-        [contentLabel setFont:[UIFont systemFontOfSize:18]];
+        self.balanceLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(titleLabel.frame) + 5, MainScreen_height / 10.7, kScreenWidth / 3, 20)];
+        
+        CGFloat coin = [[[NSUserDefaults standardUserDefaults]valueForKey:@"user_coin" ] floatValue];
+        NSString *content = [NSString stringWithFormat:@"%.2f欢乐豆",coin];
+        
+        self.balanceLabel.textAlignment = NSTextAlignmentLeft;
+        [self.balanceLabel setFont:[UIFont systemFontOfSize:18]];
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:content];
         [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(content.length - 3, 3)];
-        contentLabel.attributedText = str;
-        contentLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
+        self.balanceLabel.attributedText = str;
+        self.balanceLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
         [self.backView addSubview:titleLabel];
-        [self.backView addSubview:contentLabel];
+        [self.backView addSubview:self.balanceLabel];
         
         UIButton *fireBtn = [[BHJTools sharedTools]creatSystomButtonWithTitle:@"我要砸价" image:nil selector:@selector(fireAction:) Frame:CGRectMake(25, MainScreen_height / 6.68, MainScreen_width / 3.76, MainScreen_height / 18.9) viewController:self selectedImage:nil tag:200];
         [fireBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -214,7 +235,25 @@ typedef NS_ENUM(NSInteger,rightViewState){
     NSLog(@"tag:%ld",(long)sender.tag);
     switch (sender.tag) {
         case 200:{
-            NSLog(@"我要砸价");
+            //一天之内砸价一次
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            NSDate *now = [NSDate date];
+            NSDate *agoDate = [userDefault objectForKey:@"nowDate"];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSString *ageDateString = [dateFormatter stringFromDate:agoDate];
+            NSString *nowDateString = [dateFormatter stringFromDate:now];
+            if ( [ageDateString isEqualToString:nowDateString]) {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.label.text = @"每天仅能砸价一次哦";
+                [hud hideAnimated:YES afterDelay:2];
+            }else{
+                CGFloat banlance = [[self.balanceLabel.text substringToIndex:self.balanceLabel.text.length - 3] floatValue];
+                NSLog(@"banlance=%.2f",banlance);
+                if (banlance >= 10) {
+                    [self changePriceWithBean:kChangePriceUrl paramater:self.paramater];
+                }
+            }
         }
             break;
         case 201:{
@@ -230,32 +269,32 @@ typedef NS_ENUM(NSInteger,rightViewState){
         }
             break;
         case 300:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Sina withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Sina withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         case 301:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_WechatSession withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         case 302:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_WechatFavorite withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_WechatFavorite withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         case 303:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_QQ withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_QQ withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         case 304:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Renren withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Renren withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         case 305:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_TencentWb withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_TencentWb withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
             
         case 306:{
-//            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Sms withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
+            //            [[BHJTools sharedTools]shareWebPageToPlatformType:UMSocialPlatformType_Sms withUrl:@"http://dev.umeng.com/social/ios/quick-integration?spm=0.0.0.0.zzF6BA#4_1"];
         }
             break;
         default:
@@ -263,6 +302,64 @@ typedef NS_ENUM(NSInteger,rightViewState){
     }
 }
 
+
+/**
+ 欢乐豆砸价
+ 
+ @param url 砸价URL
+ @param paramater 参数
+ */
+-(void)changePriceWithBean:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        NSInteger status = [responseObject[@"status"] integerValue];
+        if (status == 200) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weak.view animated:YES];
+            hud.label.text = responseObject[@"message"];
+            [hud hideAnimated:YES afterDelay:2];
+            NSDate *nowDate = [NSDate date];
+            NSUserDefaults *dataUser = [NSUserDefaults standardUserDefaults];
+            [dataUser setObject:nowDate forKey:@"nowDate"];
+            [dataUser synchronize];
+            [weak.paramater setValue:@"1" forKey:@"userId"];
+            [weak requestUserInfo:kUserInfo paramater:self.paramater];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+
+/**
+ 获取用户信息
+ 
+ @param url 用户信息URL
+ @param paramater 参数
+ */
+-(void)requestUserInfo:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weak);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [weak.leftView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
+            
+            NSDictionary *user = responseObject[@"data"];
+            
+            CGFloat coin = [user[@"coin"] floatValue];
+            CGFloat gold = [user[@"gold"] floatValue];
+            [[NSUserDefaults standardUserDefaults]setValue:@(coin) forKey:@"user_coin"];
+            [[NSUserDefaults standardUserDefaults]setValue:@(gold) forKey:@"user_gold"];
+
+            NSString *banlance = [NSString stringWithFormat:@"%.2f欢乐豆",coin];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:banlance];
+            [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(banlance.length - 3, 3)];
+            weak.balanceLabel.attributedText = str;
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark - 协议
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     

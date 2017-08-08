@@ -19,9 +19,20 @@
     return self;
 }
 
+-(void)layoutSubviews{
+
+    self.mySwitch.on = YES;
+    CGFloat gold = [[[NSUserDefaults standardUserDefaults]valueForKey:@"user_gold"] floatValue];
+    self.balanceNum.text = [@"¥" stringByAppendingFormat:@"%.2f",gold];
+    [self isOpen:self.mySwitch];
+    self.mySwitch.enabled = NO;
+    [self layoutIfNeeded];
+}
+
 +(indianaBottomView *)shareIndianaBottomView{
     
     NSArray *nibView = [[NSBundle mainBundle]loadNibNamed:@"indianaBottomView" owner:nil options:nil];
+    
     return [nibView objectAtIndex:0];
 }
 
@@ -50,7 +61,7 @@
         self.saveBtn.hidden = YES;
         self.firstLabel.text = @"出价金额";
         self.secondLabel.hidden = YES;
-        self.contentView.frame = CGRectMake(0, self.height - self.height / 4, self.width, self.height / 4);
+    //    self.contentView.frame = CGRectMake(0, self.height - self.height / 4, self.width, self.height / 4);
     }
 }
 

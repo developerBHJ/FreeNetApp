@@ -12,7 +12,7 @@
 
 @property (nonatomic,strong)NSDictionary *shop; //数据字典
 
-@property (nonatomic,strong)NSNumber *shopId;   //ID
+@property (nonatomic,strong)NSNumber *id;   //ID
 
 @property (nonatomic,strong)NSString *created_at;   //时间
 @end

@@ -25,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *time_s1;
 @property (weak, nonatomic) IBOutlet UILabel *time_s2;
 
-@property (nonatomic,strong)NSTimer *timerNow;
+@property (nonatomic,strong)CADisplayLink *displayLink;
 
 @property (nonatomic,strong)HotRecommend *model;
 

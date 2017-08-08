@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderModel.h"
-
+#import "OpenOrder.h"
 @interface CopounOrderCell : BaseTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *backImage;
@@ -21,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *selectedImage;
 @property (weak, nonatomic) IBOutlet UIImageView *markImage;
 
-@property (nonatomic,strong)OrderModel *model;
-
+@property (nonatomic,strong)OpenOrder *model;
 
 @end

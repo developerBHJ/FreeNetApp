@@ -10,6 +10,7 @@
 #import "PersonerViewController.h"
 #import "RegisterViewController.h"
 #import "FindPWDViewController.h"
+
 @interface LoginViewController ()<CAAnimationDelegate,UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *regesiterBtn;
@@ -38,14 +39,13 @@
     self.navigationItem.hidesBackButton = YES;
     //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close"] style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
     self.user_nameTF.delegate = self;
+    
 }
 
 -(void)back:(UIBarButtonItem *)sender{
     
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 #pragma mark - 登录
 - (IBAction)loginAction:(UIButton *)sender {
@@ -169,6 +169,7 @@
             
             PersonerViewController *personalVC = [[PersonerViewController alloc]init];
             [self.navigationController pushViewController:personalVC animated:YES];
+            
         }else{
             [ShowMessage showMessage:result[@"message"] duration:3];
         }
@@ -179,7 +180,5 @@
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
-
-
 
 @end

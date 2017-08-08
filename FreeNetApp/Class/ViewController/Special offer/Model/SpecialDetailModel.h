@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SpecialDetailModel : NSObject
+@interface SpecialDetailModel : GoodsModel
 
 
 @property (nonatomic,strong)NSString *cover_url;

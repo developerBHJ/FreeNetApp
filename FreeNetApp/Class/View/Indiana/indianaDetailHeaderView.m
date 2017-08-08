@@ -20,11 +20,9 @@
     
     self.sliderView = [[TTRangeSlider alloc]initWithFrame:CGRectMake(0, 15, MainScreen_width - 30, self.slider.height - 15)];
     self.sliderView.delegate = self;
-    self.sliderView.minValue = 0;
-    self.sliderView.maxValue = 100;
     self.sliderView.handleColor = [UIColor whiteColor];
     self.sliderView.handleDiameter = 30;
-    self.sliderView.selectedMaximum = 90;
+    self.sliderView.userInteractionEnabled = NO;
     self.sliderView.selectedHandleDiameterMultiplier = 1.1;
     self.sliderView.lineHeight = 10;
     self.sliderView.tintColorBetweenHandles = [UIColor colorWithHexString:@"#bebebe"];
@@ -37,13 +35,6 @@
     self.sliderView.handleBorderColor = [UIColor colorWithHexString:@"#cdcdcd"];
     self.sliderView.tintColor = [UIColor colorWithHexString:@"#e4504b"];
     [self.slider addSubview:self.sliderView];
-
-    CGFloat origX = self.sliderView.selectedMinimum / 100 * self.slider.width;
-    self.markView.transform = CGAffineTransformMakeRotation(M_PI);
-    self.markView.fillColor = [UIColor colorWithHexString:@"#e4504b"];
-    self.markView.strokeColor = [UIColor colorWithHexString:@"#e4504b"];
-    self.leftSpace.constant = origX;
-    self.cornerRadius = 5;
 }
 
 
@@ -56,10 +47,24 @@
 -(void)setModel:(IndianaDetailModel *)model{
 
     _model = model;
-    self.sliderView.selectedMinimum = [model.treasure[@"start_price"] intValue];
+    self.sliderView.minValue = 0;
+    self.sliderView.maxValue = 100;
+  //  int total = [model.treasure[@"price"] intValue];
+    
     self.indianaPrice.text = model.treasure[@"start_price"];
     self.currentPrice.text = model.treasure[@"price"];
+    
+    self.sliderView.selectedMinimum = [model.treasure[@"start_price"] floatValue];
+    self.sliderView.selectedMaximum = [model.treasure[@"price"] floatValue];
+    
+    CGFloat origX = self.sliderView.selectedMinimum / 100 * self.slider.width;
+    self.markView.transform = CGAffineTransformMakeRotation(M_PI);
+    self.markView.fillColor = [UIColor colorWithHexString:@"#e4504b"];
+    self.markView.strokeColor = [UIColor colorWithHexString:@"#e4504b"];
+    self.leftSpace.constant = origX;
+    self.cornerRadius = 5;
 }
+
 #pragma mark TTRangeSliderViewDelegate
 -(void)rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum{
     

@@ -264,7 +264,7 @@
         }
             break;
         case 202:{
-            self.propertyView = [[BHJPropertyView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            self.propertyView = [[BHJPropertyView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) payment:BHJPropertyViewTypeWithCash];
             self.propertyView.model = self.model;
             [self.propertyView showPropertyView];
         }

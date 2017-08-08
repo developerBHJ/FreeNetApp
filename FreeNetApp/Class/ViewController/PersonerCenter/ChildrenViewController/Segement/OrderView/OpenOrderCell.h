@@ -7,18 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CouponOrder.h"
+#import "SpecialOrder.h"
+#import "IndianaOrder.h"
+@interface OpenOrderCell : BaseTableViewCell
 
-@interface OpenOrderCell : UITableViewCell
-
-
-@property (weak, nonatomic) IBOutlet UIImageView *storeIcon;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *storeName;
 @property (weak, nonatomic) IBOutlet UILabel *currentPrice;
-@property (weak, nonatomic) IBOutlet UICustomLineLabel *pre_price;
+@property (weak, nonatomic) IBOutlet UIButton *bottomBtn;
+@property (weak, nonatomic) IBOutlet UILabel *subTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *goodsImage;
 
-
+@property (nonatomic,strong)CouponOrder *couponOrder;
+@property (nonatomic,strong)SpecialOrder *specialOrder;
+@property (nonatomic,strong)IndianaOrder *indianaOrder;
 
 
 

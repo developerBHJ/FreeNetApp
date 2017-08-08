@@ -24,7 +24,8 @@ typedef NS_ENUM(NSInteger,cellStatus) {
 @property (weak, nonatomic) IBOutlet UILabel *firstLabel;
 @property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
 
-@property (nonatomic,strong)NSTimer *timerNow;
+@property (nonatomic,strong)CADisplayLink *displayLink;
+
 @property (nonatomic,assign)cellStatus status;
 @property (nonatomic,strong)HotRecommend *model;
 

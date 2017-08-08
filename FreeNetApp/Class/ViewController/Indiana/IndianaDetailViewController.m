@@ -16,9 +16,11 @@
 #import "indianaDetailWinningView.h"
 #import "IndianaDetailModel.h"
 #import "BHJIndianaBottomView.h"
+#import "BHJPropertyView.h"
 #define DURATION 0.3f
 
 #define DetailUrl @"http://192.168.0.254:4004/indiana/list_detail"
+#define kOrderUrl @"http://192.168.0.254:4004/indiana/addorder"
 
 @interface IndianaDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,BHJIndianaBottomViewDelegate>
 
@@ -129,6 +131,7 @@
 -(void)setHeadView{
     
     SDCycleScrollView *scrollview = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, kScreenWidth - 20, kScreenHeight / 2 - 50) imageURLStringsGroup:self.imageArr];
+    scrollview.placeholderImage = [UIImage imageNamed:@"no_picture"];
     _cycleScrollView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kScreenWidth - 20, kScreenHeight / 2)];
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, scrollview.bottom + 7, _cycleScrollView.width - 40, 15)];
     titleLabel.text = self.detailModel.treasure[@"title"];
@@ -137,7 +140,8 @@
     UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, titleLabel.bottom + 5, _cycleScrollView.width, 15)];
     priceLabel.textColor = [UIColor colorWithHexString:@"#e4504b"];
     [priceLabel setFont:[UIFont systemFontOfSize:15]];
-    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:self.detailModel.treasure[@"price"]];
+    
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"¥%@",self.detailModel.treasure[@"price"]]];
     [attStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:NSMakeRange(0, 1)];
     priceLabel.attributedText = attStr;
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -256,6 +260,7 @@
         
     }];
 }
+
 // 设置textField左右视图
 -(void)setViewWithTextField:(UITextField *)textField imageName:(NSString *)imageName anotherImage:(NSString *)image{
     
@@ -331,8 +336,25 @@
     }];
 }
 
+/**
+ 生成订单
 
-#pragma CATransition动画实现
+ @param url 生成订单URL
+ @param paramater 参数
+ */
+-(void)creatIndianaOrderWith:(NSString *)url paramater:(NSDictionary *)paramater{
+
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfo:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        NSArray *data = responseObject[@"data"];
+        if (data.count > 0) {
+            
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
+#pragma mark - CATransition动画实现
 - (void) transitionWithType:(NSString *) type WithSubtype:(NSString *) subtype ForView : (UIView *) view
 {
     //创建CATransition对象
@@ -458,7 +480,11 @@
         }
             break;
         case 503:{
+            
             self.detailState = DetailViewStatusWithWinning;
+            BHJPropertyView *propertyView = [[BHJPropertyView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) payment:BHJPropertyViewTypeWithCoin];
+            propertyView.indianaModel = self.detailModel;
+            [propertyView showPropertyView];
             [self.BerserkView reloadData];
         }
             break;

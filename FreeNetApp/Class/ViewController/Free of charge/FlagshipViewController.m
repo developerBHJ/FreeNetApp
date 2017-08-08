@@ -252,7 +252,7 @@
 #pragma mark - UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
-    return 5;
+    return 4;
 }
 
 
@@ -263,8 +263,6 @@
     }else if (section == 2){
         return 4;
     }else if (section == 3){
-        return 2;
-    }else if (section == 4){
         return self.otherSpecial.count;
     }
     return 3;
@@ -296,16 +294,6 @@
         cell.themeLabel.text = self.dataBase[indexPath.row + 4];
         return cell;
     }else if (indexPath.section == 3){
-        flagCell_4 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"flagCell_4" forIndexPath:indexPath];
-        if (indexPath.row == 1) {
-            cell.markView.hidden = YES;
-            cell.markLabel.hidden = YES;
-        }else{
-            cell.markView.hidden = NO;
-            cell.markLabel.hidden = NO;
-        }
-        return cell;
-    }else if (indexPath.section == 4){
         RecommendCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"RecommendCell" forIndexPath:indexPath];
         cell.markLabel.text = @"已售 1022";
         cell.model = self.otherSpecial[indexPath.row];
@@ -343,8 +331,8 @@
     if (indexPath.section == 1) {
         return CGSizeMake(kScreenWidth, 38);
     }else if (indexPath.section == 2){
-        return CGSizeMake((kScreenWidth - 36.5) / 4, 81);
-    }else if (indexPath.section == 4){
+        return CGSizeMake((kScreenWidth - 36.5) / 4, 90);
+    }else if (indexPath.section == 3){
         return CGSizeMake(kScreenWidth, 95);
     }
     return CGSizeMake(kScreenWidth, 38);
@@ -352,7 +340,7 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     
-    if (section == 1 || section == 3 || section == 4 || section == 5) {
+    if (section == 1 || section == 3) {
         return UIEdgeInsetsMake(1, 0, 10, 0);
     }else if (section == 2){
         return UIEdgeInsetsMake(0, 10, 10, 10);
@@ -363,7 +351,7 @@
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     
-    if (section == 2 || section == 3) {
+    if (section == 2) {
         return CGSizeMake(0, 0);
     }else if (section == 0){
         return CGSizeMake(kScreenWidth, 150);
@@ -381,7 +369,7 @@
         for (UIView *view in headView.subviews) {
             [view removeFromSuperview];
         }
-        SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
+        SDCycleScrollView *scrollView = [[SDCycleScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 150)];
         scrollView.imageURLStringsGroup = self.imageArr;
         [headView addSubview:scrollView];
         return headView;
@@ -393,7 +381,7 @@
         headView_1.followBtn.tag = 1000;
         headView_1.model = self.model;
         return headView_1;
-    }else if (indexPath.section == 4){
+    }else if (indexPath.section == 3){
         flagShipHeadView_1 *headView_1 = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"flagShipHeadView_1" forIndexPath:indexPath];
         headView_1.delegate = self;
         headView_1.viewController = self;
@@ -436,7 +424,7 @@
         }
     }else if (indexPath.section == 2){
         [self.navigationController pushViewController:self.viewControllers[indexPath.row] animated:YES];
-    }else if (indexPath.section == 4){
+    }else if (indexPath.section == 3){
         SpecialDetailViewController *detailVC = [[SpecialDetailViewController alloc]init];
         SpecialModel *model = self.otherSpecial[indexPath.row];
         detailVC.lid = model.id;

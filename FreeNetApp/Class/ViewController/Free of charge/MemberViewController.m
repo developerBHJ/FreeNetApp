@@ -15,7 +15,9 @@
 
 #import "SearchRouteViewController.h"
 #import "MemeberModel.h"
+
 #define kFlagsMemberUrl @"http://192.168.0.254:4004/special/shopvip"
+#define kGetCard @"http://192.168.0.254:4004/special/receive_vip"
 
 @interface MemberViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate>
 
@@ -43,12 +45,11 @@
 -(NSMutableDictionary *)paramater{
     
     if (!_paramater) {
-        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page", nil];
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:self.cid,@"cid",@"1",@"page",@"1",@"userId", nil];
     }
     return _paramater;
 }
 #pragma mark - 生命周期
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -80,6 +81,13 @@
     [[BHJTools sharedTools]showShareView];
 }
 
+
+/**
+ 获取会员卡详情
+ 
+ @param url URL
+ @param paramater 参数
+ */
 -(void)requestDataWith:(NSString *)url paramater:(NSDictionary *)paramater{
     
     WeakSelf(weakself);
@@ -87,11 +95,39 @@
         
         if ([responseObject[@"status"] integerValue] ==  200) {
             weakself.model = [MemeberModel mj_objectWithKeyValues:responseObject[@"data"]];
+            [weakself.paramater setValue:@(self.model.shop_id) forKey:@"shop_id"];
         }
         [weakself.memberView reloadData];
     } failure:^(NSError * _Nullable error) {
         
     }];
+}
+
+
+/**
+ 领取会员卡
+ 
+ @param url URL
+ @param paramater 参数
+ */
+-(void)getCardWith:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [UIView animateWithDuration:2 animations:^{
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+                hud.label.text = responseObject[@"message"];
+                [hud hideAnimated:YES afterDelay:0];
+            } completion:^(BOOL finished) {
+                weakSelf.isReceived = YES;
+                [weakSelf.memberView reloadData];
+            }];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+    
 }
 #pragma mark - UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -241,8 +277,8 @@
     
     switch (button.tag) {
         case 1000:{
-            self.isReceived = YES;
-            [self.memberView reloadData];
+            
+            [self getCardWith:kGetCard paramater:self.paramater];
         }
             break;
         case 1001:{

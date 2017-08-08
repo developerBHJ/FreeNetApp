@@ -34,13 +34,14 @@
     
     self.striveBtn.backgroundColor = HWColor(249, 76, 79, 1.0);
     
-    self.timerNow = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timerFunc) userInfo:nil repeats:YES];
+    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(handleDisplayLink:)];
+    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 -(void)dealloc{
     
-    [self.timerNow invalidate];
-    self.timerNow = nil;
+    [self.displayLink invalidate];
+    self.displayLink = nil;
 }
 
 - (IBAction)strive:(UIButton *)sender {
@@ -50,7 +51,7 @@
     }
 }
 
-- (void)timerFunc
+- (void)handleDisplayLink:(CADisplayLink *)sender
 {
     NSString *str = [self.model.start_time replace:@"T" withString:@" "];
     NSString *timeStr = [str substringToIndex:19];
@@ -93,7 +94,6 @@
     }else{
         self.time_s1.text = @"0";
         self.time_s2.text = @"0";
-        
     }
 }
 

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderModel.h"
+#import "FreeOrderModel.h"
 @interface myFreeCell : BaseTableViewCell
 
-@property (nonatomic,strong)OrderModel *model;
+@property (nonatomic,strong)FreeOrderModel *model;
 
 @property (weak, nonatomic) IBOutlet UIImageView *goods_image;
 
