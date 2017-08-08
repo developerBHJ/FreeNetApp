@@ -16,7 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *markLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subContentLabel;
-
 @property (nonatomic,strong)MessageModel *model;
+
+
+
 @end
 

@@ -10,13 +10,6 @@
 
 @implementation MessageModel
 
--(void)setValue:(id)value forUndefinedKey:(NSString *)key{
-
-    if ([key isEqualToString:@"id"]) {
-        self.messageId = value;
-    }
-}
-
 
 
 @end

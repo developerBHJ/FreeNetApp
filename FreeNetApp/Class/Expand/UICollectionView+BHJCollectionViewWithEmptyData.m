@@ -1,14 +1,14 @@
 //
-//  UITableView+UITabelView_EmptyData.m
-//  BHJSliderDemo
+//  UICollectionView+BHJCollectionViewWithEmptyData.m
+//  FreeNetApp
 //
-//  Created by xalo on 16/4/22.
-//  Copyright © 2016年 baihuajun. All rights reserved.
+//  Created by 白华君 on 2017/8/7.
+//  Copyright © 2017年 BHJ. All rights reserved.
 //
 
-#import "UITableView+UITabelView_EmptyData.h"
+#import "UICollectionView+BHJCollectionViewWithEmptyData.h"
 
-@implementation UITableView (UITabelView_EmptyData)
+@implementation UICollectionView (BHJCollectionViewWithEmptyData)
 
 -(NSInteger)showMessage:(NSString *)title byDataSourceCount:(NSInteger)count{
     
@@ -20,11 +20,9 @@
             label.textAlignment=NSTextAlignmentCenter;
             label;
         });
-        self.separatorStyle = UITableViewCellSeparatorStyleNone;
         return count;
     }else{
         self.backgroundView=nil;
-        self.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
         return  count;
     }
 }
@@ -46,12 +44,10 @@
                    imageFrame:(CGRect)frame byDataSourceCount:(NSInteger)count{
     
     if (count == 0) {
-        self.backgroundView = [self setViewWithNothingWithImageName:imageName alerntTitle:title buttonTitle:btnStr subContent:subContent selector:selector imageFrame:frame];
-        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+     self.backgroundView = [self setViewWithNothingWithImageName:imageName alerntTitle:title buttonTitle:btnStr subContent:subContent selector:selector imageFrame:frame];
         return count;
     }else{
-        self.backgroundView=nil;
-        self.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
+        self.backgroundView = nil;
         return count;
     }
 }
@@ -90,7 +86,5 @@
     }
     return backView;
 }
-
-
 
 @end

@@ -23,17 +23,31 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
 
 
 -(void)setModel:(MessageModel *)model{
-
-    self.contentLabel.text = model.msg;
     
-    self.timeLabel.text = model.created_at;
+    self.contentLabel.text = model.msg;
+    self.timeLabel.text = model.created_at.length > 0 ?model.created_at : @"2017-08-01 12:00:00";
+    if ([model.type integerValue] == 1) {
+        self.titleLabel.text = @"系统消息";
+    }else if ([model.type integerValue] == 2){
+        self.titleLabel.text = @"物流消息";
+    }
+    
+    if (model.enabled == true) {
+        self.titleLabel.backgroundColor = [UIColor lightGrayColor];
+        self.titleLabel.textColor = [UIColor whiteColor];
+        self.markLabel.backgroundColor = [UIColor lightGrayColor];
+    }else{
+        self.titleLabel.backgroundColor = [UIColor colorWithHexString:@"#e4504b"];
+        self.titleLabel.textColor = [UIColor whiteColor];
+        self.markLabel.backgroundColor = [UIColor colorWithHexString:@"#e4504b"];
+    }
 }
 
 

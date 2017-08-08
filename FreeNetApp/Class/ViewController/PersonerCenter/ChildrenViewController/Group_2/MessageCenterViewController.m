@@ -9,29 +9,30 @@
 #import "MessageCenterViewController.h"
 #import "messageCell.h"
 #import "MyMessageViewController.h"
-
 #import "MessageModel.h"
+
+#define kReadMessage @"http://192.168.0.254:4004/my/ready"
+
 @interface MessageCenterViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *messageView;
-
 @property (nonatomic,strong)NSMutableArray *dataArray;
+@property (nonatomic,strong)NSMutableDictionary *paramater;
 
 @end
 
 @implementation MessageCenterViewController
 
 
-
 #pragma mark - Init
 -(UITableView *)messageView{
     
     if (!_messageView) {
-        _messageView = [[UITableView alloc]initWithFrame:CGRectMake(0, 55, kScreenWidth, kScreenHeight - 55) style:UITableViewStylePlain];
+        _messageView = [[UITableView alloc]initWithFrame:CGRectMake(0, 54, kScreenWidth, kScreenHeight - 54) style:UITableViewStylePlain];
         _messageView.delegate = self;
         _messageView.dataSource = self;
         _messageView.bounces = NO;
-        _messageView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _messageView.separatorColor = [UIColor clearColor];
     }
     return _messageView;
 }
@@ -44,19 +45,21 @@
     return _dataArray;
 }
 
-
+-(NSMutableDictionary *)paramater{
+    
+    if (!_paramater) {
+        _paramater = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"1",@"userId",@"0",@"type", nil];
+    }
+    return _paramater;
+}
 
 #pragma mark - ViewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.title = @"消息中心";
-
     //构造UI
     [self setView];
-    
-    //数据请求
-    [self fetchMessageWithURL:API_URL(@"/my/messages") Type:0];
 }
 
 
@@ -67,31 +70,31 @@
     [self.messageView registerNib:[UINib nibWithNibName:@"messageCell" bundle:nil] forCellReuseIdentifier:@"messageCell"];
     [self.view addSubview:self.messageView];
     
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, 55)];
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, kScreenWidth, 54)];
     backView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:backView];
     UISegmentedControl *segementView = [[UISegmentedControl alloc]initWithItems:@[@"全部",@"系统",@"物流"]];
     segementView.selectedSegmentIndex = 0;
+    [self changeView:segementView];
+    
     [segementView setFrame:CGRectMake(kScreenWidth * 0.05, 10, kScreenWidth * 0.9, 35)];
     [segementView addTarget:self action:@selector(changeView:) forControlEvents:UIControlEventValueChanged];
-    [segementView setTintColor:[UIColor redColor]];
+    [segementView setTintColor:[UIColor colorWithHexString:@"#e4504b"]];
     [backView addSubview:segementView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"set"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(set:)];
+  //  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"set"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(set:)];
 }
-
-
-
 
 #pragma mark - 选择器方法
 -(void)changeView:(UISegmentedControl *)sender{
     
-    [self fetchMessageWithURL:API_URL(@"/my/messages") Type:sender.selectedSegmentIndex];
+    [self.paramater setValue:@(sender.selectedSegmentIndex) forKey:@"type"];
+    [self fetchMessageWithURL:API_URL(@"/my/messages") paramater:self.paramater];
 }
 
 
 
 -(void)set:(UIBarButtonItem *)sender{
-
+    
     MyMessageViewController *myMessageVC = [[MyMessageViewController alloc]init];
     myMessageVC.navgationTitle = @"我的消息";
     [self.navigationController pushViewController:myMessageVC animated:YES];
@@ -101,72 +104,67 @@
 #pragma mark - Table
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return [self.dataArray count];
+    return [tableView showViewWithImage:@"Mail" alerttitle:@"您还没有消息哦～" buttonTitle:nil subContent:nil selectore:nil imageFrame:CGRectMake(kScreenWidth / 2.75, kScreenHeight / 3, kScreenWidth / 4, kScreenWidth  / 5.5) byDataSourceCount:self.dataArray.count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return kScreenHeight / 6.5;
+    return 90;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     messageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"messageCell" forIndexPath:indexPath];
     [cell setSelectionStyle:(UITableViewCellSelectionStyleNone)];
-    
-    if (indexPath.row == 0) {
-        cell.titleLabel.backgroundColor = [UIColor redColor];
-        cell.markLabel.backgroundColor = [UIColor redColor];
-        cell.titleLabel.textColor = [UIColor whiteColor];
-    }else{
-        cell.titleLabel.backgroundColor = [UIColor lightGrayColor];
-        cell.titleLabel.textColor = [UIColor whiteColor];
-        cell.markLabel.backgroundColor = [UIColor lightGrayColor];
-    }
-    
-    
     cell.model = self.dataArray[indexPath.row];
-    
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
+    MessageModel *model = self.dataArray[indexPath.row];
+    [self.paramater setValue:model.id forKey:@"lid"];
+    [self readMessageChangStatus:kReadMessage paramater:self.paramater];
+}
 
 #pragma mark - 请求消息
--(void)fetchMessageWithURL:(NSString *)url Type:(NSInteger)type{
-
+-(void)fetchMessageWithURL:(NSString *)url paramater:(NSDictionary *)paramater{
+    
     [self.dataArray removeAllObjects];
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:@(type) forKey:@"type"];
-
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
         
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        
-        for (NSDictionary *data in result[@"data"]) {
-            MessageModel *model = [MessageModel new];
-            [model setValuesForKeysWithDictionary:data];
-            [self.dataArray addObject:model];
+        if ([responseObject[@"status"] integerValue] == 200) {
+            NSArray *data = responseObject[@"data"];
+            if (data.count > 0) {
+                weakSelf.dataArray = [MessageModel mj_objectArrayWithKeyValuesArray:data];
+                [weakSelf.messageView reloadData];
+            }
         }
+    } failure:^(NSError * _Nullable error) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [self.messageView reloadData];
-        });
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
 
+
+/**
+ 阅读消息操作
+
+ @param url 阅读消息改变消息状态的URL
+ @param paramater 参数
+ */
+-(void)readMessageChangStatus:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        
+        if ([responseObject[@"status"] integerValue] == 200) {
+            [weakSelf fetchMessageWithURL:API_URL(@"/my/messages") paramater:self.paramater];
+        }
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 
 
 @end

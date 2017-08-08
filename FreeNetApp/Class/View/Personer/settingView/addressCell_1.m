@@ -13,16 +13,25 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-
     // Initialization code
 }
 
 
 -(void)setModel:(AddressModel *)model{
 
+    _model = model;
+    if (model.status == 1) {
+        [self.defalutBtn setTitle:@"默认地址" forState:UIControlStateNormal];
+        [self.defalutBtn setTitleColor:[UIColor colorWithHexString:@"#e4504b"] forState:UIControlStateNormal];
+        [self.defalutBtn setImage:[UIImage imageNamed:@"selected_red"] forState:UIControlStateNormal];
+    }else{
+        [self.defalutBtn setTitle:@"设为默认地址" forState:UIControlStateNormal];
+        [self.defalutBtn setTitleColor:[UIColor colorWithHexString:@"#696969"] forState:UIControlStateNormal];
+        [self.defalutBtn setImage:[UIImage imageNamed:@"nomal"] forState:UIControlStateNormal];
+    }
     self.nameLabel.text = model.truename;
     self.phoneLabel.text = model.mobile;
-    self.addressLabel.text = model.address;
+    self.addressLabel.text = [NSString stringWithFormat:@"%@ %@",model.provinces,model.address];
 }
 
 

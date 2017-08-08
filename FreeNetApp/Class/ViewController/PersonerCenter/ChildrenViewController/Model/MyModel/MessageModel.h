@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MessageModel : NSObject
-
-@property (nonatomic,strong)NSNumber *messageId;    //ID
+@interface MessageModel : GoodsModel
 
 @property (nonatomic,strong)NSString *msg;      //消息
+@property (nonatomic,strong)NSNumber *type;
+@property (nonatomic,assign)BOOL enabled;//0为未读1为已读
 
-@property (nonatomic,strong)NSString *created_at;   //时间
+
 
 @end

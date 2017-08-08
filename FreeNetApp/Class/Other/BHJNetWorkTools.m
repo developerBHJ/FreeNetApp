@@ -74,13 +74,27 @@ static id _instance;
         // 回调成功之后的block
         success(responseObject);
         [SVProgressHUD showSuccessWithStatus:@"加载完成!"];
-
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 回调失败之后的block
         failure(error);
         [SVProgressHUD showErrorWithStatus:@"加载失败~"];
     }];
     [SVProgressHUD dismiss];
+}
+
+- (void)changeDataWithUrl:(NSString *)url
+               parameters:(id)parameters
+                  success:(void (^)(id _Nullable responseObject))success
+                  failure:(void (^)(NSError *error))failure{
+    
+    [[AFHTTPSessionManager manager] POST:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 回调成功之后的block
+        success(responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 回调失败之后的block
+        failure(error);
+    }];
 }
 
 - (void)loadDataInfoDelete:(NSString *)URLString
@@ -94,7 +108,6 @@ static id _instance;
         // 回调失败之后的block
         failure(error);
     }];
-    [SVProgressHUD dismiss];
 }
 
 @end

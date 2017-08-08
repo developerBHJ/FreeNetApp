@@ -8,6 +8,8 @@
 
 #import "RechargeViewController.h"
 #import "RechargeRecordCell.h"
+#import "RechargeRecordModel.h"
+#define kRechargeRecordUrl @"http://192.168.0.254:4004/my/recharges"
 
 @interface RechargeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -23,7 +25,7 @@
 
 #pragma mark - Init
 -(NSMutableArray *)dataArray{
-
+    
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
@@ -55,69 +57,55 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
+    
     self.navigationItem.title = @"充值记录";
     [self.rechargeView registerNib:[UINib nibWithNibName:@"RechargeRecordCell" bundle:nil] forCellReuseIdentifier:@"RechargeRecordCell"];
     [self.view addSubview:self.rechargeView];
-
+    
     //数据请求 充值记录
-    [self topUpDataWithURL:@"http://192.168.0.254:1000/personer/topUpRecord"];
+    [self topUpDataWithURL:kRechargeRecordUrl];
 }
 
 
 
 #pragma mark >>>>>>>>> UITableViewDelegate,UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-
-    return 5;
+    
+    return [tableView showViewWithImage:@"bil" alerttitle:@"您还没有充值哦～" buttonTitle:nil subContent:nil selectore:nil imageFrame:CGRectMake(kScreenWidth / 2.75, kScreenHeight / 3, kScreenWidth / 4, kScreenWidth  / 5.5) byDataSourceCount:self.dataArray.count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    
     RechargeRecordCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RechargeRecordCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    //cell.model = self.dataArray[indexPath.row];
-    
+    cell.rechargeM = self.dataArray[indexPath.row];
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    return kScreenHeight / 10;
+    
+    return 60;
 }
-
-
 
 #pragma mark - 充值记录 数据请求
 -(void)topUpDataWithURL:(NSString *)url{
-
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:user_id forKey:@"userId"];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setValue:@"1" forKey:@"userId"];
+    [parameter setValue:@"1" forKey:@"page"];
+    
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSArray *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-
-        for (NSDictionary *data in result) {
-//            RechargeModel *model = [RechargeModel new];
-//            [model setValuesForKeysWithDictionary:data];
-//            [self.dataArray addObject:model];
+        if ([responseObject[@"status"] integerValue] == 200) {
+            NSArray *data = responseObject[@"data"];
+            if (data.count > 0) {
+                weakSelf.dataArray = [RechargeRecordModel mj_objectArrayWithKeyValuesArray:data];
+                [weakSelf.rechargeView reloadData];
+            }
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self.rechargeView reloadData];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        });
+    } failure:^(NSError * _Nullable error) {
         
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [MBProgressHUD hideHUDForView: self.view animated:YES];
-        [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
 

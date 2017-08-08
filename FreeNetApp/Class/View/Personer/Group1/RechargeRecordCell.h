@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ExchangeRecordModel.h"
-
+#import "RechargeRecordModel.h"
 @interface RechargeRecordCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -22,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;//时间
 
 @property (nonatomic,strong)ExchangeRecordModel *model;
+@property (nonatomic,strong)RechargeRecordModel *rechargeM;
+
+
 @end
 
 

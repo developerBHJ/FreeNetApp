@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger,BHJViewControllerStatu) {
  按钮和subTitle标题为空时隐藏
  */
 -(void)setViewWithNothingWithImageName:(NSString *)image alerntTitle:(NSString *)title buttonTitle:(NSString *)str subContent:(NSString *)content selector:(SEL)selector imageFrame:(CGRect)frame;
+
 // 设置导航栏
 -(void)setNavgationBarView;
 // 获取定位信息

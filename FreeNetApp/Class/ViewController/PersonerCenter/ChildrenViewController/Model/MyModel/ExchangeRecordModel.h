@@ -8,14 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ExchangeRecordModel : NSObject
+@interface ExchangeRecordModel : GoodsModel
 
-
-@property (nonatomic,strong)NSNumber *exchangeId;   //ID
+/*
+ {
+ "id": 1,
+ "gold": 10,
+ "created_at": "2017-06-15T07:55:47.000Z",
+ "coin": 1000
+ },
+ 
+ */
 
 @property (nonatomic,strong)NSNumber *gold; //花费立免币
-
-@property (nonatomic,strong)NSString *created_at;   //时间
 
 @property (nonatomic,strong)NSNumber *coin; //兑换欢乐豆数
 

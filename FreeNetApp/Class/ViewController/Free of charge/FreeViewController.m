@@ -16,7 +16,8 @@
 #import "ClassModel.h"
 
 #define HotUrl @"http://192.168.0.254:4004/free/sfplans"
-#define TimeUrl @"http://192.168.0.254:4004/free/timecation"
+#define TimeUrl @"http://192.168.0.254:4004/free/data_times"
+#define kTimeList @"http://192.168.0.254:4004/free/free_times"
 
 @interface FreeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BaseCollectionViewCellDelegate,BHJReusableViewDelegate>
 
@@ -99,12 +100,9 @@
 -(void)setView{
     
     self.navigationItem.title = @"免费";
-    if (self.homeViewData.count == 0) {
-        [self setViewWithNothingWithImageName:@"Wifi" alerntTitle:@"没有连接至网络" buttonTitle:@"重新加载" subContent:@"请打开网络连接开关后重试" selector:@selector(jumpAction:) imageFrame:CGRectMake(kScreenWidth / 2.75, kScreenHeight / 3, kScreenWidth / 3.5, kScreenWidth  / 4)];
-    }else{
-        self.homeCollectionView.backgroundColor = HWColor(239, 239, 239, 1.0);
-        [self.view addSubview:self.homeCollectionView];
-    }
+    
+    self.homeCollectionView.backgroundColor = HWColor(239, 239, 239, 1.0);
+    [self.view addSubview:self.homeCollectionView];
     
     [self.homeCollectionView registerNib:[UINib nibWithNibName:@"homeCell" bundle:nil] forCellWithReuseIdentifier:@"homeCell"];
     [self.homeCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headView"];
@@ -123,50 +121,21 @@
     NSMutableArray *themeArr = [NSMutableArray arrayWithArray:@[@"开饭啦",@"乐翻天",@"充值",@"签到有礼",@"餐饮",@"娱乐",@"生活",@"更多"]];
     [self.homeViewData setObject:themeArr forKey:@"theme"];
     [self.homeViewData setObject:firstArr forKey:@"section_1"];
-    
-    NSMutableArray *secondArr = [NSMutableArray arrayWithArray:@[@"store_image",@"banner_2"]];
-    [self.homeViewData setObject:secondArr forKey:@"section_2"];
-    NSMutableArray *timeArr = [NSMutableArray arrayWithArray:@[@"12:00",@"14:00",@"16:00",@"19:00",@"21:00"]];
-    [self.homeViewData setObject:timeArr forKey:@"time"];
-    // 分类
-    // [self getClassDataWith:ClassUrl parameter:nil];
     //热门推荐
     [self getHotRecommendDataWithUrl:HotUrl parameter:self.parameter];
-    //整点开抢
-    // [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
     // 轮播图
     NSString *str = [BannerUrl stringByAppendingString:@"1"];
     [self getHomeBannerWith:str parameter:nil];
+    
+    // 获取时间列表
+    [self getTimeListWith:kTimeList paramater:self.parameter];
+    //整点开抢
+    [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
 }
 
 // 整点开抢
 -(void)striveTime:(UIButton *)sender{
     
-    switch (sender.tag) {
-        case 1000:{
-            [self.parameter setValue:@"1" forKey:@"type"];
-        }
-            break;
-        case 1001:{
-            [self.parameter setValue:@"2" forKey:@"type"];
-        }
-            break;
-        case 1002:{
-            [self.parameter setValue:@"3" forKey:@"type"];
-        }
-            break;
-        case 1003:{
-            [self.parameter setValue:@"4" forKey:@"type"];
-        }
-            break;
-        case 1004:{
-            [self.parameter setValue:@"5" forKey:@"type"];
-        }
-            break;
-        default:
-            break;
-    }
-    [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
     [self selectedButton:sender];
 }
 
@@ -185,14 +154,30 @@
     [self.selectedBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     self.selectedBtn = sender;
     sender.enabled = NO;
+    
+    [self.homeViewData removeObjectForKey:@"Time"];
+    NSArray *timeArr = [self.homeViewData objectForKey:@"time"];
+    [self.parameter setValue:timeArr[sender.tag - 1000] forKey:@"times"];
+    [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
 }
 
 
+
+/**
+ 没数据的时候点击跳转
+ 
+ @param sender 按钮
+ */
 -(void)jumpAction:(UIButton *)sender{
     
-    NSLog(@"重新加载数据");
+    [self getData];
 }
 
+/**
+ 选择城市
+ 
+ @param sender 按钮
+ */
 -(void)selectedCity:(NSNotification *)sender{
     
     NSString *currentCity = sender.userInfo[@"userCity"];
@@ -205,6 +190,64 @@
     }
     [self getHotRecommendDataWithUrl:HotUrl parameter:self.parameter];
     [self getTimeDataWithUrl:TimeUrl parameter:self.parameter];
+}
+
+
+/**
+ 时间选择头视图上添加按钮
+ 
+ @param view 头视图
+ @param timeArray 时间列表
+ */
+-(void)addButtonOnView:(UIView *)view array:(NSArray *)timeArray{
+    
+    UIView *markView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 1)];
+    markView.backgroundColor = [UIColor colorWithHexString:@"#bebebe"];
+    markView.alpha = 0.5;
+    [view addSubview:markView];
+    self.bubbleView = [[arrowView alloc]initWithFrame:CGRectMake(0,0, 16, 0)];
+    [view addSubview:self.bubbleView];
+    NSMutableArray *time = [NSMutableArray new];
+    for (NSString *str in timeArray) {
+        NSString *subtime = [str substringToIndex:5];
+        [time addObject:subtime];
+    }
+    for (int i = 0; i < time.count; i ++) {
+        UIButton *timeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        [timeBtn setTitle:time[i] forState:UIControlStateNormal];
+        CGFloat btnWidth = kScreenWidth / 5;
+        [timeBtn setFrame:CGRectMake(btnWidth * i, 10, btnWidth, 39)];
+        [timeBtn setTitleColor:[UIColor colorWithHexString:@"#666666"] forState:UIControlStateNormal];
+        [timeBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [timeBtn addTarget:self action:@selector(striveTime:) forControlEvents:UIControlEventTouchUpInside];
+        timeBtn.tag = 1000 + i;
+        [view addSubview:timeBtn];
+        if (i == 0) {
+            [self selectedButton:timeBtn];
+        }
+    }
+}
+
+
+/**
+ 根据数据源加载页面
+ 
+ @param data 数据源
+ @return 数据源中数据个数
+ */
+-(void)showSubViewsWithData:(NSArray *)data{
+    
+    if (data.count == 0) {
+        self.homeCollectionView.hidden = YES;
+        [self setViewWithNothingWithImageName:@"Wifi" alerntTitle:@"没有连接至网络" buttonTitle:@"重新加载" subContent:@"请打开网络连接开关后重试" selector:@selector(jumpAction:) imageFrame:CGRectMake(kScreenWidth / 2.75, kScreenHeight / 3, kScreenWidth / 3.5, kScreenWidth  / 4)];
+    }else{
+        for (UIView *subView in self.view.subviews) {
+            [subView removeFromSuperview];
+        }
+        self.homeCollectionView.hidden = NO;
+        self.homeCollectionView.backgroundColor = HWColor(239, 239, 239, 1.0);
+        [self.view addSubview:self.homeCollectionView];
+    }
 }
 #pragma mark >>>> 网络获取数据
 -(void)getHomeBannerWith:(NSString *)url parameter:(NSDictionary *)parameter{
@@ -228,26 +271,6 @@
     }];
 }
 
-// 分类数据
--(void)getClassDataWith:(NSString *)url parameter:(NSDictionary *)parameter{
-    
-    WeakSelf(weakself);
-    NSMutableArray *data = [NSMutableArray new];
-    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
-        
-        NSArray *array = responseObject[@"data"];
-        for (NSDictionary *dic in array) {
-            ClassModel *model = [ClassModel mj_objectWithKeyValues:dic];
-            [data addObject:model];
-            NSLog(@"%@===%@",model.id,model.title);
-        }
-        [[NSNotificationCenter defaultCenter]postNotificationName:GETCLASSLIST object:nil userInfo:@{@"class":data}];
-        [weakself.homeViewData setObject:data forKey:@"class"];
-    } failure:^(NSError * _Nullable error) {
-        
-    }];
-}
-
 // 热门推荐数据
 -(void)getHotRecommendDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
@@ -263,9 +286,9 @@
                 NSLog(@"class = %@",[dic[@"start_time"] class]);
                 [data addObject:hot];
             }
+            [weakself.homeViewData setObject:data forKey:@"hot"];
+            [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
         }
-        [weakself.homeViewData setObject:data forKey:@"hot"];
-        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
     } failure:^(NSError * _Nullable error) {
         
     }];
@@ -275,12 +298,10 @@
 -(void)getTimeDataWithUrl:(NSString *)url parameter:(NSDictionary *)parameter{
     
     WeakSelf(weakself);
+    NSLog(@"%@",parameter);
     NSMutableArray *data = [NSMutableArray new];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSArray *array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
+        NSArray *array = responseObject[@"data"];
         if (array.count > 0) {
             for (NSDictionary *dic in array) {
                 HotRecommend *hot = [HotRecommend mj_objectWithKeyValues:dic];
@@ -288,12 +309,39 @@
             }
         }
         [weakself.homeViewData setObject:data forKey:@"Time"];
-        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:4]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求数据失败");
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:3]];
+    } failure:^(NSError * _Nullable error) {
+        
     }];
 }
 
+/**
+ 获取时间列表
+ 
+ @param url 时间段URL
+ @param paramater 参数
+ */
+-(void)getTimeListWith:(NSString *)url paramater:(NSDictionary *)paramater{
+    
+    WeakSelf(weakself);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:paramater success:^(id  _Nullable responseObject) {
+        NSArray *data = responseObject[@"data"];
+        if (data.count > 0) {
+            NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch|NSNumericSearch|
+            NSWidthInsensitiveSearch|NSForcedOrderingSearch;
+            NSComparator sort = ^(NSString *obj1,NSString *obj2){
+                NSRange range = NSMakeRange(0,obj1.length);
+                return [obj1 compare:obj2 options:comparisonOptions range:range];
+            };
+            NSArray *resultArray = [data sortedArrayUsingComparator:sort];
+            // NSLog(@"%@",resultArray);
+            [weakself.homeViewData setObject:resultArray forKey:@"time"];
+        }
+        [weakself.homeCollectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
+    } failure:^(NSError * _Nullable error) {
+        
+    }];
+}
 #pragma mark >>>> UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     
@@ -306,10 +354,11 @@
         return 8;
     }else if (section == 1){
         NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
+        [self showSubViewsWithData:dataArr];
         return dataArr.count;
     }else if (section == 3){
-        // NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
-        return 5;
+        NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
+        return dataArr.count;
     }
     return 0;
 }
@@ -341,24 +390,13 @@
         cell.delegate = self;
         cell.index = indexPath;
         cell.striveBtn.tag = 201;
-        NSDate *date = [NSDate date];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"hh:mm:ss"];
-        NSString *hourMinuteSecond = [dateFormatter stringFromDate:date];
-        cell.time_h1.text = [hourMinuteSecond substringWithRange:NSMakeRange(0, 1)];
-        cell.time_h2.text = [hourMinuteSecond substringWithRange:NSMakeRange(1, 1)];
-        cell.time_m1.text = [hourMinuteSecond substringWithRange:NSMakeRange(3, 1)];
-        cell.time_m2.text = [hourMinuteSecond substringWithRange:NSMakeRange(4, 1)];
-        cell.time_s1.text = [hourMinuteSecond substringWithRange:NSMakeRange(6, 1)];
-        cell.time_s2.text = [hourMinuteSecond substringWithRange:NSMakeRange(7, 1)];
         NSArray *dataArr = [self.homeViewData objectForKey:@"Time"];
         HotRecommend *model = dataArr[indexPath.row];
-        // cell.model = model;
+        cell.model = model;
         return cell;
     }
     return nil;
 }
-
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -412,26 +450,7 @@
             [headView addSubview:titleLabel];
         }else if (indexPath.section == 2){
             NSArray *timeArr = [self.homeViewData objectForKey:@"time"];
-            UIView *markView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 1)];
-            markView.backgroundColor = [UIColor colorWithHexString:@"#bebebe"];
-            markView.alpha = 0.5;
-            [headView addSubview:markView];
-            self.bubbleView = [[arrowView alloc]initWithFrame:CGRectMake(0,0, 16, 0)];
-            [headView addSubview:self.bubbleView];
-            for (int i = 0; i < 5; i ++) {
-                UIButton *timeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-                [timeBtn setTitle:timeArr[i] forState:UIControlStateNormal];
-                CGFloat btnWidth = kScreenWidth / 5;
-                [timeBtn setFrame:CGRectMake(btnWidth * i, 10, btnWidth, 39)];
-                [timeBtn setTitleColor:[UIColor colorWithHexString:@"#666666"] forState:UIControlStateNormal];
-                [timeBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
-                [timeBtn addTarget:self action:@selector(striveTime:) forControlEvents:UIControlEventTouchUpInside];
-                timeBtn.tag = 1000 + i;
-                [headView addSubview:timeBtn];
-                if (i == 1) {
-                    [self selectedButton:timeBtn];
-                }
-            }
+            [self addButtonOnView:headView array:timeArr];
         }
         return headView;
     }
@@ -527,7 +546,7 @@
         HotRecommend *model = dataArr[indexPath.row];
         BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
         berserkVC.model = model;
-        // [self.navigationController pushViewController:berserkVC animated:YES];
+        [self.navigationController pushViewController:berserkVC animated:YES];
     }
     
 }
@@ -535,13 +554,11 @@
 #pragma mark >>> BaseCollectionViewCellDelegate
 -(void)MethodWithButton:(UIButton *)button indexPath:(NSIndexPath *)index{
     
-    if (button.tag == 200) {
-        NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
-        HotRecommend *model = dataArr[index.row];
-        BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
-        berserkVC.model = model;
-        [self.navigationController pushViewController:berserkVC animated:YES];
-    }
+    NSArray *dataArr = [self.homeViewData objectForKey:@"hot"];
+    HotRecommend *model = dataArr[index.row];
+    BerserkViewController *berserkVC = [[BerserkViewController alloc]init];
+    berserkVC.model = model;
+    [self.navigationController pushViewController:berserkVC animated:YES];
 }
 
 #pragma mark >>> BHJReusableViewDelegate

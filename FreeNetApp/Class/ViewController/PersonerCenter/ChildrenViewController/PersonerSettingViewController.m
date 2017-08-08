@@ -59,7 +59,7 @@
     [self.personerSettingTableView registerNib:[UINib nibWithNibName:@"PersonerCell" bundle:nil] forCellReuseIdentifier:@"PersonerCell"];
     
     [self setViewWithData];
-
+    
     UIButton *signOutBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [signOutBtn setFrame:CGRectMake(10, kScreenHeight - kScreenHeight / 3, kScreenWidth - 20, kScreenHeight / 12)];
     signOutBtn.tag = 10086;
@@ -75,7 +75,7 @@
 }
 
 -(void)setViewWithData{
-
+    
     //支付密码
     ModifyPayPwdViewController *payPwdVC = [[ModifyPayPwdViewController alloc]init];
     //用户账户
@@ -85,12 +85,12 @@
     //绑定手机
     VerificationViewController *verifyVC = [[VerificationViewController alloc]init];
     //收货地址
-  //  AddressViewController *addressVC = [[AddressViewController alloc]init];
+    //  AddressViewController *addressVC = [[AddressViewController alloc]init];
     //更多
     MoreContentViewController *moreVC = [[MoreContentViewController alloc]init];
-   
     
-    PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"支付密码" image:@"payKey" subTitle:nil toViewController:payPwdVC];
+    
+    // PersonerGroup *model_0 = [[PersonerGroup alloc]initWithTitle:@"支付密码" image:@"payKey" subTitle:nil toViewController:payPwdVC];
     PersonerGroup *model_1 = [[PersonerGroup alloc]initWithTitle:@"账户名" image:@"0_1" subTitle:@"修改" toViewController:modifyUserNameVC];
     model_1.content = [[NSUserDefaults standardUserDefaults]valueForKey:@"user_name"];
     PersonerGroup *model_2 = [[PersonerGroup alloc]initWithTitle:@"登陆密码" image:@"pwd" subTitle:@"修改" toViewController:modifyVC];
@@ -98,11 +98,11 @@
     model_3.content = [[NSUserDefaults standardUserDefaults]valueForKey:@"user_phone"];
     //PersonerGroup *model_4 = [[PersonerGroup alloc]initWithTitle:@"收货地址" image:@"address" subTitle:@"修改/添加" toViewController:addressVC];
     PersonerGroup *model_5 = [[PersonerGroup alloc]initWithTitle:@"更多" image:@"more" subTitle:nil toViewController:moreVC];
-    [self.Elements addObject:model_0];
+    //  [self.Elements addObject:model_0];
     [self.Elements addObject:model_1];
     [self.Elements addObject:model_2];
     [self.Elements addObject:model_3];
-   // [self.Elements addObject:model_4];
+    // [self.Elements addObject:model_4];
     [self.Elements addObject:model_5];
 }
 
@@ -110,17 +110,13 @@
 
 #pragma mark - Table Delegate
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-
-    return 2;
+    
+    return 1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    if (section == 0) {
-        return 1;
-    }else{
-        return self.Elements.count - 1;
-    }
+    return self.Elements.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -128,20 +124,15 @@
     PersonerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PersonerCell" forIndexPath:indexPath];
     [cell setSelectionStyle:(UITableViewCellSelectionStyleNone)];
     cell.subTitle.textColor = [UIColor redColor];
-    if (indexPath.section == 0) {
-        PersonerGroup *model = self.Elements[0];
-        [cell setCellWithModel:model];
+    PersonerGroup *model = self.Elements[indexPath.row];
+    [cell setCellWithModel:model];
+    if (indexPath.row == 0 || indexPath.row == 2) {
+        cell.contentLabel.hidden = NO;
     }else{
-        PersonerGroup *model = self.Elements[indexPath.row + 1];
-        [cell setCellWithModel:model];
-        if (indexPath.row == 0 || indexPath.row == 2) {
-            cell.contentLabel.hidden = NO;
-        }else{
-            if (indexPath.row == self.Elements.count - 2) {
-                cell.leftSpace.constant = 17;
-            }
-            cell.contentLabel.hidden = YES;
+        if (indexPath.row == self.Elements.count - 1) {
+            cell.leftSpace.constant = 17;
         }
+        cell.contentLabel.hidden = YES;
     }
     return cell;
 }
@@ -149,7 +140,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (user_id) {
-            //登录状态下
+        //登录状态下
         if (indexPath.section == 0) {
             PersonerGroup *model = self.Elements[0];
             BHJViewController *toViewController = (BHJViewController *)model.viewController;
@@ -162,13 +153,13 @@
             toViewController.navgationTitle = model.title;
         }
     }else{
-            //未登录状态下
+        //未登录状态下
         if (indexPath.section == 1 && indexPath.row == 4) {
             
-               MoreContentViewController *moreVC = [[MoreContentViewController alloc]init];
-                [self.navigationController pushViewController:moreVC animated:YES];
-            }else{
-                [ShowMessage showMessage:@"请先登录" duration:3];
+            MoreContentViewController *moreVC = [[MoreContentViewController alloc]init];
+            [self.navigationController pushViewController:moreVC animated:YES];
+        }else{
+            [ShowMessage showMessage:@"请先登录" duration:3];
         }
     }
     
@@ -176,16 +167,16 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return kScreenHeight / 16;
+    return 36;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-
-    return 15;
+    
+    return 10;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-
+    
     return 0.1;
 }
 
@@ -200,7 +191,6 @@
 }
 
 
-
 #pragma mark - 退出账户
 -(void)signOut:(UIButton *)sender{
     
@@ -209,13 +199,13 @@
 
 #pragma mark - 退出账户响应
 -(void)logOutWithURL:(NSString *)url{
-
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager POST:url parameters:@{@"user_id":user_id} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-
+        
         if ([result[@"status"] intValue] == 200) {
             NSLog(@"退出成功");
             [ShowMessage showMessage:@"退出成功" duration:3];
@@ -237,7 +227,7 @@
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-       
+        
         [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }

@@ -18,9 +18,10 @@
 
 -(void)setModel:(AddressModel *)model{
     
+    _model = model;
     self.user_name.text = model.truename;
     self.user_phone.text = model.mobile;
-    self.user_address.text = model.address;
+    self.user_address.text = [NSString stringWithFormat:@"%@ %@",model.provinces,model.address];
 }
 
 

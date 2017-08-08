@@ -8,6 +8,7 @@
 
 #import "ModifyUserNameViewController.h"
 #import "PersonerViewController.h"
+
 @interface ModifyUserNameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
@@ -58,7 +59,7 @@
         [ShowMessage showMessage:@"用户账户昵称不能为空" duration:3];
         return;
     }
-    [self changeUserNameWithURL:@"http://192.168.0.254:4004/users/profile"];
+    [self changeUserNameWithURL:@"http://192.168.0.254:4004/my/reset_username"];
     [self.view endEditing:YES];
 }
 
@@ -75,8 +76,6 @@
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
-    [parameter setValue:user_sex forKey:@"sex"];
-    [parameter setValue:user_age forKey:@"age"];
     [parameter setValue:self.modifyUserName.text forKey:@"nickname"];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

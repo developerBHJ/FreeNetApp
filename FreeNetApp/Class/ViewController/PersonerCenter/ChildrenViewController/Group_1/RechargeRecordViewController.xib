@@ -58,10 +58,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" placeholder="10元" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jXZ-aR-epa">
-                            <rect key="frame" x="86" y="12.5" width="177.5" height="26"/>
+                            <rect key="frame" x="86" y="10.5" width="177.5" height="30"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="26" id="fXe-Df-F4y"/>
+                                <constraint firstAttribute="height" constant="30" id="fXe-Df-F4y"/>
                             </constraints>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -124,8 +124,11 @@
                     </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KT6-nk-GG8">
-                    <rect key="frame" x="10" y="225" width="355" height="219.5"/>
+                    <rect key="frame" x="10" y="225" width="355" height="180"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="180" id="m50-Sd-NfJ"/>
+                    </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                             <integer key="value" value="5"/>
@@ -152,7 +155,6 @@
                 <constraint firstAttribute="trailing" secondItem="UMk-0A-NWg" secondAttribute="trailing" constant="10" id="TRJ-OA-PFV"/>
                 <constraint firstItem="UMk-0A-NWg" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="1:6.5" id="k61-M8-5u0"/>
                 <constraint firstItem="UMk-0A-NWg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="ltw-ri-GAG"/>
-                <constraint firstItem="xEe-l0-P9c" firstAttribute="top" secondItem="KT6-nk-GG8" secondAttribute="bottom" constant="19" id="pPx-Qn-Y9s"/>
                 <constraint firstItem="xEe-l0-P9c" firstAttribute="leading" secondItem="UMk-0A-NWg" secondAttribute="leading" id="qh0-oK-hVF"/>
                 <constraint firstAttribute="bottom" secondItem="xEe-l0-P9c" secondAttribute="bottom" constant="148" id="tpJ-NR-Lwn"/>
             </constraints>

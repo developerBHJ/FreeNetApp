@@ -53,7 +53,7 @@
 }
 
 -(NSMutableDictionary *)street{
-
+    
     if (!_street) {
         _street = [NSMutableDictionary new];
     }
@@ -67,7 +67,7 @@
     // 获取区域数据
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-       // [self settleAreaData];
+        // [self settleAreaData];
     });
     //    UIToolbar *statusBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
     //    statusBar.backgroundColor = [UIColor blackColor];
@@ -315,7 +315,7 @@
             NSDictionary *province = [self.areaData objectForKey:key];
             [area addObject:province];
         }
-       [[BHJTools sharedTools]saveDataToSandboxWith:area name:@"province.plist"];
+        [[BHJTools sharedTools]saveDataToSandboxWith:area name:@"province.plist"];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
@@ -355,7 +355,7 @@
         if (cities.count > 0) {
             for (NSDictionary *city in cities) {
                 NSMutableDictionary *cDic = [NSMutableDictionary new];
-                 [cDic setValue:city[@"city_id"] forKey:@"city_id"];
+                [cDic setValue:city[@"city_id"] forKey:@"city_id"];
                 [cDic setValue:city[@"city_name"] forKey:@"city_name"];
                 NSString *pre = [city[@"city_name"] firstCharactor];
                 [cDic setValue:pre forKey:@"initial"];

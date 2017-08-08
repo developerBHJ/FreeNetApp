@@ -52,7 +52,7 @@
 #import <UShareUI/UShareUI.h>
 #import <MJRefresh.h>
 #import <MJExtension/MJExtension.h>
-
+#import "SVProgressHUD.h"
 
 ///////////////////////// 高德地图 /////////////////////
 #import <AMapFoundationKit/AMapFoundationKit.h>
@@ -68,6 +68,8 @@
 #import "BHJVerifyCodeButton.h"
 #import "BHJViewController.h"
 #import "UITableView+UITabelView_EmptyData.h"
+#import "UICollectionView+BHJCollectionViewWithEmptyData.h"
+
 #import "BaseCollectionViewCell.h"
 #import "BaseModel.h"
 #import "UICustomLineLabel.h"
@@ -92,6 +94,9 @@
 #import "UIImageView+ImgaeFill.h"
 #import "NSString+Additions.h"
 #import "BHJNetWorkTools.h"     // 网络请求的封装
+#import "UserInfo.h"     //会员个人信息
+
+
 //封装提示框
 #import "ShowMessage.h"
 

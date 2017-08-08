@@ -54,23 +54,20 @@
     [self.view addSubview:self.myOrderView];
     
     
-    //默认请求全部订单数据
+    //默认请求全部关注数据
     [self myAttentionWithURL:API_URL(@"/my/focuses")];
     
-    
 }
-
-
 
 #pragma mark - Table
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return [self.dataArray count];
+    return [tableView showMessage:@"您还没有关注店铺哦" byDataSourceCount:self.dataArray.count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return kScreenHeight / 6.35;
+    return 90;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -115,12 +112,9 @@
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
             //删除关注
             AttentionModel *model = self.dataArray[indexPath.row];
-            [self myAttentionDeleteWithURL:API_URL(@"/my/focuseDel") Lid:model.shopId];
-            [_dataArray removeObjectAtIndex:indexPath.row];
+            [self myAttentionDeleteWithURL:API_URL(@"/my/focuseDel") Lid:model.id];
         }]];
         
         [self presentViewController:alertController animated:YES completion:nil];
@@ -131,7 +125,7 @@
     
     FlagshipViewController *flagVC = [[FlagshipViewController alloc]init];
     AttentionModel *model = self.dataArray[indexPath.row];
-    flagVC.cid = model.shopId;
+    flagVC.cid = model.shop[@"id"];
     [self.navigationController pushViewController:flagVC animated:YES];
 }
 
@@ -147,53 +141,37 @@
 //关注请求
 -(void)myAttentionWithURL:(NSString *)url{
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
+    WeakSelf(weakSelf);
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        
-        for (NSDictionary *data in result[@"data"]) {
-            AttentionModel *model = [AttentionModel new];
-            [model setValuesForKeysWithDictionary:data];
-            [self.dataArray addObject:model];
+        NSArray *data = responseObject[@"data"];
+        if (data.count > 0) {
+            weakSelf.dataArray = [AttentionModel mj_objectArrayWithKeyValuesArray:data];
+            [weakSelf.myOrderView reloadData];
         }
+    } failure:^(NSError * _Nullable error) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self.myOrderView reloadData];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        });
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [ShowMessage showMessage:@"网络异常" duration:3];
     }];
 }
 
 //关注删除
--(void)myAttentionDeleteWithURL:(NSString *)url Lid:(NSNumber *)lib{
+-(void)myAttentionDeleteWithURL:(NSString *)url Lid:(NSNumber *)lid{
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setValue:lib forKey:@"lid"];
-    NSLog(@"%@",parameter);
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [parameter setValue:lid forKey:@"lid"];
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        NSLog(@"%@",result);
-        
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
+        if ([responseObject[@"status"] integerValue] == 200) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
+            hud.label.text = responseObject[@"message"];
+            [weakSelf.dataArray removeAllObjects];
+            [weakSelf myAttentionWithURL:API_URL(@"/my/focuses")];
+            [hud hideAnimated:YES afterDelay:2];
+        }
+    } failure:^(NSError * _Nullable error) {
         
     }];
 }

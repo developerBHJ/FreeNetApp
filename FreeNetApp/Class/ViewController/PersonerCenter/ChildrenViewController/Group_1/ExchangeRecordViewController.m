@@ -9,6 +9,9 @@
 #import "ExchangeRecordViewController.h"
 #import "RechargeRecordCell.h"
 #import "ExchangeRecordModel.h"
+
+#define kRecordUrl @"http://192.168.0.254:4004/my/exchanges"
+
 @interface ExchangeRecordViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong)UITableView *changeRecordView;
@@ -27,13 +30,13 @@
         _changeRecordView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight) style:UITableViewStylePlain];
         _changeRecordView.delegate = self;
         _changeRecordView.dataSource = self;
-        _changeRecordView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _changeRecordView.separatorColor = [UIColor clearColor];
     }
     return _changeRecordView;
 }
 
 -(NSMutableArray *)dataArray{
-
+    
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
@@ -53,7 +56,7 @@
     [self.view addSubview:self.changeRecordView];
     
     //获取兑换记录
-    [self fetchExchangeRecordWithURL:API_URL(@"/my/exchanges")];
+    [self fetchExchangeRecordWithURL:kRecordUrl];
 }
 
 
@@ -64,7 +67,7 @@
 #pragma mark - Table Delegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return [self.dataArray count];
+    return [tableView showViewWithImage:@"exchangeRecord" alerttitle:@"您还没有兑换哦～" buttonTitle:nil subContent:nil selectore:nil imageFrame:CGRectMake(kScreenWidth / 2.75, kScreenHeight / 3, kScreenWidth / 4, kScreenWidth  / 5.5) byDataSourceCount:self.dataArray.count];
 }
 
 
@@ -87,35 +90,21 @@
 
 #pragma mark - 获取兑换记录
 -(void)fetchExchangeRecordWithURL:(NSString *)url{
-
+    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setValue:user_id forKey:@"userId"];
     [parameter setValue:@"1" forKey:@"page"];
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:url parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    WeakSelf(weakSelf);
+    [[BHJNetWorkTools sharedNetworkTool]loadDataInfoPost:url parameters:parameter success:^(id  _Nullable responseObject) {
         
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:nil];
-        
-        for (NSDictionary *data in result[@"data"]) {
-            ExchangeRecordModel *model = [ExchangeRecordModel new];
-            [model setValuesForKeysWithDictionary:data];
-            [self.dataArray addObject:model];
+        NSDictionary *result = responseObject[@"data"];
+        if (result.count > 0) {
+            weakSelf.dataArray = [ExchangeRecordModel mj_objectArrayWithKeyValuesArray:result];
+            [weakSelf.changeRecordView reloadData];
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.changeRecordView reloadData];
-        });
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [ShowMessage showMessage:@"网络异常" duration:3];
+    } failure:^(NSError * _Nullable error) {
         
     }];
-
-
-
 }
 
 

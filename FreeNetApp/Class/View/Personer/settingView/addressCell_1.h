@@ -17,6 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
 @property (weak, nonatomic) IBOutlet UIButton *editBtn;
 
-
 @property (nonatomic,strong)AddressModel *model;
+
 @end

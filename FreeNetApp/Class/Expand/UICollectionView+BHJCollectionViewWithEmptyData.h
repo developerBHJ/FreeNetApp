@@ -1,14 +1,14 @@
 //
-//  UITableView+UITabelView_EmptyData.h
-//  BHJSliderDemo
+//  UICollectionView+BHJCollectionViewWithEmptyData.h
+//  FreeNetApp
 //
-//  Created by xalo on 16/4/22.
-//  Copyright © 2016年 baihuajun. All rights reserved.
+//  Created by 白华君 on 2017/8/7.
+//  Copyright © 2017年 BHJ. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface UITableView (UITabelView_EmptyData)
+@interface UICollectionView (BHJCollectionViewWithEmptyData)
 
 // 根据数据源的个数来判断tableView的显示内容
 -(NSInteger)showMessage:(NSString *)title byDataSourceCount:(NSInteger)count;
@@ -28,6 +28,4 @@
  */
 -(NSInteger)showViewWithImage:(NSString *)imageName alerttitle:(NSString *)title buttonTitle:(NSString *)btnStr subContent:(NSString *)subContent selectore:(SEL)selector
                    imageFrame:(CGRect)frame byDataSourceCount:(NSInteger)count;
-
-
 @end

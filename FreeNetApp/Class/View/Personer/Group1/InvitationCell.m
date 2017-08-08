@@ -27,15 +27,15 @@
 
 -(void)setModel:(InvitationModel *)model{
 
+    _model = model;
     [self.head_image sd_setImageWithURL:[NSURL URLWithString:model.avatar_url]];
-
     self.user_name.text = model.nickname;
-    
     self.user_address.text = [NSString stringWithFormat:@"来自:%@",model.region[@"title"]];
+    self.prizeLabel.text = [NSString stringWithFormat:@"%@",model.invite[@"coin"]];
     
-    self.prizeLabel.text = [NSString stringWithFormat:@"%@",model.coin];
-    
-    self.timeLabel.text = [model.created_at substringToIndex:10];
+    NSString *str = [model.created_at replace:@"T" withString:@" "];
+    NSString *timeStr = [str substringToIndex:19];
+    self.timeLabel.text = timeStr;
 }
 
 
